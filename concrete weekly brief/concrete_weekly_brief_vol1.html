@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>State of Institutional DeFi — Vol. 1, Issue 1 · Week of June 23, 2026</title>
+<meta name="description" content="Weekly intelligence brief mapping regulatory news, competitor moves, and macro conditions to Concrete's positioning. Published every Monday.">
+<meta property="og:title" content="State of Institutional DeFi — Vol. 1, Issue 1">
+<meta property="og:description" content="GENIUS Act opens the custodian gateway. Stablecoin yield compression at its widest. Concrete already has the keys.">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --yellow: #E9DA7A;
+  --yellow-dim: rgba(233,218,122,0.07);
+  --yellow-border: rgba(233,218,122,0.18);
+  --bg: #0D0D0D;
+  --card: #141414;
+  --card2: #191919;
+  --border: #202020;
+  --text: #FFFFFF;
+  --muted: #5A5A5A;
+  --muted2: #888888;
+  --green: #4ADE80;
+  --red: #F87171;
+  --orange: #FB923C;
+  --blue: #60a5fa;
+}
+body {
+  background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  max-width: 760px; margin: 0 auto; padding: 0 28px 100px;
+}
+
+/* ── MASTHEAD ── */
+.masthead { padding: 52px 0 40px; border-bottom: 1px solid var(--border); }
+.masthead-top { display: flex; align-items: center; gap: 14px; margin-bottom: 32px; }
+.logo-box {
+  width: 42px; height: 42px; background: var(--yellow);
+  border: 2px solid #000; border-radius: 8px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 3px; flex-shrink: 0;
+}
+.logo-c { font-size: 21px; font-weight: 900; color: #000; line-height: 1; }
+.logo-line { width: 21px; height: 2px; background: #000; }
+.masthead-brand { font-size: 12px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted2); }
+.pub-badge {
+  display: inline-block; margin-top: 4px;
+  font-size: 9px; font-weight: 800; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--yellow);
+  border: 1px solid var(--yellow-border); padding: 3px 10px; border-radius: 4px;
+  background: var(--yellow-dim);
+}
+.masthead h1 {
+  font-size: 48px; font-weight: 900; letter-spacing: -1.8px;
+  line-height: 1.02; margin-bottom: 8px; text-transform: uppercase;
+}
+.masthead h1 span { color: var(--yellow); }
+.masthead-deck {
+  font-size: 16px; color: var(--muted2); line-height: 1.5;
+  margin-bottom: 18px; font-weight: 400;
+}
+.masthead-meta {
+  display: flex; gap: 20px; flex-wrap: wrap;
+  font-size: 11px; color: var(--muted); letter-spacing: 0.3px;
+  padding-top: 14px; border-top: 1px solid var(--border);
+}
+.masthead-meta strong { color: var(--muted2); }
+.meta-dot { color: var(--border); }
+
+/* ── DIVIDERS ── */
+.section-div {
+  display: flex; align-items: center; gap: 16px;
+  margin: 44px 0 26px;
+}
+.section-div-line { flex: 1; height: 1px; background: var(--border); }
+.section-div-label {
+  font-size: 10px; font-weight: 800; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--yellow); white-space: nowrap;
+}
+
+/* ── EXEC SUMMARY ── */
+.exec-box {
+  background: var(--yellow-dim); border: 1px solid var(--yellow-border);
+  border-left: 3px solid var(--yellow); border-radius: 0 12px 12px 0;
+  padding: 30px 34px; margin: 30px 0;
+}
+.exec-label {
+  font-size: 10px; font-weight: 800; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--yellow); margin-bottom: 20px;
+}
+.exec-item {
+  display: flex; gap: 16px; padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 14px; line-height: 1.7; color: var(--muted2);
+}
+.exec-item:last-child { border-bottom: none; }
+.exec-num { color: var(--yellow); font-weight: 900; flex-shrink: 0; font-size: 16px; }
+
+/* ── BODY TEXT ── */
+h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 16px; text-transform: uppercase; }
+h3 { font-size: 17px; font-weight: 800; letter-spacing: -0.2px; margin: 24px 0 12px; }
+p { font-size: 14px; line-height: 1.85; color: var(--muted2); margin-bottom: 16px; }
+p strong { color: var(--text); }
+p a { color: var(--yellow); text-decoration: none; }
+
+/* ── CALLOUTS ── */
+.callout {
+  border-left: 2px solid var(--yellow); background: var(--yellow-dim);
+  padding: 16px 20px; border-radius: 0 10px 10px 0; margin: 20px 0;
+}
+.callout.warn { border-color: var(--orange); background: rgba(251,146,60,0.05); }
+.callout.alert { border-color: var(--red); background: rgba(248,113,113,0.05); }
+.callout.info { border-color: var(--blue); background: rgba(96,165,250,0.05); }
+.callout-title {
+  font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--yellow); margin-bottom: 8px;
+}
+.callout.warn .callout-title { color: var(--orange); }
+.callout.alert .callout-title { color: var(--red); }
+.callout.info .callout-title { color: var(--blue); }
+.callout p { font-size: 13px; margin-bottom: 0; line-height: 1.65; }
+
+/* ── TABLE ── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 18px 0; }
+.data-table thead th {
+  background: var(--card2); color: var(--muted);
+  font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; padding: 11px 16px; text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.data-table tbody td {
+  padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--muted2);
+}
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr.featured td { background: var(--yellow-dim); }
+.proto-featured { color: var(--yellow) !important; font-weight: 700; }
+.apy-high { color: var(--green); font-weight: 800; }
+.tag {
+  display: inline-block; font-size: 9px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 4px;
+}
+.tag-green { background: rgba(74,222,128,0.1); color: var(--green); }
+.tag-red { background: rgba(248,113,113,0.1); color: var(--red); }
+.tag-orange { background: rgba(251,146,60,0.1); color: var(--orange); }
+
+/* ── STAT CARDS ── */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 20px 0; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.stat-card { background: var(--card2); padding: 18px 16px; }
+.stat-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.stat-val { font-size: 22px; font-weight: 900; letter-spacing: -0.8px; }
+.stat-val.y { color: var(--yellow); }
+.stat-val.g { color: var(--green); }
+.stat-sub { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+/* ── COMPETITOR GRID ── */
+.comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 18px 0; }
+.comp-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 18px 20px;
+}
+.comp-name {
+  font-size: 13px; font-weight: 800; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.comp-badge {
+  font-size: 8px; font-weight: 700; padding: 2px 7px;
+  border-radius: 3px; letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.badge-threat { background: rgba(248,113,113,0.12); color: var(--red); }
+.badge-niche { background: rgba(251,146,60,0.1); color: var(--orange); }
+.badge-legacy { background: rgba(255,255,255,0.06); color: var(--muted2); }
+.comp-card p { font-size: 12.5px; color: var(--muted2); line-height: 1.6; margin: 0; }
+.comp-verdict {
+  margin-top: 10px; font-size: 11px; font-weight: 700;
+  color: var(--muted2); padding-top: 10px; border-top: 1px solid var(--border);
+}
+.comp-verdict span { color: var(--yellow); }
+
+/* ── THE ONE THING ── */
+.one-thing {
+  background: var(--yellow); border-radius: 16px;
+  padding: 40px; margin: 48px 0; color: #000; text-align: center;
+}
+.one-thing-label {
+  font-size: 10px; font-weight: 800; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(0,0,0,0.45); margin-bottom: 16px;
+}
+.one-thing h3 {
+  font-size: 24px; font-weight: 900; letter-spacing: -0.5px;
+  line-height: 1.2; margin-bottom: 16px; text-transform: uppercase; color: #000;
+}
+.one-thing p { color: rgba(0,0,0,0.6); font-size: 14.5px; line-height: 1.75; margin-bottom: 0; }
+
+/* ── WATCHLIST ── */
+.watch-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 14px 0; border-bottom: 1px solid var(--border);
+}
+.watch-item:last-child { border-bottom: none; }
+.watch-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px;
+}
+.watch-dot.y { background: var(--yellow); }
+.watch-dot.o { background: var(--orange); }
+.watch-dot.r { background: var(--red); }
+.watch-dot.g { background: var(--green); }
+.watch-text { font-size: 13.5px; color: var(--muted2); line-height: 1.65; }
+.watch-text strong { color: var(--text); }
+
+/* ── SUBSCRIBE ── */
+.subscribe-box {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 32px; margin: 40px 0; text-align: center;
+}
+.subscribe-box h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; letter-spacing: -0.3px; }
+.subscribe-box p { font-size: 13px; color: var(--muted2); margin-bottom: 20px; line-height: 1.6; }
+.sub-form { display: flex; gap: 8px; max-width: 420px; margin: 0 auto; }
+.sub-input {
+  flex: 1; background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); padding: 11px 16px; border-radius: 8px;
+  font-size: 13px; font-family: inherit; outline: none;
+}
+.sub-input:focus { border-color: var(--yellow-border); }
+.sub-btn {
+  background: var(--yellow); color: #000; border: none;
+  font-weight: 800; font-size: 12px; padding: 11px 20px;
+  border-radius: 8px; cursor: pointer; font-family: inherit;
+  letter-spacing: 0.3px; white-space: nowrap;
+}
+.sub-note { font-size: 11px; color: var(--muted); margin-top: 10px; }
+
+/* ── FOOTER ── */
+.brief-footer {
+  border-top: 1px solid var(--border); padding-top: 30px; margin-top: 60px;
+  font-size: 11px; color: var(--muted); text-align: center; line-height: 2.2;
+}
+.brief-footer a { color: var(--yellow); text-decoration: none; }
+.brief-footer strong { color: var(--muted2); }
+
+@media (max-width: 580px) {
+  .masthead h1 { font-size: 32px; }
+  body { padding: 0 16px 60px; }
+  .exec-box { padding: 20px; }
+  .one-thing { padding: 28px; }
+  .stats-row { grid-template-columns: repeat(2,1fr); }
+  .comp-grid { grid-template-columns: 1fr; }
+  .sub-form { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-top">
+    <div class="logo-box"><span class="logo-c">C</span><div class="logo-line"></div></div>
+    <div>
+      <div class="masthead-brand">Community Research · Concrete.xyz</div>
+      <span class="pub-badge">Published Every Monday</span>
+    </div>
+  </div>
+  <h1>State of<br><span>Institutional DeFi</span></h1>
+  <div class="masthead-deck">Weekly intelligence mapping regulatory shifts, macro conditions, and competitor moves to Concrete's positioning.</div>
+  <div class="masthead-meta">
+    <span><strong>Vol. 1, Issue 1</strong></span>
+    <span class="meta-dot">·</span>
+    <span>Week of June 23, 2026</span>
+    <span class="meta-dot">·</span>
+    <span>~7 min read</span>
+    <span class="meta-dot">·</span>
+    <span>By <a href="https://x.com/billiano_21" target="_blank" style="color:var(--yellow);text-decoration:none;">@billiano_21</a></span>
+  </div>
+</div>
+
+<!-- EXEC SUMMARY -->
+<div class="section-div">
+  <span class="section-div-label">📋 Executive Summary</span>
+  <div class="section-div-line"></div>
+</div>
+
+<div class="exec-box">
+  <div class="exec-label">4 Things That Matter This Week</div>
+  <div class="exec-item"><span class="exec-num">①</span> The OCC's GENIUS Act implementation formally opens the bank-affiliated custodian pathway to yield products. Concrete is the only DeFi protocol already integrated across all nine of the major qualified custodians — BitGo, Fireblocks, Coinbase Custody, Ceffu, Cobo, Copper, Hex Trust, Anchorage, and Zodia.</div>
+  <div class="exec-item"><span class="exec-num">②</span> Stablecoin yield compression across legacy protocols reaches its widest point in 18 months: Aave USDT at 3.82%, Compound USDC at 3.21%, US T-Bills at 4.88%. Concrete's 8.5–8.7% risk-adjusted spread has never been more legible to institutional allocators.</div>
+  <div class="exec-item"><span class="exec-num">③</span> The Euler partnership progresses. Modular DeFi primitives combined with Concrete's automation layer represents the most compelling institutional-grade architecture in the space. TVL implications in Q3.</div>
+  <div class="exec-item"><span class="exec-num">④</span> EU MiCA DeFi working group's CASP classification guidance for "vault operators" is advancing. Concrete's existing infrastructure — institutional audits, transparent NAV, qualified custodian integrations — puts it structurally ahead of the compliance curve that will sting competitors.</div>
+</div>
+
+<!-- MACRO CONTEXT -->
+<div class="section-div">
+  <span class="section-div-label">🌍 Macro Context</span>
+  <div class="section-div-line"></div>
+</div>
+
+<h2>The Rate Environment Changes the Math</h2>
+<p>The Fed's June meeting held rates steady at 4.25–4.50%, maintaining the risk-free floor that has been the institutional allocation hurdle since 2024. For DeFi protocols to attract serious capital, they must clear this rate plus a meaningful risk premium. Most can't. <strong>Concrete's automated yield consistently clears 8%+ on stablecoins</strong>, representing a genuine risk-adjusted spread that institutional mandates can quantify and justify.</p>
+
+<p>Bitcoin ETF inflows remain structurally positive at $400M+ weekly net positive, signaling the continued institutional legitimization of digital assets as an asset class. This is the tailwind that matters: once institutions are comfortable holding BTC through ETFs, the question becomes where they earn yield on their stable allocation. That's Concrete's market.</p>
+
+<div class="callout info">
+  <div class="callout-title">📊 Rate Spread Context</div>
+  <p>US 3M T-Bill: <strong style="color:var(--text)">4.88%</strong> &nbsp;·&nbsp; Aave USDT: <strong style="color:var(--text)">3.82%</strong> &nbsp;·&nbsp; Compound USDC: <strong style="color:var(--text)">3.21%</strong><br>
+  Concrete ctYieldUSDC: <strong style="color:var(--green)">8.7%</strong> risk-adjusted &nbsp;·&nbsp; Spread vs T-Bill: <strong style="color:var(--green)">+382bps</strong></p>
+</div>
+
+<!-- REGULATORY -->
+<div class="section-div">
+  <span class="section-div-label">🏛️ Regulatory Pulse</span>
+  <div class="section-div-line"></div>
+</div>
+
+<h2>The GENIUS Act: A Structural Catalyst Hidden in Plain Sight</h2>
+<p>The GENIUS Act (Guiding and Establishing National Innovation for US Stablecoins), now in implementation phase via OCC rulemaking, creates a formal framework for payment stablecoin issuers and clarifies the perimeter for yield-generating products. The operational detail that matters most for Concrete: <strong>bank-affiliated custodians will be able to offer yield products to institutional clients through compliant wrappers</strong>.</p>
+
+<p>Most DeFi protocols cannot access this pipeline at all — they have no qualified custodian integrations, no transparent NAV accounting frameworks, and no audit trail that compliance teams can hand to a risk committee. Concrete was built for exactly this moment. The nine custodian integrations weren't just product features; they were regulatory moat construction.</p>
+
+<div class="callout">
+  <div class="callout-title">✅ Bullish for Concrete</div>
+  <p>The custodian channel is the institutional capital pathway. Concrete is already live in every major qualified custodian workflow. When compliance teams at banks begin approving DeFi yield access for their clients, Concrete isn't on the shortlist — <strong>it's the infrastructure those custodians will route through</strong>. First-mover advantage here is structural, not temporary.</p>
+</div>
+
+<h3>EU MiCA: The Coming Compliance Shakeout</h3>
+<p>The MiCA DeFi working group's preliminary guidance suggesting "vault operators" may require CASP (Crypto Asset Service Provider) classification is the canary in the coal mine for smaller, under-audited protocols. A CASP classification requirement would require ongoing regulatory filings, capital buffers, and disclosure frameworks that most mid-tier yield protocols cannot operationalize without fundamentally changing their model.</p>
+
+<div class="callout warn">
+  <div class="callout-title">⚠️ Watch Closely — EU CASP Classification</div>
+  <p>If vault operators require CASP classification in the EU, protocols with &lt;3 audits, no institutional custody integrations, and opaque rebalancing logic face existential compliance cost. Concrete's infrastructure — 51 audits, qualified custodians, transparent NAV — is exactly the CASP-ready architecture. Compliance risk is a Concrete tailwind.</p>
+</div>
+
+<h3>SEC Howey Analysis — Custody as the Distinguishing Variable</h3>
+<p>The SEC continues its evaluation of whether automated DeFi vaults constitute investment contracts under Howey's "efforts of others" prong. The most important structural distinction: <strong>Concrete's custody-native model keeps assets with qualified custodians at all times</strong>. The protocol never takes custody. This may be the legal architecture that matters most when enforcement clarity arrives.</p>
+
+<div class="callout alert">
+  <div class="callout-title">⚠️ Ongoing Risk — SEC Enforcement Posture</div>
+  <p>SEC's DeFi enforcement posture remains ambiguous for automated yield products. The custody-native model is Concrete's best structural defense, but regulatory clarity has not yet arrived. Monitor enforcement actions against comparable protocols for early signals.</p>
+</div>
+
+<!-- MARKET INTELLIGENCE -->
+<div class="section-div">
+  <span class="section-div-label">📊 Market Intelligence</span>
+  <div class="section-div-line"></div>
+</div>
+
+<h2>Yield Compression Everywhere Except Where It Counts</h2>
+<p>Across the legacy DeFi landscape, stablecoin yields have structurally compressed following rate environment changes and liquidity normalization post-2025 volatility. The protocols that benefited from high-APY environments driven by token incentives are now exposed: when the emissions end, the yield ends. <strong>Concrete's yield is structural, not incentivized</strong> — it comes from real lending markets and protocol fee capture, not token printing.</p>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Venue / Protocol</th>
+      <th>Asset</th>
+      <th>~APY</th>
+      <th>Risk Profile</th>
+      <th>Category</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="featured">
+      <td class="proto-featured">Concrete ctYieldUSDC</td>
+      <td>USDC</td>
+      <td class="apy-high">8.7%</td>
+      <td><span class="tag tag-green">LOW</span></td>
+      <td>Auto-vault</td>
+      <td>Prob. Engine + 51 audits, 1-click</td>
+    </tr>
+    <tr class="featured">
+      <td class="proto-featured">Concrete ctYieldUSDT</td>
+      <td>USDT</td>
+      <td class="apy-high">8.5%</td>
+      <td><span class="tag tag-green">LOW</span></td>
+      <td>Auto-vault</td>
+      <td>Custody-native, liq. protection</td>
+    </tr>
+    <tr>
+      <td>Pendle YT-USDe (Jun26)</td>
+      <td>USDe</td>
+      <td>21.3%</td>
+      <td><span class="tag tag-red">HIGH</span></td>
+      <td>Yield-strip</td>
+      <td>Fixed-term, PT/YT complexity, depeg risk</td>
+    </tr>
+    <tr>
+      <td>Morpho USDC (Blue)</td>
+      <td>USDC</td>
+      <td>6.4%</td>
+      <td><span class="tag tag-orange">MED</span></td>
+      <td>Lending</td>
+      <td>Good liquidity, no automation layer</td>
+    </tr>
+    <tr>
+      <td>Sky (fka MakerDAO) DSR</td>
+      <td>DAI/USDS</td>
+      <td>5.0%</td>
+      <td><span class="tag tag-green">LOW</span></td>
+      <td>Savings</td>
+      <td>Governance-controlled rate, single protocol</td>
+    </tr>
+    <tr>
+      <td>Euler USDT</td>
+      <td>USDT</td>
+      <td>5.9%</td>
+      <td><span class="tag tag-orange">MED</span></td>
+      <td>Lending</td>
+      <td>Concrete Euler partnership — watch for evolution</td>
+    </tr>
+    <tr>
+      <td>Aave v3 USDT</td>
+      <td>USDT</td>
+      <td>3.82%</td>
+      <td><span class="tag tag-green">LOW</span></td>
+      <td>Lending</td>
+      <td>Legacy positioning, below T-Bill</td>
+    </tr>
+    <tr>
+      <td>Compound v3 USDC</td>
+      <td>USDC</td>
+      <td>3.21%</td>
+      <td><span class="tag tag-green">LOW</span></td>
+      <td>Lending</td>
+      <td>Safe but below TradFi benchmark</td>
+    </tr>
+    <tr>
+      <td>Yearn USDC (v3)</td>
+      <td>USDC</td>
+      <td>5.2%</td>
+      <td><span class="tag tag-orange">MED</span></td>
+      <td>Auto-vault</td>
+      <td>Aging infrastructure, slower governance</td>
+    </tr>
+    <tr>
+      <td>US T-Bill (3M)</td>
+      <td>USD</td>
+      <td>4.88%</td>
+      <td><span class="tag tag-green">LOW</span></td>
+      <td>TradFi</td>
+      <td>Risk-free benchmark. DeFi must clear this.</td>
+    </tr>
+  </tbody>
+</table>
+<p style="font-size:11px;color:var(--muted);margin-top:-8px;">* Illustrative estimates for educational comparison. Rates change constantly. Verify on-chain before acting. Not financial advice.</p>
+
+<!-- CONCRETE SPOTLIGHT -->
+<div class="section-div">
+  <span class="section-div-label">🏗️ Concrete Spotlight</span>
+  <div class="section-div-line"></div>
+</div>
+
+<h2>Platform Metrics — Where It Stands</h2>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-label">TVL</div>
+    <div class="stat-val y">$809M</div>
+    <div class="stat-sub">Assets under management</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Volume to Date</div>
+    <div class="stat-val y">$11.25B</div>
+    <div class="stat-sub">Total processed</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Depositors</div>
+    <div class="stat-val">51.5K</div>
+    <div class="stat-sub">Active users</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Audits</div>
+    <div class="stat-val g">51</div>
+    <div class="stat-sub">Smart contract audits</div>
+  </div>
+</div>
+
+<h3>This Week's Developments</h3>
+
+<p><strong>AssetCX Custodian Pipeline.</strong> Concrete's custody-native yield product is now live and accepting institutional enquiries across nine qualified custodians. The significance: most DeFi protocols require assets to leave custody entirely, creating legal and regulatory friction for institutional mandates. Concrete's architecture keeps assets inside the custodian's perimeter — a structural feature, not a marketing claim.</p>
+
+<p><strong>Euler Partnership Progression.</strong> The collaboration to build institutional-grade modular DeFi lending markets has entered its next phase. Modular DeFi (Euler, Morpho, etc.) plus Concrete's automation and risk layer is the convergence architecture that serious capital will use. This isn't a Twitter partnership announcement — it's B2B infrastructure that compounds quietly but matters for long-term TVL capacity.</p>
+
+<p><strong>Backtested Performance Through the Oct 2025 Cascade.</strong> During the October 2025 $19B liquidation cascade — the largest DeFi liquidation event in 18 months — Concrete's ctYieldUSDC delivered one of its most profitable 24-hour periods. The Probability Engine was designed to perform in exactly these conditions: high-volatility environments where manual positioning fails and automated rebalancing extracts opportunity. This isn't marketing; it's verifiable on-chain.</p>
+
+<div class="callout">
+  <div class="callout-title">📈 The Custodian Moat in Numbers</div>
+  <p>9 qualified custodian integrations. $809M TVL. $11.25B processed. 51.5K depositors. 51 audits. <strong style="color:var(--text)">Zero major exploits.</strong> The institutional due diligence checklist that took competitors years to build — Concrete has it, and the custodians already know it.</p>
+</div>
+
+<!-- COMPETITOR WATCH -->
+<div class="section-div">
+  <span class="section-div-label">⚔️ Competitor Watch</span>
+  <div class="section-div-line"></div>
+</div>
+
+<h2>The Moat Is Wider Than the APY Chart Shows</h2>
+
+<div class="comp-grid">
+  <div class="comp-card">
+    <div class="comp-name">Pendle <span class="comp-badge badge-niche">Niche</span></div>
+    <p>High raw APY (21%+) captures headlines but the structure — yield token stripping, fixed-term tranches, PT/YT complexity — is fundamentally incompatible with institutional custody workflows. Compliance teams cannot approve an instrument they cannot explain to a risk committee. Pendle is a power user product. Concrete is the general solution.</p>
+    <div class="comp-verdict">Concrete advantage: <span>Architecture + automation vs. complexity + risk</span></div>
+  </div>
+  <div class="comp-card">
+    <div class="comp-name">Morpho <span class="comp-badge badge-threat">Watch</span></div>
+    <p>Strong liquidity aggregation and a growing institutional following. No automation layer, no liquidation protection, no custody integration. Morpho is a good primitive that Concrete uses — not a finished product that competes with Concrete's full stack. The Concrete-Euler partnership also uses Morpho infrastructure. Concrete is building on top of Morpho, not competing with it.</p>
+    <div class="comp-verdict">Concrete advantage: <span>Full automation stack vs. manual lending primitive</span></div>
+  </div>
+  <div class="comp-card">
+    <div class="comp-name">Yearn Finance <span class="comp-badge badge-legacy">Legacy</span></div>
+    <p>The vault pioneer. Yearn created the category Concrete now leads. Governance is slow, infrastructure is aging, and yield has compressed to 5.2%. The talent and TVL migration from Yearn toward newer architectures has been consistent for 18+ months. The era of DeFi vaults Yearn built now belongs to the protocols that modernized the model.</p>
+    <div class="comp-verdict">Concrete advantage: <span>Modern architecture, institutional-grade, active development</span></div>
+  </div>
+  <div class="comp-card">
+    <div class="comp-name">Euler <span class="comp-badge badge-threat">Partner</span></div>
+    <p>Not a competitor — a partner in the modular DeFi buildout. Euler provides the lending primitive layer; Concrete provides the automation, risk, and custodian integration layer on top. The collaboration creates a product that neither could build alone: truly institutional modular DeFi with automated rebalancing and qualified custody compatibility.</p>
+    <div class="comp-verdict">Concrete advantage: <span>Partnership = combined TVL capacity amplification</span></div>
+  </div>
+</div>
+
+<!-- WHAT TO WATCH NEXT WEEK -->
+<div class="section-div">
+  <span class="section-div-label">🔭 Watch Next Week</span>
+  <div class="section-div-line"></div>
+</div>
+
+<div class="watch-item">
+  <div class="watch-dot y"></div>
+  <div class="watch-text"><strong>OCC GENIUS Act comment period closes June 30.</strong> Final rulemaking timeline will clarify the bank custodian yield product pathway. Any acceleration is a direct catalyst for Concrete's AssetCX institutional pipeline.</div>
+</div>
+<div class="watch-item">
+  <div class="watch-dot o"></div>
+  <div class="watch-text"><strong>Pendle June-26 fixed-term expiry.</strong> When yield tranches expire, capital must redeploy. Watch whether Pendle users rolling off fixed positions move into open-ended automated vaults like Concrete's rather than re-entering fixed-term structures.</div>
+</div>
+<div class="watch-item">
+  <div class="watch-dot g"></div>
+  <div class="watch-text"><strong>Concrete Euler partnership — next announcement expected.</strong> The modular DeFi buildout with Euler is advancing. Any TVL or product announcement here would be a meaningful signal for Q3 capacity.</div>
+</div>
+<div class="watch-item">
+  <div class="watch-dot r"></div>
+  <div class="watch-text"><strong>SEC enforcement posture on yield-generating DeFi vaults.</strong> Any Wells notice or action against a comparable custody-incompatible protocol creates clarity (and differentiation) for Concrete's custody-native architecture.</div>
+</div>
+<div class="watch-item">
+  <div class="watch-dot o"></div>
+  <div class="watch-text"><strong>Fed minutes release Wednesday.</strong> Any dovish signal on rates compresses T-Bill yields further and widens Concrete's risk-adjusted spread advantage vs. TradFi benchmarks.</div>
+</div>
+
+<!-- THE ONE THING -->
+<div class="one-thing">
+  <div class="one-thing-label">💡 The One Thing This Week</div>
+  <h3>The Custodian Gateway Is Opening.<br>Concrete Already Has the Keys.</h3>
+  <p>GENIUS Act implementation means bank-affiliated custodians will formally offer DeFi yield products to institutional clients in the next 12–18 months. The compliance due diligence that gatekeeps this pipeline — qualified custody integration, transparent NAV accounting, multi-firm audit trail, zero major exploits — Concrete has already passed it. The institutional capital flood won't need to find Concrete. It's already at the door, with Concrete holding the keycard.</p>
+</div>
+
+<!-- SUBSCRIBE -->
+<div class="subscribe-box">
+  <h3>Get This Every Monday</h3>
+  <p>State of Institutional DeFi publishes every Monday morning. Follow on Mirror or X to not miss Issue 2.</p>
+  <div class="sub-form">
+    <input class="sub-input" type="email" placeholder="your@email.com" disabled title="Subscribe via Mirror link below"/>
+    <button class="sub-btn">Subscribe on Mirror →</button>
+  </div>
+  <div class="sub-note">Or follow <a href="https://x.com/ConcreteXYZ" target="_blank" style="color:var(--yellow)">@ConcreteXYZ</a> on X to catch each issue when it drops.</div>
+</div>
+
+<!-- FOOTER -->
+<div class="brief-footer">
+  <strong>State of Institutional DeFi</strong> is an independent community research brief. Not affiliated with or endorsed by Concrete Protocol.<br>
+  APY figures are illustrative estimates for educational purposes. Not financial advice. DYOR before investing.<br>
+  Data sourced from on-chain analytics, protocol documentation, and public research as of June 22, 2026.<br><br>
+  <a href="https://x.com/ConcreteXYZ" target="_blank">@ConcreteXYZ</a> &nbsp;·&nbsp;
+  <a href="https://concrete.xyz/blog" target="_blank">Blog</a> &nbsp;·&nbsp;
+  <a href="https://discord.gg/concretexyz" target="_blank">Discord</a> &nbsp;·&nbsp;
+  <a href="https://app.concrete.xyz/earn" target="_blank">Launch App</a> &nbsp;·&nbsp;
+  <a href="https://points.concrete.xyz/home" target="_blank">Points</a>
+</div>
+
+</body>
+</html>

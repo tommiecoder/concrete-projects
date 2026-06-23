@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concrete Chronicles — X Thread Kit</title>
+<meta name="description" content="Copy-paste Twitter/X threads for The Concrete Chronicles comic series. One file per episode, ready to post.">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --yellow: #E9DA7A; --yellow-dim: rgba(233,218,122,0.08);
+  --yellow-border: rgba(233,218,122,0.2); --bg: #0D0D0D;
+  --card: #141414; --card2: #191919; --border: #222222;
+  --text: #FFFFFF; --muted: #666666; --muted2: #999999;
+  --green: #4ADE80;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+.header { border-bottom: 1px solid var(--border); padding: 18px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.logo-wrap { display: flex; align-items: center; gap: 12px; }
+.logo-box { width: 36px; height: 36px; background: var(--yellow); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2px; }
+.logo-c { font-size: 18px; font-weight: 900; color: #000; line-height: 1; }
+.logo-line { width: 18px; height: 2px; background: #000; }
+.logo-text { font-size: 15px; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; }
+.header-badge { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--yellow); border: 1px solid var(--yellow-border); padding: 5px 14px; border-radius: 100px; background: var(--yellow-dim); }
+
+.hero { max-width: 640px; margin: 0 auto; padding: 60px 24px 40px; text-align: center; }
+.hero-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: var(--yellow); margin-bottom: 18px; }
+.hero h1 { font-size: 42px; font-weight: 900; letter-spacing: -1.5px; line-height: 1.05; text-transform: uppercase; margin-bottom: 14px; }
+.hero h1 em { font-style: normal; color: var(--yellow); }
+.hero p { color: var(--muted2); font-size: 14px; line-height: 1.8; }
+
+.how-to { max-width: 640px; margin: 0 auto 48px; padding: 0 24px; }
+.how-to-box { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; }
+.how-step { flex: 1; min-width: 160px; }
+.how-step-num { font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--yellow); margin-bottom: 6px; }
+.how-step p { font-size: 12px; color: var(--muted2); line-height: 1.6; }
+.how-step strong { color: var(--text); }
+
+.ep-tabs { display: flex; gap: 6px; justify-content: center; padding: 0 24px 36px; flex-wrap: wrap; }
+.ep-tab { background: var(--card); border: 1px solid var(--border); color: var(--muted2); padding: 9px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; font-family: inherit; transition: all 0.15s; }
+.ep-tab:hover { border-color: #333; color: var(--text); }
+.ep-tab.active { background: var(--yellow-dim); border-color: var(--yellow-border); color: var(--yellow); }
+.ep-tab.locked { opacity: 0.4; cursor: default; }
+
+.content { max-width: 680px; margin: 0 auto; padding: 0 24px 80px; }
+.ep-content { display: none; }
+.ep-content.active { display: block; }
+
+.ep-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.ep-x-icon { width: 44px; height: 44px; background: #000; border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.ep-meta { flex: 1; }
+.ep-label { font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--yellow); margin-bottom: 4px; }
+.ep-title { font-size: 17px; font-weight: 800; letter-spacing: -0.2px; }
+.ep-date { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+.tweet-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; margin-bottom: 6px; }
+.tweet-num { font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.tweet-text { font-size: 14px; line-height: 1.75; color: var(--muted2); white-space: pre-wrap; }
+.tweet-text strong { color: var(--text); font-weight: 700; }
+.tweet-text em { color: var(--yellow); font-style: normal; font-weight: 700; }
+.tweet-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; }
+.tweet-chars { font-size: 10px; color: var(--muted); }
+.copy-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-size: 10px; font-weight: 700; padding: 7px 16px; border-radius: 6px; cursor: pointer; font-family: inherit; letter-spacing: 0.5px; transition: all 0.12s; }
+.copy-btn:hover { border-color: #333; color: var(--muted2); }
+.copy-btn.copied { color: var(--green); border-color: rgba(74,222,128,0.3); }
+
+.copy-all-btn { width: 100%; background: var(--yellow-dim); border: 1px solid var(--yellow-border); color: var(--yellow); font-size: 13px; font-weight: 800; padding: 14px; border-radius: 10px; cursor: pointer; font-family: inherit; letter-spacing: 0.5px; margin: 16px 0; transition: all 0.15s; }
+.copy-all-btn:hover { background: rgba(233,218,122,0.14); }
+
+.thread-tip { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-top: 20px; font-size: 12px; color: var(--muted2); line-height: 1.75; }
+.thread-tip strong { color: var(--yellow); }
+
+.locked-banner { text-align: center; padding: 60px 24px; color: var(--muted); }
+.locked-banner h3 { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+.locked-banner .date-tag { display: inline-block; background: var(--card); border: 1px solid var(--border); color: var(--yellow); font-size: 11px; font-weight: 700; padding: 6px 16px; border-radius: 100px; margin-top: 14px; }
+
+.footer { text-align: center; padding: 28px 40px; border-top: 1px solid var(--border); color: var(--muted); font-size: 11px; line-height: 2.2; }
+.footer a { color: var(--yellow); text-decoration: none; }
+
+@media (max-width: 600px) {
+  .header { padding: 14px 20px; }
+  .hero h1 { font-size: 30px; }
+  .ep-tabs { gap: 4px; }
+  .ep-tab { font-size: 12px; padding: 8px 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-wrap">
+    <div class="logo-box"><span class="logo-c">C</span><div class="logo-line"></div></div>
+    <span class="logo-text">Concrete</span>
+  </div>
+  <div class="header-badge">𝕏 Thread Kit</div>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">The Concrete Chronicles · X Thread Kit</div>
+  <h1>Ready-to-Post <em>Threads</em></h1>
+  <p>One file, all episodes. Copy each tweet individually or grab the whole thread at once — formatted, character-counted, and ready to post on X.</p>
+</div>
+
+<div class="how-to">
+  <div class="how-to-box">
+    <div class="how-step"><div class="how-step-num">Step 1</div><p>Pick the episode tab matching the comic you just published.</p></div>
+    <div class="how-step"><div class="how-step-num">Step 2</div><p>Copy tweets <strong>one by one</strong> in order, posting each before copying the next.</p></div>
+    <div class="how-step"><div class="how-step-num">Step 3</div><p>Attach a <strong>screenshot of the comic panel</strong> to Tweet 1 for maximum reach.</p></div>
+    <div class="how-step"><div class="how-step-num">Step 4</div><p>Tag <strong>@ConcreteXYZ</strong> and use <strong>#DeFi #Concrete</strong> on the last tweet.</p></div>
+  </div>
+</div>
+
+<div class="ep-tabs">
+  <button class="ep-tab active" onclick="switchEp('ep1', this)">Episode 1 · Jun 23</button>
+  <button class="ep-tab locked" onclick="return false">Episode 2 · Jun 30</button>
+  <button class="ep-tab locked" onclick="return false">Episode 3 · Jul 7</button>
+  <button class="ep-tab locked" onclick="return false">Episode 4 · Jul 14</button>
+</div>
+
+<div class="content">
+
+  <!-- EPISODE 1 THREAD -->
+  <div id="ep-ep1" class="ep-content active">
+    <div class="ep-header">
+      <div class="ep-x-icon">𝕏</div>
+      <div class="ep-meta">
+        <div class="ep-label">Episode 1 · "The One-Click Awakening"</div>
+        <div class="ep-title">Post this thread on Monday, June 23, 2026</div>
+        <div class="ep-date">5 tweets · ~1,100 characters total · Attach comic panel image to Tweet 1</div>
+      </div>
+    </div>
+
+    <div class="tweet-card">
+      <div class="tweet-num">Tweet 1 of 5 · Pin this · Attach comic image</div>
+      <div class="tweet-text" id="t1-0">I made a comic about DeFi's most relatable trauma.
+
+Chasing APY manually at 2AM... getting liquidated... discovering something better.
+
+🔑 "The One-Click Awakening" — The Concrete Chronicles, Ep.1
+
+A thread 🧵 <em>@ConcreteXYZ</em></div>
+      <div class="tweet-meta">
+        <span class="tweet-chars">~200 chars</span>
+        <button class="copy-btn" onclick="copyTweet(this, 'ep1', 0)">Copy Tweet 1</button>
+      </div>
+    </div>
+
+    <div class="tweet-card">
+      <div class="tweet-num">Tweet 2 of 5</div>
+      <div class="tweet-text" id="t1-1"><strong>Panel 1: The Grind</strong>
+
+22 open tabs. Aave at 3.8%. Compound at 3.2%. Curve locked for 14 days. Morpho has no automation. Yearn is basically a museum.
+
+It's 11:47PM and you still don't know where to put your USDC.</div>
+      <div class="tweet-meta">
+        <span class="tweet-chars">~220 chars</span>
+        <button class="copy-btn" onclick="copyTweet(this, 'ep1', 1)">Copy Tweet 2</button>
+      </div>
+    </div>
+
+    <div class="tweet-card">
+      <div class="tweet-num">Tweet 3 of 5</div>
+      <div class="tweet-text" id="t1-2"><strong>Panel 2: The Rekt</strong>
+
+You fell asleep. Your position drifted. The liquidation bot did not sleep.
+
+-$4,812.00
+Health Factor: 0.97
+
+"I was watching the wrong protocol for 3 hours straight."</div>
+      <div class="tweet-meta">
+        <span class="tweet-chars">~190 chars</span>
+        <button class="copy-btn" onclick="copyTweet(this, 'ep1', 2)">Copy Tweet 3</button>
+      </div>
+    </div>
+
+    <div class="tweet-card">
+      <div class="tweet-num">Tweet 4 of 5</div>
+      <div class="tweet-text" id="t1-3"><strong>Panel 3: The Discovery</strong>
+
+At 2:09AM, still awake and now $4,812 poorer, you find Concrete.
+
+One button. 8.7% APY. 51 audits. Automated rebalancing across Morpho, Euler, Pendle. Built-in liquidation protection.
+
+"...it does ALL of that automatically?"</div>
+      <div class="tweet-meta">
+        <span class="tweet-chars">~245 chars</span>
+        <button class="copy-btn" onclick="copyTweet(this, 'ep1', 3)">Copy Tweet 4</button>
+      </div>
+    </div>
+
+    <div class="tweet-card">
+      <div class="tweet-num">Tweet 5 of 5 · CTA</div>
+      <div class="tweet-text" id="t1-4"><strong>Panel 4: The Glow-Up</strong>
+
+One week later. Poolside. Phone shows +$489. The Probability Engine is managing 12 protocols while you do nothing.
+
+This is the way. 🤌
+
+Try it → app.concrete.xyz/earn
+Ep.2 coming Jun 30. Follow to not miss it.
+@ConcreteXYZ #DeFi #Concrete</div>
+      <div class="tweet-meta">
+        <span class="tweet-chars">~260 chars</span>
+        <button class="copy-btn" onclick="copyTweet(this, 'ep1', 4)">Copy Tweet 5</button>
+      </div>
+    </div>
+
+    <button class="copy-all-btn" onclick="copyAll('ep1')">📋 Copy Entire Thread (all 5 tweets, separated by — )</button>
+
+    <div class="thread-tip">
+      <strong>Posting tips:</strong> Attach a screenshot of the comic (or a panel collage) to Tweet 1 — visual content gets 3× more reach. Reply to your own Tweet 1 for each subsequent tweet. Don't post all at once: space them 30–60 seconds apart so they surface in feeds. Tag <strong>@ConcreteXYZ</strong> — they may retweet community content.
+    </div>
+  </div>
+
+  <!-- EPISODE 2 PLACEHOLDER -->
+  <div id="ep-ep2" class="ep-content">
+    <div class="locked-banner">
+      <h3>"The NAV Explainer" Thread</h3>
+      <p>Thread drops alongside Episode 2 of The Concrete Chronicles.<br>Add the copy here once Episode 2 is ready to publish.</p>
+      <div class="date-tag">📅 Publish June 30, 2026</div>
+    </div>
+  </div>
+
+  <!-- EPISODE 3 PLACEHOLDER -->
+  <div id="ep-ep3" class="ep-content">
+    <div class="locked-banner">
+      <h3>"The Probability Engine" Thread</h3>
+      <p>Thread drops alongside Episode 3 of The Concrete Chronicles.<br>Add the copy here once Episode 3 is ready to publish.</p>
+      <div class="date-tag">📅 Publish July 7, 2026</div>
+    </div>
+  </div>
+
+  <!-- EPISODE 4 PLACEHOLDER -->
+  <div id="ep-ep4" class="ep-content">
+    <div class="locked-banner">
+      <h3>"The Institutional Migration" Thread</h3>
+      <p>Thread drops alongside Episode 4 of The Concrete Chronicles.<br>Add the copy here once Episode 4 is ready to publish.</p>
+      <div class="date-tag">📅 Publish July 14, 2026</div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<div class="footer">
+  The Concrete Chronicles · Thread Kit · By <a href="https://x.com/billiano_21" target="_blank">@billiano_21</a><br>
+  <a href="https://concrete.xyz" target="_blank">concrete.xyz</a> &nbsp;·&nbsp;
+  <a href="https://x.com/ConcreteXYZ" target="_blank">@ConcreteXYZ</a> &nbsp;·&nbsp;
+  <a href="https://discord.gg/concretexyz" target="_blank">Discord</a> &nbsp;·&nbsp;
+  <a href="https://app.concrete.xyz/earn" target="_blank">Launch App</a><br>
+  Not official Concrete content. Community-made.
+</div>
+
+<script>
+const threadData = {
+  ep1: [
+    `I made a comic about DeFi's most relatable trauma.\n\nChasing APY manually at 2AM... getting liquidated... discovering something better.\n\n🔑 "The One-Click Awakening" — The Concrete Chronicles, Ep.1\n\nA thread 🧵 @ConcreteXYZ`,
+    `Panel 1: The Grind\n\n22 open tabs. Aave at 3.8%. Compound at 3.2%. Curve locked for 14 days. Morpho has no automation. Yearn is basically a museum.\n\nIt's 11:47PM and you still don't know where to put your USDC.`,
+    `Panel 2: The Rekt\n\nYou fell asleep. Your position drifted. The liquidation bot did not sleep.\n\n-$4,812.00\nHealth Factor: 0.97\n\n"I was watching the wrong protocol for 3 hours straight."`,
+    `Panel 3: The Discovery\n\nAt 2:09AM, still awake and now $4,812 poorer, you find Concrete.\n\nOne button. 8.7% APY. 51 audits. Automated rebalancing across Morpho, Euler, Pendle. Built-in liquidation protection.\n\n"...it does ALL of that automatically?"`,
+    `Panel 4: The Glow-Up\n\nOne week later. Poolside. Phone shows +$489. The Probability Engine is managing 12 protocols while you do nothing.\n\nThis is the way. 🤌\n\nTry it → app.concrete.xyz/earn\nEp.2 coming Jun 30. Follow to not miss it.\n@ConcreteXYZ #DeFi #Concrete`
+  ]
+};
+
+function switchEp(ep, btn) {
+  document.querySelectorAll('.ep-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.ep-tab:not(.locked)').forEach(el => el.classList.remove('active'));
+  document.getElementById('ep-' + ep).classList.add('active');
+  btn.classList.add('active');
+}
+
+function copyTweet(btn, ep, idx) {
+  const text = threadData[ep]?.[idx];
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = `Copy Tweet ${idx + 1}`; btn.classList.remove('copied'); }, 2200);
+  });
+}
+
+function copyAll(ep) {
+  const tweets = threadData[ep];
+  if (!tweets) return;
+  const full = tweets.join('\n\n——\n\n');
+  const btn = document.querySelector('.copy-all-btn');
+  navigator.clipboard.writeText(full).then(() => {
+    btn.textContent = '✓ Full Thread Copied!';
+    setTimeout(() => { btn.textContent = '📋 Copy Entire Thread (all 5 tweets, separated by — )'; }, 2500);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concrete Yield Tracker — Weekly Scorecard · June 23, 2026</title>
+<meta name="description" content="Weekly risk-adjusted yield comparison: Concrete vs Morpho, Euler, Yearn, Pendle, Aave, Compound, Sky, Fluid, Notional, Spark, and more.">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --yellow: #E9DA7A; --yellow-dim: rgba(233,218,122,0.07);
+  --yellow-border: rgba(233,218,122,0.18); --bg: #0D0D0D;
+  --card: #141414; --card2: #191919; --border: #202020;
+  --text: #FFFFFF; --muted: #555555; --muted2: #888888;
+  --green: #4ADE80; --yellow-active: rgba(233,218,122,0.12);
+  --red: #F87171; --orange: #FB923C;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+.header { padding: 18px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.header-left { display: flex; align-items: center; gap: 14px; }
+.logo-box { width: 38px; height: 38px; background: var(--yellow); border: 2px solid #000; border-radius: 7px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; flex-shrink: 0; }
+.logo-c { font-size: 19px; font-weight: 900; color: #000; line-height: 1; }
+.logo-line { width: 19px; height: 2px; background: #000; }
+.header-brand { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted2); }
+.header-title { font-size: 18px; font-weight: 900; letter-spacing: -0.3px; text-transform: uppercase; }
+.header-sub { font-size: 11px; color: var(--muted); }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.live-badge { display: flex; align-items: center; gap: 7px; background: var(--yellow-dim); border: 1px solid var(--yellow-border); padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 700; color: var(--yellow); letter-spacing: 1px; text-transform: uppercase; }
+.live-dot { width: 7px; height: 7px; background: var(--yellow); border-radius: 50%; animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.header-cta { font-size: 11px; font-weight: 800; padding: 9px 18px; border-radius: 7px; text-decoration: none; background: var(--yellow); color: #000; }
+
+.stats-bar { display: grid; grid-template-columns: repeat(5, 1fr); border-bottom: 1px solid var(--border); }
+.stat { padding: 20px 22px; border-right: 1px solid var(--border); }
+.stat:last-child { border-right: none; }
+.stat-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+.stat-val { font-size: 22px; font-weight: 900; letter-spacing: -0.8px; }
+.stat-val.yellow { color: var(--yellow); }
+.stat-val.green { color: var(--green); }
+.stat-sub { font-size: 10px; color: var(--muted); margin-top: 3px; }
+.stat-change { font-size: 10px; margin-top: 3px; font-weight: 700; }
+.up { color: var(--green); } .down { color: var(--red); } .flat { color: var(--muted); }
+
+.chart-section { padding: 28px 40px; border-bottom: 1px solid var(--border); }
+.section-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+.chart-wrap { position: relative; height: 230px; }
+.chart-note { font-size: 11px; color: var(--muted); margin-top: 10px; text-align: center; }
+
+.controls { padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--border); }
+.filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter-btn { background: var(--card); border: 1px solid var(--border); color: var(--muted2); padding: 7px 16px; border-radius: 7px; cursor: pointer; font-size: 11px; font-weight: 700; font-family: inherit; transition: all 0.12s; letter-spacing: 0.5px; text-transform: uppercase; }
+.filter-btn:hover { border-color: #333; color: var(--text); }
+.filter-btn.active { background: var(--yellow-active); border-color: var(--yellow-border); color: var(--yellow); }
+.sort-wrap { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--muted); }
+select { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 7px 12px; border-radius: 7px; font-size: 11px; font-family: inherit; cursor: pointer; outline: none; }
+
+.main { padding: 24px 40px 60px; }
+
+.winner-card { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 24px; background: var(--yellow-dim); border: 1px solid var(--yellow-border); border-left: 3px solid var(--yellow); border-radius: 0 14px 14px 0; padding: 20px 26px; margin-bottom: 20px; }
+.winner-badge { background: var(--yellow); color: #000; font-size: 10px; font-weight: 800; padding: 5px 12px; border-radius: 5px; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
+.winner-info h3 { font-size: 16px; font-weight: 800; margin-bottom: 5px; }
+.winner-info p { font-size: 11px; color: var(--muted2); line-height: 1.5; }
+.winner-score { text-align: right; }
+.winner-score-num { font-size: 48px; font-weight: 900; color: var(--yellow); letter-spacing: -2px; line-height: 1; }
+.winner-score-label { font-size: 9px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+.winner-score-change { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 4px; }
+
+.table-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+table { width: 100%; border-collapse: collapse; }
+thead th { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 10px 11px; text-align: left; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; white-space: nowrap; }
+thead th:hover { color: var(--muted2); }
+thead th.sorted { color: var(--yellow); }
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover td { background: rgba(255,255,255,0.012); }
+tbody tr.featured td { background: var(--yellow-dim); }
+tbody tr.featured:hover td { background: rgba(233,218,122,0.1); }
+td { padding: 12px 11px; font-size: 12px; vertical-align: middle; }
+.rank { font-size: 11px; color: var(--muted); width: 26px; }
+.proto-name { font-weight: 700; font-size: 13px; }
+.proto-name.featured { color: var(--yellow); }
+.proto-asset { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.apy-val { font-size: 15px; font-weight: 800; white-space: nowrap; }
+.apy-high { color: var(--green); } .apy-mid { color: var(--muted2); } .apy-low { color: var(--muted); }
+.change-cell { font-size: 11px; font-weight: 700; white-space: nowrap; }
+.change-up { color: var(--green); } .change-dn { color: var(--red); } .change-flat { color: var(--muted); }
+
+.risk-wrap { display: flex; align-items: center; gap: 3px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; }
+.dot-green { background: var(--green); } .dot-orange { background: var(--orange); }
+.dot-red { background: var(--red); } .dot-empty { background: var(--border); }
+.risk-label { font-size: 9px; color: var(--muted); margin-left: 5px; }
+
+.score-wrap { display: flex; align-items: center; gap: 8px; min-width: 90px; }
+.score-num { font-size: 13px; font-weight: 800; width: 26px; flex-shrink: 0; }
+.score-num.top { color: var(--yellow); }
+.score-bar-bg { flex: 1; height: 3px; background: var(--border); border-radius: 2px; }
+.score-bar { height: 100%; border-radius: 2px; }
+.score-bar.yellow { background: var(--yellow); } .score-bar.green { background: var(--green); } .score-bar.dim { background: #2a2a2a; }
+
+.method-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 26px 30px; margin-top: 32px; }
+.method-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+.method-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+.method-weight { font-size: 20px; font-weight: 900; color: var(--yellow); }
+.method-name { font-size: 11px; font-weight: 700; margin-top: 4px; text-transform: uppercase; }
+.method-desc { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+.notes-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 26px 30px; margin-top: 16px; }
+.note-row { display: grid; grid-template-columns: 170px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+.note-row:last-child { border-bottom: none; }
+.note-proto { font-weight: 700; color: var(--muted2); }
+.note-proto.featured { color: var(--yellow); }
+.note-text { color: var(--muted2); line-height: 1.6; }
+
+.footer { padding: 24px 40px; border-top: 1px solid var(--border); text-align: center; font-size: 11px; color: var(--muted); line-height: 2.2; }
+.footer a { color: var(--yellow); text-decoration: none; }
+
+@media (max-width: 900px) { .stats-bar { grid-template-columns: repeat(3,1fr); } .method-grid { grid-template-columns: repeat(3,1fr); } }
+@media (max-width: 700px) {
+  .stats-bar { grid-template-columns: repeat(2,1fr); } .main { padding: 16px 20px 40px; }
+  .header { padding: 14px 20px; } .controls { padding: 12px 20px; } .chart-section { padding: 20px; }
+  .winner-card { grid-template-columns: auto 1fr; } .winner-score { display: none; }
+  .method-grid { grid-template-columns: repeat(2,1fr); } td { padding: 10px 7px; }
+  .note-row { grid-template-columns: 1fr; gap: 4px; } .footer { padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo-box"><span class="logo-c">C</span><div class="logo-line"></div></div>
+    <div>
+      <div class="header-brand">Concrete.xyz Community</div>
+      <div class="header-title">Weekly Yield Tracker</div>
+      <div class="header-sub">Week of June 23, 2026 &nbsp;·&nbsp; 13 protocols tracked</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div>Updated Weekly</div>
+    <a href="https://app.concrete.xyz/earn" class="header-cta" target="_blank">Earn with Concrete →</a>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-label">Best Risk-Adj APY</div>
+    <div class="stat-val green">8.7%</div>
+    <div class="stat-sub">Concrete ctYieldUSDC</div>
+    <div class="stat-change up">↑ +0.2% vs last week</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Protocols Tracked</div>
+    <div class="stat-val yellow">13</div>
+    <div class="stat-sub">DeFi + TradFi benchmarks</div>
+    <div class="stat-change up">↑ +2 new this week</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Avg DeFi APY</div>
+    <div class="stat-val">6.3%</div>
+    <div class="stat-sub">Unweighted, excl. outliers</div>
+    <div class="stat-change down">↓ −0.4% vs last week</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">TradFi Benchmark</div>
+    <div class="stat-val">4.88%</div>
+    <div class="stat-sub">US 3M T-Bill</div>
+    <div class="stat-change flat">— Unchanged</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Concrete Spread</div>
+    <div class="stat-val yellow">+382bps</div>
+    <div class="stat-sub">vs T-Bill, risk-adjusted</div>
+    <div class="stat-change up">↑ Widest in 3 weeks</div>
+  </div>
+</div>
+
+<div class="chart-section">
+  <div class="section-label">📊 Risk-Adjusted APY Comparison — All 13 Protocols (Sorted High → Low)</div>
+  <div class="chart-wrap"><canvas id="apyChart"></canvas></div>
+  <div class="chart-note">Gold bars = Concrete vaults. Concrete's risk-adj APY leads despite the lowest risk profile. Raw APY shown as lighter overlay.</div>
+</div>
+
+<div class="controls">
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterAll(this)">All</button>
+    <button class="filter-btn" onclick="filterCat('stablecoin',this)">Stablecoins</button>
+    <button class="filter-btn" onclick="filterCat('btc',this)">BTC</button>
+    <button class="filter-btn" onclick="filterCat('eth',this)">ETH</button>
+    <button class="filter-btn" onclick="filterCat('concrete',this)">Concrete Only</button>
+    <button class="filter-btn" onclick="filterCat('tradfi',this)">TradFi</button>
+  </div>
+  <div class="sort-wrap">
+    Sort:
+    <select id="sortSel" onchange="sortTable()">
+      <option value="score">Overall Score</option>
+      <option value="apy">Raw APY ↓</option>
+      <option value="risk_apy">Risk-Adj APY ↓</option>
+      <option value="risk">Risk Level ↑</option>
+      <option value="audits">Audits ↓</option>
+    </select>
+  </div>
+</div>
+
+<div class="main">
+  <div class="winner-card">
+    <div class="winner-badge">🏆 #1 This Week</div>
+    <div class="winner-info">
+      <h3>Concrete ctYieldUSDT &amp; ctYieldUSDC</h3>
+      <p>Automated cross-protocol allocation · Probability Engine · 51 smart contract audits · Custody-native (9 qualified custodians) · Built-in liquidation protection · $809M TVL · One-click deposit</p>
+    </div>
+    <div class="winner-score">
+      <div class="winner-score-num">95</div>
+      <div class="winner-score-label">Overall Score</div>
+      <div class="winner-score-change">↑ +2 vs last week</div>
+    </div>
+  </div>
+
+  <div class="table-label">All 13 Protocols — Click column headers to sort</div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Protocol / Venue</th>
+        <th onclick="sortBy('apy')" id="h-apy">Raw APY ↕</th>
+        <th onclick="sortBy('risk')" id="h-risk">Risk ↕</th>
+        <th onclick="sortBy('risk_apy')" id="h-risk_apy">Risk-Adj APY ↕</th>
+        <th>WoW Δ</th>
+        <th>Liq. Protection</th>
+        <th onclick="sortBy('audits')" id="h-audits">Audits ↕</th>
+        <th>Auto-Rebal.</th>
+        <th>Custody Native</th>
+        <th onclick="sortBy('score')" id="h-score">Score ↕</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+  <div class="method-box">
+    <div class="method-title">📐 Scoring Methodology v2 — June 2026</div>
+    <div class="method-grid">
+      <div><div class="method-weight">35%</div><div class="method-name">Risk-Adj APY</div><div class="method-desc">Raw APY × (1 − risk_discount), normalised against all peers.</div></div>
+      <div><div class="method-weight">25%</div><div class="method-name">Security Audits</div><div class="method-desc">Number of independent audit firms. 51 = max; 0 = zero contribution.</div></div>
+      <div><div class="method-weight">20%</div><div class="method-name">Liq. Protection</div><div class="method-desc">Native liquidation protection active and user-facing.</div></div>
+      <div><div class="method-weight">10%</div><div class="method-name">Automation</div><div class="method-desc">Protocol rebalances automatically without user action.</div></div>
+      <div><div class="method-weight">10%</div><div class="method-name">UX / Custody</div><div class="method-desc">One-click + institutional custody compatibility = max.</div></div>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <div class="method-title">🗒️ Analyst Notes — Week of June 23, 2026</div>
+    <div class="note-row">
+      <div class="note-proto featured">Concrete (both vaults)</div>
+      <div class="note-text">Score +2pts WoW as T-Bill spread widened to +382bps, widest in 3 weeks. Euler partnership advancing — Q3 TVL expansion announcement expected. GENIUS Act strengthens institutional pipeline thesis. Concrete now integrated with 9 qualified custodians — no competitor matches this.</div>
+    </div>
+    <div class="note-row">
+      <div class="note-proto">Pendle YT-USDe</div>
+      <div class="note-text">Raw APY spiked to 21.3% on short-dated tranches ahead of June-26 expiry. Risk-adj score stays low: PT/YT complexity, fixed-term lock, USDe depeg exposure. Capital rolling off June tranches may migrate to open-ended automated vaults. Monitor post-expiry flows.</div>
+    </div>
+    <div class="note-row">
+      <div class="note-proto">Fluid (fka Instadapp)</div>
+      <div class="note-text">New addition. Smart collateral architecture with 7.1% USDC yield is competitive. Only 4 audits and no custody integration cap the score at 64. One to watch as institutional product development progresses.</div>
+    </div>
+    <div class="note-row">
+      <div class="note-proto">Morpho Blue</div>
+      <div class="note-text">APY compressed -0.3% WoW to 6.4%. Concrete's Probability Engine allocates through Morpho — it's a component of Concrete's yield stack, not a full-stack competitor. Score penalized for no automation and no liquidation protection.</div>
+    </div>
+    <div class="note-row">
+      <div class="note-proto">Sky DSR / Notional</div>
+      <div class="note-text">Sky (MakerDAO) DSR stable at 5.0% — governance-controlled rate. Notional USDC at 5.8% offers predictability for fixed-rate mandates but limited institutional compatibility. Both legitimate primitives, neither a full institutional stack.</div>
+    </div>
+    <div class="note-row">
+      <div class="note-proto">Aave v3 / Compound v3</div>
+      <div class="note-text">Both protocols now below US T-Bill on USD stablecoins (3.82% and 3.21% vs 4.88%). Zero risk premium for taking DeFi smart contract risk. These protocols have aged into TradFi-equivalent yields without TradFi-equivalent safety guarantees. The frontier of on-chain yield has moved on.</div>
+    </div>
+    <div class="note-row">
+      <div class="note-proto">US T-Bill (3M)</div>
+      <div class="note-text">Unchanged at 4.88%. The institutional hurdle rate. Any DeFi protocol below this must justify its risk with better liquidity or other factors — and none of the below-T-Bill protocols do. Concrete's +382bps spread above this benchmark is the core institutional value proposition.</div>
+    </div>
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:24px;line-height:1.8;">
+    ⚠️ All APY figures are illustrative estimates as of week of June 23, 2026. Rates change constantly — verify on-chain.<br>
+    Community resource. Not financial advice. DYOR. Supporting <a href="https://concrete.xyz" target="_blank" style="color:var(--yellow)">concrete.xyz</a> · <a href="https://x.com/ConcreteXYZ" target="_blank" style="color:var(--yellow)">@ConcreteXYZ</a>
+  </p>
+</div>
+
+<div class="footer">
+  Concrete Yield Tracker &nbsp;·&nbsp; By <a href="https://x.com/billiano_21" target="_blank">@billiano_21</a> &nbsp;·&nbsp; Not official Concrete content<br>
+  <a href="https://app.concrete.xyz/earn" target="_blank">Launch App</a> &nbsp;·&nbsp;
+  <a href="https://x.com/ConcreteXYZ" target="_blank">@ConcreteXYZ</a> &nbsp;·&nbsp;
+  <a href="https://discord.gg/concretexyz" target="_blank">Discord</a> &nbsp;·&nbsp;
+  <a href="https://concrete.xyz/blog" target="_blank">Blog</a> &nbsp;·&nbsp;
+  <a href="https://points.concrete.xyz/home" target="_blank">Points Program</a>
+</div>
+
+<script>
+const protocols = [
+  { name:"Concrete ctYieldUSDC", cat:["stablecoin","concrete"], asset:"USDC", apy:8.7,  risk:2, risk_apy:8.7,  wow:+0.2,  liq:true,  audits:51, auto:true,  custody:true,  score:95, featured:true },
+  { name:"Concrete ctYieldUSDT", cat:["stablecoin","concrete"], asset:"USDT", apy:8.5,  risk:2, risk_apy:8.5,  wow:+0.1,  liq:true,  audits:51, auto:true,  custody:true,  score:93, featured:true },
+  { name:"Concrete WBTC Vault",  cat:["btc","concrete"],        asset:"WBTC", apy:4.8,  risk:3, risk_apy:4.3,  wow:+0.3,  liq:true,  audits:51, auto:true,  custody:true,  score:88, featured:true },
+  { name:"Pendle YT-USDe",       cat:["stablecoin"],            asset:"USDe", apy:21.3, risk:9, risk_apy:6.8,  wow:+3.1,  liq:false, audits:3,  auto:false, custody:false, score:55, featured:false },
+  { name:"Fluid USDC",           cat:["stablecoin"],            asset:"USDC", apy:7.1,  risk:5, risk_apy:5.7,  wow:+0.4,  liq:false, audits:4,  auto:false, custody:false, score:64, featured:false },
+  { name:"Morpho Blue USDC",     cat:["stablecoin"],            asset:"USDC", apy:6.4,  risk:4, risk_apy:5.5,  wow:-0.3,  liq:false, audits:4,  auto:false, custody:false, score:67, featured:false },
+  { name:"Euler USDT",           cat:["stablecoin"],            asset:"USDT", apy:5.9,  risk:4, risk_apy:5.1,  wow:-0.1,  liq:false, audits:3,  auto:false, custody:false, score:61, featured:false },
+  { name:"Yearn USDC v3",        cat:["stablecoin"],            asset:"USDC", apy:5.2,  risk:5, risk_apy:4.2,  wow:-0.2,  liq:false, audits:3,  auto:true,  custody:false, score:52, featured:false },
+  { name:"Notional USDC Fixed",  cat:["stablecoin"],            asset:"USDC", apy:5.8,  risk:4, risk_apy:5.0,  wow:+0.2,  liq:false, audits:3,  auto:false, custody:false, score:54, featured:false },
+  { name:"Sky DSR (MakerDAO)",   cat:["stablecoin"],            asset:"DAI",  apy:5.0,  risk:2, risk_apy:4.9,  wow: 0.0,  liq:false, audits:6,  auto:false, custody:false, score:55, featured:false },
+  { name:"Lido stETH",           cat:["eth"],                   asset:"ETH",  apy:3.9,  risk:3, risk_apy:3.5,  wow:-0.1,  liq:false, audits:5,  auto:false, custody:false, score:50, featured:false },
+  { name:"Aave v3 USDT",         cat:["stablecoin"],            asset:"USDT", apy:3.82, risk:2, risk_apy:3.7,  wow:-0.1,  liq:false, audits:5,  auto:false, custody:false, score:46, featured:false },
+  { name:"Compound v3 USDC",     cat:["stablecoin"],            asset:"USDC", apy:3.21, risk:2, risk_apy:3.1,  wow:-0.2,  liq:false, audits:5,  auto:false, custody:false, score:43, featured:false },
+  { name:"US T-Bill (3M)",       cat:["stablecoin","tradfi"],   asset:"USD",  apy:4.88, risk:1, risk_apy:4.88, wow: 0.0,  liq:false, audits:0,  auto:false, custody:false, score:38, featured:false },
+];
+
+let currentFilter = null, currentSort = "score", sortDir = -1;
+
+function riskDots(risk) {
+  const col = risk <= 2 ? 'green' : risk <= 5 ? 'orange' : 'red';
+  const label = risk <= 2 ? 'LOW' : risk <= 5 ? 'MED' : 'HIGH';
+  let h = '<div class="risk-wrap">';
+  for(let i=1;i<=5;i++) h += `<div class="dot ${i<=Math.ceil(risk/2)?'dot-'+col:'dot-empty'}"></div>`;
+  return h + `<span class="risk-label">${label}</span></div>`;
+}
+function apyCls(v) { return v>=8?'apy-high':v>=5?'apy-mid':'apy-low'; }
+function wowCell(v) {
+  if(v===0) return '<span class="change-cell change-flat">— flat</span>';
+  return v>0 ? `<span class="change-cell change-up">↑ +${v.toFixed(1)}%</span>` : `<span class="change-cell change-dn">↓ ${v.toFixed(1)}%</span>`;
+}
+function scoreBar(s,f) {
+  const b=s>=85?(f?'yellow':'green'):'dim', nc=s>=85&&f?'top':'';
+  return `<div class="score-wrap"><span class="score-num ${nc}">${s}</span><div class="score-bar-bg"><div class="score-bar ${b}" style="width:${s}%"></div></div></div>`;
+}
+function auditCell(n) {
+  if(!n) return '<span style="color:var(--muted)">—</span>';
+  const c=n>=20?'var(--yellow)':n>=4?'var(--green)':'var(--muted2)';
+  return `<span style="font-weight:800;color:${c}">${n}</span>`;
+}
+function yn(v) { return v?'✅':'<span style="color:var(--muted)">—</span>'; }
+
+function render(data) {
+  const tb = document.getElementById('tbody');
+  tb.innerHTML = '';
+  data.forEach((p,i) => {
+    const tr = document.createElement('tr');
+    if(p.featured) tr.classList.add('featured');
+    tr.innerHTML = `
+      <td class="rank">${i+1}</td>
+      <td><div class="proto-name ${p.featured?'featured':''}">${p.name}</div><div class="proto-asset">${p.asset}${p.featured?' · CONCRETE':''}</div></td>
+      <td><span class="apy-val ${apyCls(p.apy)}">${p.apy}%</span></td>
+      <td>${riskDots(p.risk)}</td>
+      <td><span class="apy-val ${apyCls(p.risk_apy)}">${p.risk_apy}%</span></td>
+      <td>${wowCell(p.wow)}</td>
+      <td>${yn(p.liq)}</td>
+      <td>${auditCell(p.audits)}</td>
+      <td>${yn(p.auto)}</td>
+      <td>${yn(p.custody)}</td>
+      <td>${scoreBar(p.score,p.featured)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+function filtered() { return currentFilter?protocols.filter(p=>p.cat.includes(currentFilter)):[...protocols]; }
+function sorted(d) { return [...d].sort((a,b)=>sortDir*(b[currentSort]-a[currentSort])); }
+function filterAll(btn) { currentFilter=null; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); render(sorted(filtered())); }
+function filterCat(cat,btn) { currentFilter=cat; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); render(sorted(filtered())); }
+function sortBy(col) {
+  document.querySelectorAll('thead th').forEach(t=>t.classList.remove('sorted'));
+  const el=document.getElementById('h-'+col); if(el) el.classList.add('sorted');
+  if(currentSort===col) sortDir*=-1; else{currentSort=col;sortDir=-1;}
+  render(sorted(filtered()));
+}
+function sortTable() { currentSort=document.getElementById('sortSel').value; sortDir=-1; render(sorted(filtered())); }
+
+render(sorted(filtered()));
+
+// ── CHART ──
+const cdata = [...protocols].sort((a,b)=>b.risk_apy-a.risk_apy);
+const ctx = document.getElementById('apyChart').getContext('2d');
+new Chart(ctx, {
+  type:'bar',
+  data:{
+    labels: cdata.map(p=>p.name.replace('Concrete ct','C.').replace(' (Blue)','').replace(' USDC','').replace(' USDT','').replace('US T-Bill (3M)','T-Bill').replace(' v3','')),
+    datasets:[
+      { label:'Risk-Adj APY (%)', data:cdata.map(p=>p.risk_apy), backgroundColor:cdata.map(p=>p.featured?'rgba(233,218,122,0.88)':'rgba(255,255,255,0.1)'), borderColor:cdata.map(p=>p.featured?'#E9DA7A':'rgba(255,255,255,0.15)'), borderWidth:1, borderRadius:4, order:1 },
+      { label:'Raw APY (%)', data:cdata.map(p=>p.apy), backgroundColor:'transparent', borderColor:cdata.map(p=>p.featured?'rgba(233,218,122,0.25)':'rgba(255,255,255,0.05)'), borderWidth:1, borderRadius:4, order:2 }
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{
+      legend:{labels:{color:'#555',font:{size:11},boxWidth:12,boxHeight:12}},
+      tooltip:{backgroundColor:'#141414',borderColor:'#202020',borderWidth:1,titleColor:'#fff',bodyColor:'#888',padding:12,callbacks:{label:c=>` ${c.dataset.label}: ${c.raw}%`}}
+    },
+    scales:{
+      x:{ticks:{color:'#555',font:{size:9},maxRotation:35,minRotation:20},grid:{color:'rgba(255,255,255,0.03)'}},
+      y:{ticks:{color:'#555',font:{size:10},callback:v=>v+'%'},grid:{color:'rgba(255,255,255,0.04)'},beginAtZero:true}
+    }
+  }
+});
+</script>
+</body>
+</html>
