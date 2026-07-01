@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Concrete Chronicles — Episode 2: The NAV Explainer</title>
+<meta name="description" content="A community comic series making DeFi vault concepts funny and accessible. Episode 2: Your vault share has a price. It compounds. It doesn't dilute.">
+<meta property="og:title" content="The Concrete Chronicles — Ep.2: The NAV Explainer">
+<meta property="og:description" content="940 shares and $1,000 deposited. Where did the $60 go? The answer will change how you look at every vault forever.">
+<meta property="og:type" content="website">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --yellow: #E9DA7A;
+  --yellow-dim: rgba(233,218,122,0.08);
+  --yellow-border: rgba(233,218,122,0.2);
+  --bg: #0D0D0D;
+  --card: #141414;
+  --border: #1E1E1E;
+  --text: #FFFFFF;
+  --muted: #555555;
+  --muted2: #888888;
+  --green: #4ADE80;
+  --red: #F87171;
+  --orange: #FB923C;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+.top-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 40px; border-bottom: 1px solid var(--border);
+  gap: 16px; flex-wrap: wrap;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; }
+.logo-box {
+  width: 34px; height: 34px; background: var(--yellow);
+  border: 2px solid #000; border-radius: 6px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+}
+.logo-c { font-size: 17px; font-weight: 900; color: #000; line-height: 1; }
+.logo-line { width: 17px; height: 2px; background: #000; }
+.nav-series { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted2); }
+.nav-links { display: flex; gap: 8px; }
+.nav-link {
+  font-size: 11px; font-weight: 700; padding: 7px 14px; border-radius: 6px;
+  text-decoration: none; letter-spacing: 0.5px;
+  border: 1px solid var(--border); color: var(--muted2);
+  transition: all 0.12s;
+}
+.nav-link:hover { color: var(--text); border-color: #333; }
+.nav-link.primary { background: var(--yellow); color: #000; border-color: var(--yellow); }
+.nav-link.primary:hover { opacity: 0.9; }
+
+.comic-header {
+  text-align: center; padding: 60px 20px 48px;
+  border-bottom: 1px solid var(--border); position: relative; overflow: hidden;
+}
+.header-glow {
+  position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+  width: 500px; height: 200px;
+  background: radial-gradient(ellipse, rgba(233,218,122,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.series-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--yellow-dim); border: 1px solid var(--yellow-border);
+  padding: 6px 16px; border-radius: 100px;
+  font-size: 10px; font-weight: 800; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--yellow); margin-bottom: 24px;
+}
+.series-dot { width: 5px; height: 5px; background: var(--yellow); border-radius: 50%; }
+.comic-title {
+  font-size: 72px; font-weight: 900; letter-spacing: -3px;
+  line-height: 0.95; text-transform: uppercase; font-style: italic;
+  margin-bottom: 14px;
+}
+.comic-title .line2 { color: var(--yellow); }
+.episode-meta { font-size: 16px; font-weight: 700; color: var(--muted2); letter-spacing: 0.3px; margin-bottom: 8px; }
+.episode-title { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
+.episode-tagline {
+  font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.6;
+  max-width: 500px; margin-left: auto; margin-right: auto;
+}
+
+.comic-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6px; max-width: 1080px;
+  margin: 40px auto; padding: 0 24px;
+}
+.panel {
+  position: relative; border: 2px solid var(--border);
+  border-radius: 14px; overflow: hidden; background: #080808;
+}
+.panel-banner {
+  position: absolute; top: 0; left: 0; right: 0;
+  padding: 8px 16px; z-index: 10;
+  font-size: 9px; font-weight: 800; letter-spacing: 2.5px;
+  text-transform: uppercase; text-align: center;
+  background: rgba(8,8,8,0.92); backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border);
+}
+.panel svg { display: block; width: 100%; }
+
+.next-ep { max-width: 1080px; margin: 0 auto 60px; padding: 0 24px; }
+.next-ep-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.next-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px;
+  position: relative; overflow: hidden;
+}
+.next-card.featured { border-color: var(--yellow-border); background: var(--yellow-dim); }
+.next-card-label { font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.next-card.featured .next-card-label { color: var(--yellow); }
+.next-card h4 { font-size: 15px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.2px; }
+.next-card p { font-size: 12px; color: var(--muted2); line-height: 1.65; }
+.next-card .coming-soon {
+  display: inline-block; margin-top: 14px;
+  font-size: 9px; font-weight: 800; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--muted);
+  border: 1px solid var(--border); padding: 4px 10px; border-radius: 4px;
+}
+.next-card.featured .coming-soon { color: var(--yellow); border-color: var(--yellow-border); }
+
+.section-div {
+  display: flex; align-items: center; gap: 16px;
+  max-width: 1080px; margin: 0 auto 32px; padding: 0 24px;
+}
+.section-div-line { flex: 1; height: 1px; background: var(--border); }
+.section-div-label { font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: var(--yellow); white-space: nowrap; }
+
+.share-section {
+  text-align: center; padding: 52px 20px;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  max-width: 580px; margin: 0 auto 0;
+}
+.share-title { font-size: 32px; font-weight: 900; text-transform: uppercase; font-style: italic; letter-spacing: -1px; margin-bottom: 10px; }
+.share-sub { font-size: 14px; color: var(--muted2); line-height: 1.75; margin-bottom: 28px; }
+.share-sub em { color: var(--yellow); font-style: normal; font-weight: 700; }
+.btn-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.btn { display: inline-block; font-weight: 800; font-size: 12px; padding: 12px 22px; border-radius: 8px; text-decoration: none; letter-spacing: 0.3px; transition: opacity 0.12s; }
+.btn:hover { opacity: 0.85; }
+.btn-yellow { background: var(--yellow); color: #000; }
+.btn-outline { background: transparent; color: var(--yellow); border: 1px solid var(--yellow-border); }
+.btn-dark { background: var(--card); color: var(--muted2); border: 1px solid var(--border); }
+
+.comic-footer {
+  text-align: center; padding: 28px 24px;
+  color: var(--muted); font-size: 11px; line-height: 2.2; letter-spacing: 0.3px;
+}
+.comic-footer a { color: var(--yellow); text-decoration: none; }
+
+@media (max-width: 680px) {
+  .comic-grid { grid-template-columns: 1fr; padding: 0 16px; }
+  .comic-title { font-size: 44px; }
+  .next-ep-grid { grid-template-columns: 1fr; }
+  .top-nav { padding: 12px 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="nav-brand">
+    <div class="logo-box"><span class="logo-c">C</span><div class="logo-line"></div></div>
+    <span class="nav-series">The Concrete Chronicles</span>
+  </div>
+  <div class="nav-links">
+    <a href="concrete_chronicles_ep1" class="nav-link">← Ep. 1</a>
+    <a href="https://concrete.xyz/blog" class="nav-link" target="_blank">Blog</a>
+    <a href="https://discord.gg/concretexyz" class="nav-link" target="_blank">Discord</a>
+    <a href="https://app.concrete.xyz/earn" class="nav-link primary" target="_blank">Launch App →</a>
+  </div>
+</nav>
+
+<div class="comic-header">
+  <div class="header-glow"></div>
+  <div class="series-badge"><div class="series-dot"></div>Community Comic Series · Episode 2</div>
+  <div class="comic-title">The Concrete<br><span class="line2">Chronicles</span></div>
+  <div class="episode-meta">Episode 2 of ∞</div>
+  <div class="episode-title">📈 "The NAV Explainer"</div>
+  <div class="episode-tagline">Your vault share has a price. It compounds. It doesn't dilute. Most people have no idea how this works — until now.</div>
+</div>
+
+<div class="comic-grid">
+
+  <!-- PANEL 1: THE CONFUSION -->
+  <div class="panel" style="border-color:#1e1e2e;">
+    <div class="panel-banner" style="color:#818cf8;">Panel 1 · The Confusion · Monday 6:00 PM</div>
+    <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg">
+      <rect width="480" height="360" fill="#060608"/>
+      <!-- Ceiling glow -->
+      <ellipse cx="240" cy="0" rx="200" ry="80" fill="rgba(129,140,248,0.04)"/>
+
+      <!-- MONITOR — Concrete dashboard -->
+      <rect x="100" y="48" width="280" height="158" rx="10" fill="#080810" stroke="#1e1e2e" stroke-width="2"/>
+      <rect x="104" y="52" width="272" height="150" rx="8" fill="#04040e"/>
+
+      <!-- Dashboard header -->
+      <rect x="104" y="52" width="272" height="28" rx="0" fill="#0b0b18" stroke="none"/>
+      <rect x="104" y="52" width="272" height="28" rx="8" fill="#0b0b18"/>
+      <rect x="104" y="67" width="272" height="13" fill="#0b0b18"/>
+      <text x="118" y="70" fill="#555" font-size="8" font-family="monospace">concrete.xyz / portfolio</text>
+      <circle cx="354" cy="66" r="4" fill="#f87171" opacity="0.7"/>
+      <circle cx="342" cy="66" r="4" fill="#fb923c" opacity="0.7"/>
+      <circle cx="330" cy="66" r="4" fill="#4ade80" opacity="0.7"/>
+
+      <!-- Balance display -->
+      <text x="240" y="108" text-anchor="middle" fill="#444" font-size="8.5" font-family="monospace">YOUR BALANCE</text>
+      <text x="240" y="130" text-anchor="middle" fill="#818cf8" font-size="28" font-weight="900" font-family="monospace">940.18</text>
+      <text x="240" y="146" text-anchor="middle" fill="#555" font-size="10" font-family="monospace">ctUSDC shares</text>
+
+      <!-- Divider -->
+      <line x1="120" y1="156" x2="360" y2="156" stroke="#111" stroke-width="1"/>
+
+      <!-- Deposited row -->
+      <text x="140" y="174" fill="#444" font-size="9" font-family="monospace">Deposited</text>
+      <text x="350" y="174" text-anchor="end" fill="#888" font-size="9" font-family="monospace">1,000.00 USDC</text>
+
+      <!-- Stand -->
+      <rect x="222" y="206" width="36" height="12" rx="3" fill="#0c0c18"/>
+      <rect x="190" y="218" width="100" height="6" rx="3" fill="#111"/>
+
+      <!-- DESK -->
+      <rect x="40" y="288" width="400" height="14" rx="4" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="1"/>
+
+      <!-- Notepad — scribbled math -->
+      <rect x="62" y="240" width="80" height="52" rx="4" fill="#0c0c0c" stroke="#181818" stroke-width="1"/>
+      <text x="102" y="256" text-anchor="middle" fill="#333" font-size="8" font-family="monospace">1000 - 940</text>
+      <text x="102" y="269" text-anchor="middle" fill="#F87171" font-size="9" font-family="monospace">= $60 GONE?!</text>
+      <line x1="68" y1="275" x2="136" y2="275" stroke="#1a1a1a" stroke-width="1"/>
+      <text x="102" y="284" text-anchor="middle" fill="#222" font-size="7" font-family="monospace">where??</text>
+
+      <!-- CHARACTER -->
+      <rect x="196" y="234" width="88" height="56" rx="14" fill="#312e81"/>
+      <circle cx="240" cy="218" r="26" fill="#f5c5a3"/>
+      <!-- Hair -->
+      <path d="M215,204 Q240,190 265,204 L262,194 Q240,179 218,194 Z" fill="#1a0f0a"/>
+      <!-- Question mark eyes -->
+      <text x="228" y="216" text-anchor="middle" fill="#1a0f0a" font-size="10" font-weight="900">?</text>
+      <text x="252" y="216" text-anchor="middle" fill="#1a0f0a" font-size="10" font-weight="900">?</text>
+      <!-- Mouth — wobbly -->
+      <path d="M227,228 Q232,224 240,227 Q248,224 253,228" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+      <!-- Sweat -->
+      <ellipse cx="268" cy="206" rx="3" ry="5" fill="#93c5fd" opacity="0.85"/>
+      <ellipse cx="213" cy="209" rx="2.5" ry="4" fill="#93c5fd" opacity="0.7"/>
+      <!-- Arms -->
+      <line x1="196" y1="244" x2="160" y2="268" stroke="#312e81" stroke-width="11" stroke-linecap="round"/>
+      <line x1="284" y1="244" x2="320" y2="270" stroke="#312e81" stroke-width="11" stroke-linecap="round"/>
+      <!-- Legs -->
+      <line x1="216" y1="290" x2="206" y2="330" stroke="#312e81" stroke-width="10" stroke-linecap="round"/>
+      <line x1="264" y1="290" x2="274" y2="330" stroke="#312e81" stroke-width="10" stroke-linecap="round"/>
+
+      <!-- Speech bubble -->
+      <path d="M300,120 L462,120 Q470,120 470,128 L470,174 Q470,182 462,182 L362,182 L358,196 L354,182 L300,182 Q292,182 292,174 L292,128 Q292,120 300,120Z" fill="#0e0e10" stroke="#2a2a40" stroke-width="1.5"/>
+      <text x="381" y="140" text-anchor="middle" fill="#ccc" font-size="9.5" font-weight="700">940 shares?!</text>
+      <text x="381" y="155" text-anchor="middle" fill="#ccc" font-size="9" font-weight="600">I deposited $1,000...</text>
+      <text x="381" y="169" text-anchor="middle" fill="#F87171" font-size="9" font-weight="700">WHERE IS MY $60?!</text>
+
+      <!-- Time -->
+      <rect x="16" y="14" width="70" height="20" rx="4" fill="rgba(0,0,0,0.7)"/>
+      <text x="51" y="27" text-anchor="middle" fill="#555" font-size="9" font-family="monospace">MON 6:00 PM</text>
+    </svg>
+  </div>
+
+  <!-- PANEL 2: THE MENTOR -->
+  <div class="panel" style="border-color:#2d1b4e;">
+    <div class="panel-banner" style="background:rgba(45,27,78,0.85);color:#c084fc;border-color:#3b1f6e;">Panel 2 · The Mentor Appears · 6:01 PM</div>
+    <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg">
+      <rect width="480" height="360" fill="#060408"/>
+      <!-- Purple ambient glow -->
+      <ellipse cx="160" cy="180" rx="150" ry="120" fill="rgba(192,132,252,0.03)"/>
+
+      <!-- WHITEBOARD / CHALKBOARD -->
+      <rect x="200" y="36" width="268" height="194" rx="10" fill="#0a0614" stroke="#2d1b4e" stroke-width="2"/>
+      <rect x="206" y="42" width="256" height="182" rx="7" fill="#070410"/>
+
+      <!-- Board title -->
+      <text x="334" y="64" text-anchor="middle" fill="#c084fc" font-size="9" font-weight="800" letter-spacing="1.5">NAV = NET ASSET VALUE</text>
+      <line x1="218" y1="70" x2="450" y2="70" stroke="#1e0a36" stroke-width="1"/>
+
+      <!-- Formula block -->
+      <rect x="216" y="78" width="238" height="40" rx="6" fill="#0f0720"/>
+      <text x="334" y="94" text-anchor="middle" fill="#888" font-size="8.5" font-family="monospace">Total Vault Assets</text>
+      <line x1="234" y1="100" x2="434" y2="100" stroke="#333" stroke-width="1"/>
+      <text x="334" y="114" text-anchor="middle" fill="#888" font-size="8.5" font-family="monospace">Total Shares in Existence</text>
+
+      <!-- = NAV per share -->
+      <text x="334" y="134" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="800">= NAV per share</text>
+
+      <!-- Example box -->
+      <rect x="216" y="144" width="238" height="72" rx="6" fill="#0c0518"/>
+      <text x="334" y="162" text-anchor="middle" fill="#555" font-size="8.5" font-family="monospace">EXAMPLE</text>
+      <text x="226" y="180" fill="#888" font-size="9" font-family="monospace">Vault holds:</text>
+      <text x="448" y="180" text-anchor="end" fill="#4ADE80" font-size="9" font-weight="800" font-family="monospace">$999,420 USDC</text>
+      <text x="226" y="196" fill="#888" font-size="9" font-family="monospace">Total shares:</text>
+      <text x="448" y="196" text-anchor="end" fill="#c084fc" font-size="9" font-weight="800" font-family="monospace">940,180 ctUSDC</text>
+      <line x1="226" y1="200" x2="448" y2="200" stroke="#1e0a36" stroke-width="1"/>
+      <text x="226" y="210" fill="#888" font-size="8" font-family="monospace">NAV per share =</text>
+      <text x="448" y="210" text-anchor="end" fill="#E9DA7A" font-size="10" font-weight="900" font-family="monospace">$1.0631 ↑</text>
+
+      <!-- Board chalk tray -->
+      <rect x="200" y="228" width="268" height="8" rx="0" fill="#0c0518"/>
+
+      <!-- MENTOR CHARACTER -->
+      <!-- Body -->
+      <rect x="40" y="240" width="76" height="72" rx="14" fill="#134e4a"/>
+      <!-- Pointer stick arm -->
+      <line x1="116" y1="256" x2="208" y2="186" stroke="#134e4a" stroke-width="11" stroke-linecap="round"/>
+      <circle cx="210" cy="184" r="4" fill="#E9DA7A"/>
+      <!-- Other arm -->
+      <line x1="40" y1="258" x2="14" y2="282" stroke="#134e4a" stroke-width="11" stroke-linecap="round"/>
+      <!-- Legs -->
+      <line x1="62" y1="312" x2="54" y2="348" stroke="#134e4a" stroke-width="10" stroke-linecap="round"/>
+      <line x1="100" y1="312" x2="108" y2="348" stroke="#134e4a" stroke-width="10" stroke-linecap="round"/>
+      <!-- Head -->
+      <circle cx="78" cy="222" r="26" fill="#d4956a"/>
+      <!-- Short hair -->
+      <path d="M54,208 Q78,196 102,208 Q100,196 78,190 Q56,196 54,208Z" fill="#0a0604"/>
+      <!-- Glasses -->
+      <rect x="60" y="216" width="15" height="10" rx="5" fill="none" stroke="#6b7280" stroke-width="2"/>
+      <rect x="80" y="216" width="15" height="10" rx="5" fill="none" stroke="#6b7280" stroke-width="2"/>
+      <line x1="75" y1="221" x2="80" y2="221" stroke="#6b7280" stroke-width="1.5"/>
+      <!-- Eyes behind glasses -->
+      <circle cx="67" cy="221" r="3" fill="#333"/>
+      <circle cx="87" cy="221" r="3" fill="#333"/>
+      <!-- Smile -->
+      <path d="M64,236 Q78,244 92,236" fill="none" stroke="#7a4030" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- Speech bubble from mentor -->
+      <path d="M110,144 L380,144 Q390,144 390,154 L390,232 Q390,242 380,242 L240,242 L236,256 L232,242 L110,242 Q100,242 100,232 L100,154 Q100,144 110,144Z" fill="#0e0e10" stroke="#2d1b4e" stroke-width="1.5"/>
+      <text x="245" y="168" text-anchor="middle" fill="#c084fc" font-size="10" font-weight="800">You have 940 shares.</text>
+      <text x="245" y="183" text-anchor="middle" fill="#888" font-size="9" font-weight="600">Each share is worth $1.0631 —</text>
+      <text x="245" y="198" text-anchor="middle" fill="#888" font-size="9" font-weight="600">not $1.00 like when you joined.</text>
+      <text x="245" y="213" text-anchor="middle" fill="#888" font-size="9" font-weight="600">940.18 × $1.0631 =</text>
+      <text x="245" y="228" text-anchor="middle" fill="#4ADE80" font-size="11" font-weight="900">$1,000.59 USDC ✓</text>
+
+      <!-- Small character in background — confused face peeking -->
+      <circle cx="386" cy="296" r="22" fill="#f5c5a3" opacity="0.9"/>
+      <path d="M364,282 Q386,270 408,282" fill="#1a0f0a"/>
+      <text x="374" y="292" font-size="9" fill="#1a0f0a">?</text>
+      <text x="390" y="292" font-size="9" fill="#1a0f0a">!</text>
+      <path d="M374,308 Q386,304 398,308" fill="none" stroke="#555" stroke-width="1.5" stroke-linecap="round"/>
+
+      <!-- Time -->
+      <rect x="16" y="14" width="70" height="20" rx="4" fill="rgba(0,0,0,0.7)"/>
+      <text x="51" y="27" text-anchor="middle" fill="#555" font-size="9" font-family="monospace">MON 6:01 PM</text>
+    </svg>
+  </div>
+
+  <!-- PANEL 3: THE NAV REVEALED -->
+  <div class="panel" style="border-color:#0d3a26;">
+    <div class="panel-banner" style="color:var(--yellow);border-bottom-color:#0d2a16;">Panel 3 · The NAV Revealed · 6:03 PM</div>
+    <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg">
+      <rect width="480" height="360" fill="#030602"/>
+      <defs>
+        <radialGradient id="yg3ep2" cx="55%" cy="40%" r="50%">
+          <stop offset="0%" stop-color="#E9DA7A" stop-opacity="0.1"/>
+          <stop offset="100%" stop-color="#E9DA7A" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="480" height="360" fill="url(#yg3ep2)"/>
+
+      <!-- Concrete NAV Dashboard — large card -->
+      <rect x="88" y="22" width="304" height="226" rx="18" fill="#070900" stroke="#E9DA7A" stroke-width="2"/>
+      <rect x="91" y="25" width="298" height="220" rx="16" fill="none" stroke="#E9DA7A" stroke-width="0.5" opacity="0.15"/>
+
+      <!-- Card header -->
+      <rect x="112" y="40" width="36" height="36" rx="8" fill="#E9DA7A"/>
+      <text x="130" y="62" text-anchor="middle" fill="#000" font-size="20" font-weight="900">C</text>
+      <rect x="120" y="73" width="20" height="3" fill="#000"/>
+      <text x="162" y="55" fill="#E9DA7A" font-size="12" font-weight="900" letter-spacing="1.5">CONCRETE</text>
+      <text x="162" y="68" fill="#444" font-size="8">.xyz · ctYieldUSDC</text>
+      <rect x="310" y="48" width="68" height="20" rx="5" fill="rgba(74,222,128,0.1)" stroke="rgba(74,222,128,0.2)" stroke-width="1"/>
+      <text x="344" y="62" text-anchor="middle" fill="#4ADE80" font-size="8.5" font-weight="700">● LIVE</text>
+
+      <!-- NAV per share — the key metric -->
+      <rect x="96" y="90" width="288" height="58" rx="10" fill="#0d0e00"/>
+      <text x="240" y="110" text-anchor="middle" fill="#666" font-size="8.5" font-family="monospace">NAV PER SHARE</text>
+      <text x="240" y="137" text-anchor="middle" fill="#E9DA7A" font-size="34" font-weight="900" font-family="monospace">$1.0641</text>
+
+      <!-- Mini line chart showing NAV growth -->
+      <rect x="96" y="156" width="288" height="72" rx="8" fill="#060800"/>
+      <text x="110" y="172" fill="#333" font-size="8" font-family="monospace">NAV / SHARE OVER TIME</text>
+      <!-- Chart grid lines -->
+      <line x1="108" y1="218" x2="372" y2="218" stroke="#0f1000" stroke-width="1"/>
+      <line x1="108" y1="204" x2="372" y2="204" stroke="#0f1000" stroke-width="1"/>
+      <line x1="108" y1="190" x2="372" y2="190" stroke="#0f1000" stroke-width="1"/>
+      <!-- Data labels -->
+      <text x="104" y="221" text-anchor="end" fill="#222" font-size="7" font-family="monospace">1.00</text>
+      <text x="104" y="207" text-anchor="end" fill="#222" font-size="7" font-family="monospace">1.03</text>
+      <text x="104" y="193" text-anchor="end" fill="#222" font-size="7" font-family="monospace">1.06</text>
+      <!-- NAV line (growing) -->
+      <polyline points="116,218 152,215 188,211 224,206 260,200 296,194 332,190 368,188" fill="none" stroke="#E9DA7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Area fill -->
+      <polygon points="116,218 152,215 188,211 224,206 260,200 296,194 332,190 368,188 368,220 116,220" fill="rgba(233,218,122,0.05)"/>
+      <!-- End dot -->
+      <circle cx="368" cy="188" r="4" fill="#E9DA7A"/>
+      <!-- Time axis labels -->
+      <text x="116" y="228" text-anchor="middle" fill="#222" font-size="7" font-family="monospace">W1</text>
+      <text x="196" y="228" text-anchor="middle" fill="#222" font-size="7" font-family="monospace">W2</text>
+      <text x="280" y="228" text-anchor="middle" fill="#222" font-size="7" font-family="monospace">W3</text>
+      <text x="368" y="228" text-anchor="middle" fill="#E9DA7A" font-size="7" font-family="monospace">NOW</text>
+
+      <!-- Bottom stats row -->
+      <text x="148" y="264" text-anchor="middle" fill="#555" font-size="8" font-family="monospace">YOUR SHARES</text>
+      <text x="148" y="280" text-anchor="middle" fill="#888" font-size="14" font-weight="900" font-family="monospace">940.18</text>
+      <text x="240" y="264" text-anchor="middle" fill="#555" font-size="8" font-family="monospace">USD VALUE</text>
+      <text x="240" y="280" text-anchor="middle" fill="#4ADE80" font-size="14" font-weight="900" font-family="monospace">$1,000.59</text>
+      <text x="336" y="264" text-anchor="middle" fill="#555" font-size="8" font-family="monospace">EARNED</text>
+      <text x="336" y="280" text-anchor="middle" fill="#E9DA7A" font-size="14" font-weight="900" font-family="monospace">+$0.59</text>
+
+      <!-- Sparkles -->
+      <text x="44" y="88" font-size="18" fill="#E9DA7A" opacity="0.7">✦</text>
+      <text x="412" y="102" font-size="14" fill="#E9DA7A" opacity="0.55">✦</text>
+      <text x="30" y="210" font-size="10" fill="#E9DA7A" opacity="0.4">✦</text>
+      <text x="438" y="198" font-size="12" fill="#E9DA7A" opacity="0.45">✦</text>
+
+      <!-- Character — jaw dropped -->
+      <rect x="56" y="292" width="82" height="58" rx="14" fill="#312e81"/>
+      <circle cx="97" cy="274" r="26" fill="#f5c5a3"/>
+      <path d="M73,260 Q97,248 121,260" fill="#1a0f0a"/>
+      <!-- Wide eyes -->
+      <circle cx="86" cy="271" r="9" fill="white"/>
+      <circle cx="86" cy="273" r="5.5" fill="#111"/>
+      <circle cx="88" cy="270" r="1.8" fill="white"/>
+      <circle cx="108" cy="271" r="9" fill="white"/>
+      <circle cx="108" cy="273" r="5.5" fill="#111"/>
+      <circle cx="110" cy="270" r="1.8" fill="white"/>
+      <!-- Open mouth -->
+      <ellipse cx="97" cy="288" rx="7" ry="9" fill="#1a0f0a"/>
+      <!-- Arms -->
+      <line x1="138" y1="302" x2="174" y2="288" stroke="#312e81" stroke-width="11" stroke-linecap="round"/>
+      <line x1="58" y1="304" x2="30" y2="318" stroke="#312e81" stroke-width="11" stroke-linecap="round"/>
+      <line x1="78" y1="350" x2="70" y2="356" stroke="#312e81" stroke-width="10" stroke-linecap="round"/>
+      <line x1="114" y1="350" x2="122" y2="356" stroke="#312e81" stroke-width="10" stroke-linecap="round"/>
+
+      <!-- Thought bubble -->
+      <circle cx="148" cy="308" r="4" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="1"/>
+      <circle cx="162" cy="298" r="6" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="1"/>
+      <path d="M172,264 L372,264 Q382,264 382,274 L382,315 Q382,325 372,325 L238,325 L234,337 L230,325 L172,325 Q162,325 162,315 L162,274 Q162,264 172,264Z" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="1.5"/>
+      <text x="272" y="284" text-anchor="middle" fill="#E9DA7A" font-size="10.5" font-weight="900">The share count stays fixed.</text>
+      <text x="272" y="300" text-anchor="middle" fill="#888" font-size="9.5" font-weight="600">The PRICE of each share goes up.</text>
+      <text x="272" y="316" text-anchor="middle" fill="#555" font-size="9" font-weight="600">That's how vaults compound. 🧠</text>
+
+      <!-- Time -->
+      <rect x="16" y="14" width="70" height="20" rx="4" fill="rgba(0,0,0,0.7)"/>
+      <text x="51" y="27" text-anchor="middle" fill="#555" font-size="9" font-family="monospace">MON 6:03 PM</text>
+    </svg>
+  </div>
+
+  <!-- PANEL 4: THE CLARITY -->
+  <div class="panel" style="border-color:#111;">
+    <div class="panel-banner" style="color:#444;">Panel 4 · The Clarity · Three Weeks Later</div>
+    <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sky4ep2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#010208"/>
+          <stop offset="100%" stop-color="#050710"/>
+        </linearGradient>
+        <radialGradient id="moon4ep2" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fef3c7"/>
+          <stop offset="100%" stop-color="#fef9c3"/>
+        </radialGradient>
+      </defs>
+      <rect width="480" height="360" fill="url(#sky4ep2)"/>
+
+      <!-- Stars -->
+      <circle cx="34" cy="28" r="1.5" fill="white" opacity="0.5"/>
+      <circle cx="116" cy="18" r="1" fill="white" opacity="0.35"/>
+      <circle cx="204" cy="34" r="1.5" fill="white" opacity="0.55"/>
+      <circle cx="308" cy="22" r="1" fill="white" opacity="0.3"/>
+      <circle cx="430" cy="42" r="1.5" fill="white" opacity="0.45"/>
+      <circle cx="72" cy="56" r="1" fill="white" opacity="0.25"/>
+      <circle cx="378" cy="48" r="1" fill="white" opacity="0.4"/>
+      <circle cx="160" cy="16" r="1" fill="white" opacity="0.4"/>
+      <circle cx="452" cy="28" r="1" fill="white" opacity="0.3"/>
+      <circle cx="46" cy="72" r="1" fill="white" opacity="0.2"/>
+
+      <!-- Moon -->
+      <circle cx="64" cy="52" r="20" fill="url(#moon4ep2)" opacity="0.8"/>
+      <circle cx="74" cy="46" r="14" fill="#050710"/>
+
+      <!-- NAV growth visual in sky -->
+      <rect x="166" y="24" width="148" height="44" rx="8" fill="rgba(0,0,0,0.55)" stroke="#1a1a0a" stroke-width="1"/>
+      <text x="240" y="40" text-anchor="middle" fill="#444" font-size="7.5" font-family="monospace">ctUSDC NAV PER SHARE</text>
+      <text x="186" y="58" fill="#4ADE80" font-size="10" font-weight="900" font-family="monospace">$1.00</text>
+      <text x="228" y="58" fill="#E9DA7A" font-size="8" fill-opacity="0.7" font-family="monospace">→</text>
+      <text x="244" y="58" fill="#E9DA7A" font-size="10" font-weight="900" font-family="monospace">$1.064</text>
+      <text x="298" y="58" fill="#E9DA7A" font-size="8" fill-opacity="0.7" font-family="monospace">→</text>
+      <text x="314" y="58" fill="#E9DA7A" font-size="7.5" fill-opacity="0.55" font-family="monospace">∞ ↑</text>
+
+      <!-- Ground -->
+      <rect x="0" y="298" width="480" height="62" fill="#030508"/>
+      <path d="M0,306 Q48,302 96,306 Q144,310 192,306 Q240,302 288,306 Q336,310 384,306 Q432,302 480,306" fill="none" stroke="#090f1c" stroke-width="2" opacity="0.7"/>
+
+      <!-- Palm tree right -->
+      <line x1="432" y1="298" x2="426" y2="210" stroke="#100804" stroke-width="8" stroke-linecap="round"/>
+      <ellipse cx="414" cy="214" rx="28" ry="11" fill="#134a0c" opacity="0.8" transform="rotate(-25,414,214)"/>
+      <ellipse cx="438" cy="218" rx="26" ry="10" fill="#165a0d" opacity="0.7" transform="rotate(25,438,218)"/>
+      <ellipse cx="420" cy="207" rx="20" ry="8" fill="#0e3a08" opacity="0.65" transform="rotate(-10,420,207)"/>
+
+      <!-- Lounge chairs base -->
+      <rect x="58" y="274" width="310" height="30" rx="14" fill="#0b0808" stroke="#151010" stroke-width="1.5"/>
+
+      <!-- EP1 Character (green hoodie, Ep1 panel 4 style) — left -->
+      <rect x="72" y="262" width="110" height="36" rx="16" fill="#15803d"/>
+      <line x1="74" y1="278" x2="50" y2="294" stroke="#15803d" stroke-width="13" stroke-linecap="round"/>
+      <line x1="114" y1="268" x2="108" y2="230" stroke="#15803d" stroke-width="11" stroke-linecap="round"/>
+      <line x1="88" y1="292" x2="74" y2="316" stroke="#15803d" stroke-width="11" stroke-linecap="round"/>
+      <line x1="162" y1="290" x2="178" y2="314" stroke="#15803d" stroke-width="11" stroke-linecap="round"/>
+      <!-- EP1 head with sunglasses -->
+      <circle cx="196" cy="266" r="24" fill="#f5c5a3"/>
+      <path d="M175,252 Q196,241 217,252" fill="#1a0f0a"/>
+      <rect x="182" y="260" width="14" height="9" rx="4" fill="#080808" stroke="#222" stroke-width="1"/>
+      <rect x="200" y="260" width="14" height="9" rx="4" fill="#080808" stroke="#222" stroke-width="1"/>
+      <line x1="196" y1="264" x2="200" y2="264" stroke="#222" stroke-width="1.5"/>
+      <path d="M185,278 Q196,285 207,278" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round"/>
+
+      <!-- EP1 phone — Concrete normal -->
+      <rect x="98" y="192" width="44" height="38" rx="7" fill="#080700" stroke="#E9DA7A" stroke-width="1.5"/>
+      <rect x="101" y="195" width="38" height="32" rx="5" fill="#060500"/>
+      <rect x="104" y="198" width="10" height="10" rx="2" fill="#E9DA7A"/>
+      <text x="109" y="206" text-anchor="middle" fill="#000" font-size="6" font-weight="900">C</text>
+      <text x="128" y="206" fill="#4ADE80" font-size="10" font-weight="900" font-family="monospace">8.9%</text>
+      <text x="120" y="218" fill="#888" font-size="6.5" font-family="sans-serif" text-anchor="middle">APY</text>
+      <text x="120" y="228" fill="#4ADE80" font-size="7" font-family="sans-serif" text-anchor="middle">+$623 wk</text>
+
+      <!-- EP2 Character (indigo hoodie) — right -->
+      <rect x="292" y="262" width="108" height="36" rx="16" fill="#312e81"/>
+      <line x1="398" y1="276" x2="422" y2="292" stroke="#312e81" stroke-width="13" stroke-linecap="round"/>
+      <line x1="364" y1="266" x2="370" y2="228" stroke="#312e81" stroke-width="11" stroke-linecap="round"/>
+      <line x1="308" y1="290" x2="294" y2="314" stroke="#312e81" stroke-width="11" stroke-linecap="round"/>
+      <line x1="380" y1="290" x2="394" y2="314" stroke="#312e81" stroke-width="11" stroke-linecap="round"/>
+      <!-- EP2 head with sunglasses -->
+      <circle cx="272" cy="266" r="24" fill="#f5c5a3"/>
+      <path d="M251,252 Q272,241 293,252" fill="#1a0f0a"/>
+      <rect x="258" y="260" width="14" height="9" rx="4" fill="#080808" stroke="#222" stroke-width="1"/>
+      <rect x="276" y="260" width="14" height="9" rx="4" fill="#080808" stroke="#222" stroke-width="1"/>
+      <line x1="272" y1="264" x2="276" y2="264" stroke="#222" stroke-width="1.5"/>
+      <path d="M261,278 Q272,285 283,278" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round"/>
+
+      <!-- EP2 phone — NAV view -->
+      <rect x="346" y="190" width="48" height="40" rx="7" fill="#050700" stroke="#818cf8" stroke-width="1.5"/>
+      <rect x="349" y="193" width="42" height="34" rx="5" fill="#030508"/>
+      <text x="370" y="206" text-anchor="middle" fill="#818cf8" font-size="7" font-weight="700" font-family="monospace">NAV</text>
+      <text x="370" y="218" text-anchor="middle" fill="#E9DA7A" font-size="11" font-weight="900" font-family="monospace">$1.089</text>
+      <text x="370" y="228" text-anchor="middle" fill="#4ADE80" font-size="7" font-family="monospace">+$1,023.82</text>
+
+      <!-- Conversation bubbles -->
+      <path d="M214,188 L356,188 Q366,188 366,178 L366,148 Q366,138 356,138 L282,138 L279,126 L276,138 L214,138 Q204,138 204,148 L204,178 Q204,188 214,188Z" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="1.5"/>
+      <text x="285" y="156" text-anchor="middle" fill="#888" font-size="9" font-weight="600">I stopped checking</text>
+      <text x="285" y="171" text-anchor="middle" fill="#888" font-size="9" font-weight="600">my share count. 😌</text>
+
+      <path d="M56,172 L222,172 Q232,172 232,162 L232,132 Q232,122 222,122 L144,122 L140,110 L136,122 L56,122 Q46,122 46,132 L46,162 Q46,172 56,172Z" fill="#0e0e0e" stroke="#1a1a1a" stroke-width="1.5"/>
+      <text x="139" y="140" text-anchor="middle" fill="#E9DA7A" font-size="10" font-weight="800">Welcome to the</text>
+      <text x="139" y="155" text-anchor="middle" fill="#E9DA7A" font-size="10" font-weight="800">other side. 🤌</text>
+
+      <!-- Coins floating -->
+      <text x="232" y="252" font-size="18" opacity="0.8">🪙</text>
+      <text x="260" y="224" font-size="14" opacity="0.6">🪙</text>
+      <text x="214" y="228" font-size="12" opacity="0.5">🪙</text>
+    </svg>
+  </div>
+
+</div>
+
+<!-- NEXT EPISODES -->
+<div class="section-div">
+  <div class="section-div-line"></div>
+  <div class="section-div-label">📺 Coming Up Next</div>
+  <div class="section-div-line"></div>
+</div>
+
+<div class="next-ep">
+  <div class="next-ep-grid">
+    <div class="next-card featured">
+      <div class="next-card-label">Episode 3 · Next Week</div>
+      <h4>"The Probability Engine"</h4>
+      <p>What is actually happening inside Concrete's brain when it decides where to put your USDC? A peek inside the machine that replaced your 22 open tabs.</p>
+      <span class="coming-soon">↗ Coming Jul 7</span>
+    </div>
+    <div class="next-card">
+      <div class="next-card-label">Episode 4</div>
+      <h4>"The Institutional Migration"</h4>
+      <p>A hedge fund, a family office, and a DAO walk into a custodian... and Concrete was already there waiting for them.</p>
+      <span class="coming-soon">Coming Jul 14</span>
+    </div>
+    <div class="next-card">
+      <div class="next-card-label">Episode 5 · TBD</div>
+      <h4>"The Liquidation That Wasn't"</h4>
+      <p>A volatile weekend. A collateral ratio teetering on the edge. And the protection layer that stepped in before the cascade started.</p>
+      <span class="coming-soon">Coming Soon</span>
+    </div>
+  </div>
+</div>
+
+<!-- SHARE -->
+<div class="share-section">
+  <div class="share-title">Understand NAV Now?</div>
+  <p class="share-sub">
+    Next: <em>"The Probability Engine"</em> — inside the automation that manages 12 protocols at once.<br><br>
+    Share this episode, tag <em>@ConcreteXYZ</em>, and tell us what DeFi concept you want explained next.
+  </p>
+  <div class="btn-row">
+    <a href="https://x.com/intent/tweet?text=This+community+comic+just+explained+NAV+better+than+any+docs+%F0%9F%93%88+%40ConcreteXYZ" class="btn btn-yellow" target="_blank">Share on X</a>
+    <a href="https://discord.gg/concretexyz" class="btn btn-outline" target="_blank">Join Discord</a>
+    <a href="https://app.concrete.xyz/earn" class="btn btn-dark" target="_blank">Try Concrete →</a>
+  </div>
+</div>
+
+<div class="comic-footer">
+  THE CONCRETE CHRONICLES &nbsp;·&nbsp; Community-made educational comic series &nbsp;·&nbsp; Not official Concrete content<br>
+  By <a href="https://x.com/billiano_21" target="_blank">@billiano_21</a> &nbsp;·&nbsp; <a href="https://concrete.xyz" target="_blank">concrete.xyz</a> &nbsp;·&nbsp;
+  <a href="https://x.com/ConcreteXYZ" target="_blank">@ConcreteXYZ</a> &nbsp;·&nbsp;
+  <a href="https://discord.gg/concretexyz" target="_blank">Discord</a> &nbsp;·&nbsp;
+  <a href="https://points.concrete.xyz/home" target="_blank">Points Program</a><br>
+  APY figures illustrative. Not financial advice. DYOR.
+</div>
+
+</body>
+</html>
