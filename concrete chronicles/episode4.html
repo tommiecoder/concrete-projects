@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concrete Chronicles — Episode 4: The Dollar That Went to Work</title>
+  <meta name="description" content="Concrete Chronicles Episode 4: The Dollar That Went to Work. A sequential educational comic about USD1, concrete vault infrastructure, and four real-world economic opportunities.">
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --bg: #0d0d0d;
+      --ink: #0a0a0a;
+      --panel: #121212;
+      --panel-2: #171717;
+      --border: #232323;
+      --text: #f5f5f5;
+      --muted: #a4a4a4;
+      --muted-2: #d7d7d7;
+      --yellow: #e9da7a;
+      --yellow-soft: rgba(233, 218, 122, 0.12);
+      --yellow-edge: rgba(233, 218, 122, 0.26);
+      --cyan: #7dd3fc;
+      --blue: #5aa8ff;
+      --green: #6ee7b7;
+      --orange: #fbbf24;
+      --red: #f87171;
+      --purple: #d6b7ff;
+      --shadow: rgba(0,0,0,0.24);
+    }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top, rgba(233,218,122,0.06), transparent 26%),
+        var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.5;
+      letter-spacing: -0.02em;
+    }
+    a { color: var(--yellow); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      background: rgba(13,13,13,0.9);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--yellow);
+      border: 2px solid #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
+    }
+    .brand-mark .c { font-size: 20px; font-weight: 900; color: #000; line-height: 1; }
+    .brand-mark .bar { width: 18px; height: 2px; background: #000; }
+    .brand-text { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav a {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted-2);
+      text-decoration: none;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.01);
+    }
+    .nav a.primary {
+      background: var(--yellow);
+      color: #000;
+      border-color: var(--yellow);
+    }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+    .hero {
+      text-align: center;
+      padding: 56px 12px 26px;
+      border-bottom: 1px solid var(--border);
+    }
+    .badge {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--yellow-edge);
+      background: var(--yellow-soft);
+      color: var(--yellow);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(42px, 8vw, 88px);
+      line-height: 0.9;
+      letter-spacing: -3px;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+    .hero h1 .glow { color: var(--yellow); }
+    .subtitle {
+      max-width: 760px;
+      margin: 18px auto 0;
+      color: var(--muted-2);
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 14px;
+      margin-top: 20px;
+      font-size: 11px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .comic-wrap {
+      padding-top: 28px;
+    }
+    .panel-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .panel {
+      background: linear-gradient(180deg, rgba(14,14,14,0.98), rgba(20,20,20,1));
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px 18px 10px;
+      box-shadow: 0 18px 36px var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    .panel.wide {
+      grid-column: 1 / -1;
+    }
+    .panel-id {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.3px;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 12px;
+    }
+    .scene {
+      position: relative;
+      min-height: 320px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.0));
+      border: 1px solid rgba(255,255,255,0.04);
+      overflow: hidden;
+    }
+    .phone {
+      position: absolute;
+      left: 50%;
+      top: 38%;
+      transform: translate(-50%, -50%);
+      width: 180px;
+      height: 230px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, #1c1c1c, #0e0e0e);
+      border: 2px solid rgba(255,255,255,0.1);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.42);
+    }
+    .phone::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 10px;
+      transform: translateX(-50%);
+      width: 64px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+    }
+    .token {
+      position: absolute;
+      left: 50%;
+      top: 58%;
+      transform: translate(-50%, -50%);
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fffdf0, var(--yellow) 35%, #d6c75a 100%);
+      border: 4px solid rgba(0,0,0,0.62);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 10px 25px rgba(233,218,122,0.38);
+    }
+    .token span {
+      color: #111;
+      font-weight: 900;
+      font-size: 24px;
+      letter-spacing: -0.05em;
+    }
+    .bubble {
+      position: absolute;
+      max-width: 260px;
+      background: rgba(15,15,15,0.9);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 18px;
+      padding: 12px 14px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      box-shadow: 0 14px 22px rgba(0,0,0,0.18);
+    }
+    .bubble::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: rgba(15,15,15,0.9);
+      border-left: 1px solid rgba(255,255,255,0.09);
+      border-bottom: 1px solid rgba(255,255,255,0.09);
+      transform: rotate(-45deg);
+      bottom: -8px;
+      left: 26px;
+    }
+    .bubble.small {
+      font-size: 15px;
+      font-weight: 800;
+    }
+    .b1 { right: 18px; top: 18px; }
+    .b2 { left: 18px; top: 20px; }
+    .b3 { right: 18px; top: 18px; }
+    .b4 { left: 18px; top: 18px; }
+    .b5 { left: 50%; transform: translateX(-50%); bottom: 18px; max-width: 400px; }
+    .b6 { left: 20px; top: 20px; }
+    .panel .caption {
+      margin: 14px 2px 8px;
+      color: var(--muted-2);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .scene.grid-lines {
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(0,0,0,0.15), rgba(2,2,2,0.35));
+      background-size: 32px 32px, 32px 32px, auto;
+    }
+    .scene .mini-note {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      text-align: center;
+      color: var(--muted-2);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .vault-box {
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      width: 250px;
+      padding: 18px 14px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(233,218,122,0.08), rgba(233,218,122,0.02));
+      border: 1px solid var(--yellow-edge);
+      text-align: center;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .vault-box .stack {
+      color: var(--yellow);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .vault-box .title {
+      margin-top: 10px;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.7px;
+    }
+    .vault-box .small {
+      margin-top: 8px;
+      color: var(--muted-2);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .opportunity {
+      position: absolute;
+      width: 180px;
+      min-height: 120px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      padding: 12px 12px 10px;
+      overflow: hidden;
+    }
+    .opportunity.left { left: 22px; top: 42px; }
+    .opportunity.right { right: 22px; top: 42px; }
+    .opportunity.bottom-left { left: 22px; bottom: 24px; }
+    .opportunity.bottom-right { right: 22px; bottom: 24px; }
+    .opportunity .headline {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 8px;
+    }
+    .opportunity .story {
+      color: var(--muted-2);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .opportunity .icon {
+      position: absolute;
+      right: 12px;
+      bottom: 10px;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      font-weight: 900;
+      font-size: 18px;
+    }
+    .arrows {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .arrow {
+      position: absolute;
+      width: 90px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--yellow), rgba(233,218,122,0.2));
+      box-shadow: 0 0 16px rgba(233,218,122,0.18);
+    }
+    .arrow::after {
+      content: "";
+      position: absolute;
+      right: -4px;
+      top: -3px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid var(--yellow);
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+    }
+    .a-1 { left: 220px; top: 168px; transform: rotate(38deg); width: 110px; }
+    .a-2 { right: 220px; top: 168px; transform: rotate(-38deg); width: 110px; }
+    .a-3 { left: 20%; bottom: 58px; transform: rotate(18deg); width: 90px; }
+    .a-4 { right: 20%; bottom: 58px; transform: rotate(-18deg); width: 90px; }
+    .icon-wave {
+      position: absolute;
+      inset: auto 52px 18px 52px;
+      height: 30px;
+      border-top: 2px dashed rgba(233,218,122,0.45);
+      opacity: 0.8;
+    }
+    .icon-wave::before, .icon-wave::after {
+      content: "";
+      position: absolute;
+      top: -6px;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(233,218,122,0.7);
+      border-left: none;
+      border-bottom: none;
+      transform: rotate(45deg);
+    }
+    .icon-wave::before { left: 12%; }
+    .icon-wave::after { right: 12%; }
+    .scene.ship { background: linear-gradient(180deg, rgba(41,53,82,0.3), rgba(5,10,18,0.2)); }
+    .flightline {
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      width: 360px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(125,211,252,0.9), transparent);
+      box-shadow: 0 0 18px rgba(125,211,252,0.35);
+    }
+    .plane {
+      position: absolute;
+      top: 36%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(12deg);
+      width: 48px;
+      height: 20px;
+      border-radius: 12px 16px 12px 16px;
+      background: linear-gradient(90deg, var(--cyan), rgba(125,211,252,0.4));
+      box-shadow: 0 0 20px rgba(125,211,252,0.30);
+    }
+    .plane::before, .plane::after {
+      content: "";
+      position: absolute;
+      top: 7px;
+      width: 14px;
+      height: 2px;
+      background: rgba(255,255,255,0.7);
+    }
+    .plane::before { left: 8px; }
+    .plane::after { right: 8px; }
+    .city .block {
+      position: absolute;
+      bottom: 18px;
+      width: 38px;
+      height: 90px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px 8px 0 0;
+    }
+    .city .b1 { left: 22px; }
+    .city .b2 { left: 80px; height: 110px; }
+    .city .b3 { left: 136px; height: 84px; }
+    .city .b4 { right: 80px; height: 120px; }
+    .city .b5 { right: 24px; height: 96px; }
+    .scene.server {
+      background: linear-gradient(180deg, rgba(13,17,34,0.25), rgba(7,7,7,0.5));
+    }
+    .server-box {
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      width: 350px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .rack {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      height: 120px;
+      position: relative;
+      overflow: hidden;
+    }
+    .rack::before {
+      content: "";
+      position: absolute;
+      inset: 12px 8px 10px;
+      background: repeating-linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.08) 4px, transparent 4px, transparent 10px);
+      border-radius: 8px;
+    }
+    .rack::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(125,211,252,0.2);
+      border: 1px solid rgba(125,211,252,0.6);
+    }
+    .scene .caption-line {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(15,15,15,0.9);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted-2);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 7px 12px;
+      text-align: center;
+    }
+    .final-panel {
+      background: linear-gradient(180deg, #0f1218, #111111);
+      border: 1px solid rgba(233,218,122,0.25);
+      overflow: hidden;
+    }
+    .final-panel .scene {
+      min-height: 500px;
+      background:
+        radial-gradient(circle at center, rgba(233,218,122,0.1), transparent 25%),
+        linear-gradient(180deg, rgba(20,20,20,0.9), rgba(10,10,10,1));
+    }
+    .final-panel .vault-final {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 480px;
+      max-width: calc(100% - 50px);
+      padding: 22px 18px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(233,218,122,0.08), rgba(233,218,122,0.02));
+      border: 2px solid rgba(233,218,122,0.5);
+      box-shadow: 0 0 40px rgba(233,218,122,0.2), inset 0 0 0 1px rgba(255,255,255,0.06);
+      text-align: center;
+    }
+    .final-panel .vault-final .small-label {
+      color: var(--yellow);
+      font-size: 10px;
+      letter-spacing: 2.3px;
+      text-transform: uppercase;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .final-panel .vault-final .big {
+      font-size: clamp(30px, 5vw, 64px);
+      line-height: 1;
+      letter-spacing: -2px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .final-panel .vault-final .sub {
+      margin-top: 14px;
+      color: var(--muted-2);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .final-panel .flow-msg {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      text-align: center;
+      color: var(--text);
+      max-width: 720px;
+      font-size: clamp(15px, 2vw, 26px);
+      line-height: 1.3;
+      letter-spacing: -0.05em;
+      font-weight: 900;
+    }
+    .final-panel .flow-msg .highlight { color: var(--yellow); }
+    .research {
+      margin-top: 26px;
+      border-top: 1px solid var(--border);
+      padding-top: 32px;
+    }
+    .research h2 {
+      margin: 0 0 18px;
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1;
+      letter-spacing: -1.3px;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .note-box {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 14px 26px var(--shadow);
+    }
+    .note-box h3 {
+      margin: 0 0 12px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+    .note-box p, .note-box li {
+      margin: 0;
+      color: var(--muted-2);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    .note-box ul {
+      padding-left: 18px;
+      margin: 0;
+    }
+    .source-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .source-box {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .source-box h4 {
+      margin: 0 0 8px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+    .source-box p {
+      margin: 0;
+      color: var(--muted-2);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+    .disclaimer {
+      margin-top: 18px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      color: var(--muted-2);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+    .footer {
+      margin-top: 26px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.9;
+      padding-bottom: 30px;
+    }
+    @media (max-width: 900px) {
+      .panel-grid, .research-grid, .source-list { grid-template-columns: 1fr; }
+      .scene { min-height: 290px; }
+      .vault-box { width: 200px; }
+      .final-panel .scene { min-height: 420px; }
+    }
+    @media (max-width: 620px) {
+      .page { padding-left: 14px; padding-right: 14px; }
+      .topbar { padding-left: 14px; padding-right: 14px; }
+      .panel { padding: 14px 14px 8px; }
+      .bubble { max-width: 170px; font-size: 14px; }
+      .b5 { max-width: 240px; }
+      .scene { min-height: 250px; }
+      .phone { width: 150px; height: 190px; }
+      .token { width: 70px; height: 70px; }
+      .opportunity { width: 135px; }
+      .final-panel .vault-final { width: 280px; }
+      .final-panel .flow-msg { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="brand">
+      <div class="brand-mark"><span class="c">C</span><span class="bar"></div></div>
+      <div class="brand-text">Concrete Chronicles</div>
+    </div>
+    <div class="nav">
+      <a href="episode3">← Ep. 3</a>
+      <a href="index">All episodes</a>
+      <a class="primary" href="https://concrete.xyz" target="_blank">Concrete ↗</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <header class="hero">
+      <div class="badge">Episode 4</div>
+      <h1>The Dollar <span class="glow">That Went to Work</span></h1>
+      <p class="subtitle">How one USD1 vault connects stablecoin capital to four real-world economic opportunities.</p>
+      <div class="meta">
+        <span>Sequential educational comic</span>
+        <span>·</span>
+        <span>September 2, 2026</span>
+        <span>·</span>
+        <span>Independent educational project</span>
+      </div>
+    </header>
+
+    <main class="comic-wrap">
+      <div class="panel-grid">
+        <section class="panel">
+          <div class="panel-id">Panel 1</div>
+          <div class="scene grid-lines">
+            <div class="phone"></div>
+            <div class="token"><span>USD1</span></div>
+            <div class="bubble b1">“I’m a dollar.”</div>
+          </div>
+          <p class="caption">A USD1 stablecoin sits on a phone screen, looking like a normal digital dollar. It has a job. It just does not know it yet.</p>
+        </section>
+
+        <section class="panel">
+          <div class="panel-id">Panel 2</div>
+          <div class="scene grid-lines">
+            <div class="phone"></div>
+            <div class="token"><span>USD1</span></div>
+            <div class="bubble b2 small">“I provide stability.”</div>
+          </div>
+          <p class="caption">USD1 has the classic stablecoin superpower: it is supposed to stay stable while everyone else panics.</p>
+        </section>
+
+        <section class="panel">
+          <div class="panel-id">Panel 3</div>
+          <div class="scene grid-lines">
+            <div class="phone"></div>
+            <div class="token"><span>USD1</span></div>
+            <div class="bubble b3 small">“I can be used for payments.”</div>
+            <div class="bubble b4 small" style="top: 170px; right: 22px;">“But… am I actually doing anything?”</div>
+          </div>
+          <p class="caption">Stable money can move fast. But sometimes it feels like it is only good at sitting there looking useful.</p>
+        </section>
+
+        <section class="panel">
+          <div class="panel-id">Panel 4</div>
+          <div class="scene grid-lines">
+            <div class="phone"></div>
+            <div class="token"><span>USD1</span></div>
+            <div class="bubble b3 small" style="right: 28px; top: 24px;">“Want to put yourself to work?”</div>
+            <div class="bubble b4 small" style="left: 26px; top: 188px;">“Doing what?”</div>
+          </div>
+          <p class="caption">Concrete strides in with a very good question and a terrible amount of paperwork behind it.</p>
+        </section>
+
+        <section class="panel wide">
+          <div class="panel-id">Panel 5</div>
+          <div class="scene">
+            <div class="token" style="left: 28%; top: 58%; width: 80px; height: 80px;"><span>USD1</span></div>
+            <div class="icon-wave"></div>
+            <div class="vault-box">
+              <div class="stack">Concrete</div>
+              <div class="title">USD1 RWA Vault</div>
+              <div class="small">One vault. Multiple real-world opportunities.</div>
+            </div>
+          </div>
+          <p class="caption">This is the moment the stablecoin stops being just a wallet asset and becomes a capital engine.</p>
+        </section>
+
+        <section class="panel wide">
+          <div class="panel-id">Panel 6</div>
+          <div class="scene ship">
+            <div class="flightline"></div>
+            <div class="plane"></div>
+            <div class="opportunity left">
+              <div class="headline">ZIG Markets</div>
+              <div class="story">Cross-border settlement finance</div>
+              <div class="icon">⇄</div>
+            </div>
+            <div class="opportunity right">
+              <div class="headline">Qiro</div>
+              <div class="story">Short-duration private credit</div>
+              <div class="icon">◌</div>
+            </div>
+            <div class="opportunity bottom-left">
+              <div class="headline">Colb</div>
+              <div class="story">European asset-backed private credit</div>
+              <div class="icon">€</div>
+            </div>
+            <div class="opportunity bottom-right">
+              <div class="headline">Origin Assets</div>
+              <div class="story">Digital infrastructure financing</div>
+              <div class="icon">▣</div>
+            </div>
+            <div class="bubble small" style="left: 50%; top: 22px; transform: translateX(-50%); max-width: 320px;">“Cross-border settlement finance.”</div>
+            <div class="caption-line">Real-world economic opportunities</div>
+          </div>
+          <p class="caption">USD1 liquidity can support settlement financing and other credit-linked opportunities, but the flow is still real-world business activity, not free money.</p>
+        </section>
+
+        <section class="panel wide">
+          <div class="panel-id">Panel 7</div>
+          <div class="scene server">
+            <div class="server-box">
+              <div class="rack"></div>
+              <div class="rack"></div>
+              <div class="rack"></div>
+              <div class="rack"></div>
+            </div>
+            <div class="bubble small" style="left: 24px; top: 18px; max-width: 200px;">“Qiro provides access to professionally underwritten private-credit opportunities focused on payment and fintech businesses.”</div>
+            <div class="caption-line">Qiro</div>
+          </div>
+          <p class="caption">Qiro’s role is not just “a name on a slide.” It is underwriting, structuring and monitoring for short-duration private credit.</p>
+        </section>
+
+        <section class="panel wide">
+          <div class="panel-id">Panel 8</div>
+          <div class="scene city">
+            <div class="city">
+              <div class="block b1"></div>
+              <div class="block b2"></div>
+              <div class="block b3"></div>
+              <div class="block b4"></div>
+              <div class="block b5"></div>
+            </div>
+            <div class="bubble small" style="left: 26px; top: 24px;">“European asset-backed private credit.”</div>
+            <div class="bubble small" style="right: 30px; bottom: 40px; max-width: 220px;">Invoices. Businesses. Short-duration financing.</div>
+            <div class="caption-line">Colb</div>
+          </div>
+          <p class="caption">Colb adds a Europe-focused credit lane, where cash flow and asset-backed underwriting matter more than headline yield alone.</p>
+        </section>
+
+        <section class="panel wide">
+          <div class="panel-id">Panel 9</div>
+          <div class="scene server">
+            <div class="server-box" style="width: 420px;">
+              <div class="rack"></div>
+              <div class="rack"></div>
+              <div class="rack"></div>
+              <div class="rack"></div>
+              <div class="rack"></div>
+              <div class="rack"></div>
+              <div class="rack"></div>
+              <div class="rack"></div>
+            </div>
+            <div class="bubble small" style="left: 30px; top: 18px; max-width: 250px;">“Digital infrastructure financing.”</div>
+            <div class="caption-line">Origin Assets</div>
+          </div>
+          <p class="caption">Origin Assets brings the infrastructure lane: data centers, power, and the financing behind digital operations.</p>
+        </section>
+
+        <section class="panel wide">
+          <div class="panel-id">Panel 10</div>
+          <div class="scene">
+            <div class="bubble small" style="left: 18px; top: 18px; max-width: 200px;">ZIG</div>
+            <div class="bubble small" style="left: 25%; top: 18px; max-width: 170px;">Qiro</div>
+            <div class="bubble small" style="left: 52%; top: 18px; max-width: 170px;">Colb</div>
+            <div class="bubble small" style="right: 18px; top: 18px; max-width: 200px;">Origin</div>
+            <div class="icon-wave" style="left: 54px; right: 54px; top: 110px; bottom: auto; border-top: 2px dashed rgba(255,255,255,0.15);"></div>
+            <div class="vault-box" style="top: 55%; width: 320px;">
+              <div class="stack">Concrete</div>
+              <div class="title" style="font-size: 26px;">USD1 RWA Vault</div>
+            </div>
+          </div>
+          <p class="caption">One stablecoin, four lanes, one structure. The vault is the hub; the underlying opportunities are the economic engines.</p>
+        </section>
+
+        <section class="panel">
+          <div class="panel-id">Panel 11</div>
+          <div class="scene grid-lines">
+            <div class="phone"></div>
+            <div class="token"><span>USD1</span></div>
+            <div class="bubble b2 small" style="left: 32px; top: 18px;">“So I’m not just sitting in a wallet anymore?”</div>
+            <div class="bubble b3 small" style="right: 28px; top: 180px;">“That’s the idea.”</div>
+          </div>
+          <p class="caption">The look on USD1’s face is worth the entire story: it was never just a passive token; it was a dollar with a potential purpose.</p>
+        </section>
+
+        <section class="panel wide final-panel">
+          <div class="panel-id">Final panel</div>
+          <div class="scene">
+            <div class="final-panel-curve" style="position:absolute; inset: 0; background: radial-gradient(circle at center, rgba(233,218,122,0.12), transparent 28%);"></div>
+            <div class="vault-final">
+              <div class="small-label">One dollar. Four engines. One vault.</div>
+              <div class="big">USD1<br>RWA Vault</div>
+              <div class="sub">Stablecoin liquidity → Vault infrastructure → Real-world financing → Economic activity</div>
+            </div>
+            <div class="flow-msg">“One dollar.<br><span class="highlight">Four economic engines.</span><br>One vault.”</div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <section class="research">
+      <h2>Research Notes</h2>
+      <div class="research-grid">
+        <div class="note-box">
+          <h3>Factual summary</h3>
+          <ul>
+            <li>Concrete launched the USD1 RWA Vault.</li>
+            <li>World Liberty Financial provides the USD1 ecosystem.</li>
+            <li>Concrete provides the vault infrastructure.</li>
+            <li>Initial opportunity providers include ZIG Markets, Qiro, Colb and Origin Assets.</li>
+            <li>The vault is for eligible/whitelisted participants.</li>
+            <li>Holding USD1 itself does not generate yield.</li>
+            <li>Potential returns come from underlying investments.</li>
+            <li>Underlying opportunities carry credit, counterparty, liquidity, smart-contract and other risks.</li>
+          </ul>
+        </div>
+        <div class="note-box">
+          <h3>Interpretation</h3>
+          <p>The educational purpose of this comic is to explain how stablecoin capital can move from simple liquidity into structured, real-world investing. The comic is not a promise of return or a description of guaranteed yield. It is a simplified explanation of a product architecture based on publicly available information.</p>
+          <p style="margin-top: 10px;">Based on publicly available information as of September 2, 2026.</p>
+        </div>
+      </div>
+
+      <div class="source-list">
+        <article class="source-box">
+          <h4>Primary source</h4>
+          <p>Concrete official USD1 RWA Vault article and related public materials. <a href="https://concrete.xyz" target="_blank">concrete.xyz ↗</a></p>
+        </article>
+        <article class="source-box">
+          <h4>USD1 ecosystem</h4>
+          <p>World Liberty Financial public materials on USD1. <a href="https://www.worldlibertyfinancial.com/" target="_blank">worldlibertyfinancial.com ↗</a></p>
+        </article>
+        <article class="source-box">
+          <h4>Opportunity providers</h4>
+          <p>ZIG Markets, Qiro, Colb and Origin Assets public materials and related product descriptions.</p>
+        </article>
+        <article class="source-box">
+          <h4>Institutional context</h4>
+          <p>Concrete public vault infrastructure and institutional product material as context for the comic’s educational framing.</p>
+        </article>
+      </div>
+
+      <div class="disclaimer">
+        This is an independent educational project and is not affiliated with Concrete, World Liberty Financial, or any named opportunity provider. It is intended to explain a public product concept in beginner-friendly terms and should not be treated as financial advice or as a guarantee of returns. Risks include credit, counterparty, liquidity, operational, smart-contract and market-related factors.
+      </div>
+    </section>
+
+    <footer class="footer">
+      The Concrete Chronicles · Episode 4 · “The Dollar That Went to Work”<br>
+      Independent educational project · Not financial advice<br>
+      <a href="index">All episodes</a> · <a href="https://concrete.xyz" target="_blank">concrete.xyz ↗</a>
+    </footer>
+  </div>
+</body>
+</html>
