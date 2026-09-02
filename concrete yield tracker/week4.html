@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concrete Yield Tracker — Week 4 | The RWA Yield Shift</title>
+<meta name="description" content="Concrete Yield Tracker Week 4: the RWA yield shift. Concrete's vault lineup expands beyond conventional DeFi yield into institutional yield infrastructure.">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --yellow: #E9DA7A; --yellow-dim: rgba(233,218,122,0.07); --yellow-border: rgba(233,218,122,0.18);
+  --bg: #0D0D0D; --card: #141414; --card2: #191919; --border: #202020; --text: #FFFFFF; --muted: #555555; --muted2: #888888;
+  --green: #4ADE80; --red: #F87171; --orange: #FB923C; --blue: #7dd3fc;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+.header { padding: 18px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.header-left { display: flex; align-items: center; gap: 14px; }
+.logo-box { width: 38px; height: 38px; background: var(--yellow); border: 2px solid #000; border-radius: 7px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; flex-shrink: 0; }
+.logo-c { font-size: 19px; font-weight: 900; color: #000; line-height: 1; }
+.logo-line { width: 19px; height: 2px; background: #000; }
+.header-brand { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted2); }
+.header-title { font-size: 18px; font-weight: 900; letter-spacing: -0.3px; text-transform: uppercase; }
+.header-sub { font-size: 11px; color: var(--muted); }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.live-badge { display: inline-flex; align-items: center; gap: 7px; background: var(--yellow-dim); border: 1px solid var(--yellow-border); padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 700; color: var(--yellow); letter-spacing: 1px; text-transform: uppercase; }
+.live-dot { width: 7px; height: 7px; background: var(--yellow); border-radius: 50%; }
+.header-cta { font-size: 11px; font-weight: 800; padding: 9px 18px; border-radius: 7px; text-decoration: none; background: var(--yellow); color: #000; }
+.header-prev { font-size: 11px; font-weight: 700; padding: 9px 14px; border-radius: 7px; text-decoration: none; color: var(--muted2); border: 1px solid var(--border); }
+.header-prev:hover { color: var(--text); border-color: #333; }
+.hero { max-width: 1100px; margin: 0 auto; padding: 52px 24px 30px; }
+.kicker { font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: var(--yellow); }
+.hero h1 { font-size: clamp(38px, 5vw, 72px); font-weight: 900; letter-spacing: -2.5px; line-height: 0.96; margin-top: 12px; margin-bottom: 14px; text-transform: uppercase; }
+.hero h1 span { color: var(--yellow); }
+.subtitle { max-width: 720px; color: var(--muted2); font-size: 18px; line-height: 1.6; }
+.meta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); }
+.meta span { border: 1px solid var(--border); padding: 8px 10px; border-radius: 6px; }
+.meta .research { color: var(--yellow); border-color: var(--yellow-border); background: var(--yellow-dim); }
+.stats-bar { display: grid; grid-template-columns: repeat(5, minmax(120px, 1fr)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.stat { padding: 18px 20px; border-right: 1px solid var(--border); }
+.stat:last-child { border-right: none; }
+.stat-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+.stat-val { font-size: 22px; font-weight: 900; letter-spacing: -0.8px; }
+.stat-val.yellow { color: var(--yellow); }
+.stat-val.green { color: var(--green); }
+.stat-sub { font-size: 10px; color: var(--muted); margin-top: 5px; }
+.stat-source { font-size: 10px; color: var(--muted2); margin-top: 4px; line-height: 1.4; }
+.main { max-width: 1100px; margin: 0 auto; padding: 28px 24px 60px; }
+.section-head { display: flex; align-items: center; gap: 14px; padding-top: 24px; margin-bottom: 20px; }
+.section-kicker { font-size: 10px; font-weight: 800; letter-spacing: 2px; color: var(--yellow); text-transform: uppercase; }
+.section-line { height: 1px; flex: 1; background: var(--border); }
+h2 { font-size: 32px; letter-spacing: -0.8px; font-weight: 800; margin-bottom: 10px; }
+.section-intro { font-size: 13px; color: var(--muted2); line-height: 1.6; max-width: 700px; }
+.grid-2 { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px; }
+.panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 18px 16px; }
+.panel h3 { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 12px; }
+.market-table { width: 100%; border-collapse: collapse; }
+.market-table th { text-align: left; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 10px 10px; border-bottom: 1px solid var(--border); }
+.market-table td { padding: 12px 10px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--muted2); vertical-align: top; }
+.market-table tr:last-child td { border-bottom: none; }
+.market-table td strong { color: var(--text); font-weight: 700; }
+.num { color: var(--yellow); font-weight: 800; }
+.badge { display: inline-block; font-size: 9px; letter-spacing: 1.2px; font-weight: 800; text-transform: uppercase; border-radius: 999px; padding: 4px 8px; }
+.badge.live { background: var(--yellow-dim); color: var(--yellow); border: 1px solid var(--yellow-border); }
+.badge.target { background: rgba(74,222,128,0.08); color: var(--green); border: 1px solid rgba(74,222,128,0.25); }
+.badge.private { background: rgba(255,255,255,0.04); color: var(--muted2); border: 1px solid var(--border); }
+.featured-list { display: grid; gap: 10px; }
+.featured-item { padding: 14px 14px; background: var(--card2); border: 1px solid var(--border); border-radius: 9px; }
+.featured-item .name { font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.featured-item .sub { font-size: 11px; color: var(--muted2); margin-top: 7px; line-height: 1.5; }
+.yield-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
+.board-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.board-card .label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+.board-card .vault { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--border); }
+.board-card .vault:first-of-type { border-top: none; padding-top: 0; }
+.board-card .vault-name { font-size: 13px; font-weight: 700; }
+.board-card .vault-meta { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+.board-card .vault-rate { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; }
+.board-card .vault-rate.live { color: var(--yellow); }
+.board-card .vault-rate.target { color: var(--green); }
+.board-card .vault-rate.private { color: var(--muted2); }
+.context-panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+.inline-math { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.math-box { background: var(--card2); border: 1px solid var(--border); border-radius: 9px; padding: 16px; }
+.math-box .head { font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+.math-box .value { font-size: 28px; font-weight: 900; letter-spacing: -1px; color: var(--yellow); }
+.math-box .value.safe { color: var(--green); }
+.math-box .sub { font-size: 11px; color: var(--muted2); margin-top: 6px; line-height: 1.5; }
+.rwa-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+.rwa-flow { display: grid; grid-template-columns: 1fr 22px 1fr 22px 1fr; gap: 10px; align-items: center; margin-top: 18px; }
+.rwa-step { background: var(--card2); border: 1px solid var(--border); border-radius: 9px; padding: 14px 10px; text-align: center; font-size: 12px; font-weight: 800; line-height: 1.3; }
+.rwa-step strong { display: block; font-size: 20px; margin-bottom: 8px; color: var(--yellow); }
+.rwa-arrow { font-size: 22px; color: var(--yellow); }
+.rwa-categories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+.rwa-cat { background: var(--card2); border: 1px solid var(--border); border-radius: 9px; padding: 14px; }
+.rwa-cat h4 { font-size: 13px; font-weight: 800; margin-bottom: 6px; }
+.rwa-cat p { font-size: 11px; color: var(--muted2); line-height: 1.6; }
+.risk-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+.risk-box p { font-size: 13px; color: var(--muted2); line-height: 1.7; }
+.big-takeaway { background: var(--yellow-dim); border: 1px solid var(--yellow-border); border-left: 3px solid var(--yellow); border-radius: 0 12px 12px 0; padding: 20px 22px; margin-top: 24px; }
+.big-takeaway h3 { font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.2px; margin-bottom: 10px; }
+.big-takeaway p { color: var(--muted2); font-size: 14px; line-height: 1.7; }
+.method-note { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+.method-note ul { margin: 0; padding-left: 18px; color: var(--muted2); font-size: 13px; line-height: 1.8; }
+.sources { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+.source-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.source-card h4 { font-size: 11px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.source-card p { font-size: 12px; line-height: 1.6; color: var(--muted2); }
+.source-card a { color: var(--yellow); text-decoration: none; }
+.footer { padding: 28px 40px 42px; border-top: 1px solid var(--border); text-align: center; font-size: 11px; color: var(--muted); line-height: 2; }
+.footer a { color: var(--yellow); text-decoration: none; }
+@media (max-width: 900px) {
+  .stats-bar { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+  .grid-2, .yield-board, .sources { grid-template-columns: 1fr; }
+  .rwa-flow { grid-template-columns: 1fr; }
+  .rwa-arrow { display: none; }
+}
+@media (max-width: 620px) {
+  .header { padding: 14px 20px; }
+  .hero, .main { padding-left: 20px; padding-right: 20px; }
+  .stats-bar { grid-template-columns: 1fr; }
+  .header-right { width: 100%; justify-content: flex-start; }
+  .section-head { margin-top: 10px; }
+  .inline-math { grid-template-columns: 1fr; }
+  .rwa-categories { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-left">
+    <div class="logo-box"><span class="logo-c">C</span><div class="logo-line"></div></div>
+    <div>
+      <div class="header-brand">Concrete.xyz Community</div>
+      <div class="header-title">Weekly Yield Tracker</div>
+      <div class="header-sub">Week of August 25–September 1, 2026</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="week3" class="header-prev">← Week 3</a>
+    <div class="live-badge"><span class="live-dot"></span>Updated weekly</div>
+    <a href="https://app.concrete.xyz/earn" class="header-cta" target="_blank">Earn with Concrete →</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="kicker">Week 4 · August 25 – September 1, 2026</div>
+  <h1>The <span>RWA Yield Shift</span></h1>
+  <p class="subtitle">Concrete’s yield infrastructure is expanding beyond traditional DeFi strategies.</p>
+  <div class="meta">
+    <span>Edition 04</span>
+    <span>August 2026</span>
+    <span class="research">Research snapshot</span>
+    <span>Source-led</span>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-label">Total deposits</div>
+    <div class="stat-val yellow">$1.223B</div>
+    <div class="stat-sub">Concrete platform total</div>
+    <div class="stat-source">Source: Concrete Earn app, September 2, 2026.</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Total volume</div>
+    <div class="stat-val">$22.79B</div>
+    <div class="stat-sub">Cumulative volume</div>
+    <div class="stat-source">Source: Concrete Earn app, September 2, 2026.</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Depositors</div>
+    <div class="stat-val green">53.74K</div>
+    <div class="stat-sub">Unique depositors</div>
+    <div class="stat-source">Source: Concrete Earn app, September 2, 2026.</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Concrete USDT</div>
+    <div class="stat-val">8.30%</div>
+    <div class="stat-sub">Live APY</div>
+    <div class="stat-source">Source: Concrete Earn app, September 2, 2026.</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Concrete Frontier / USDC</div>
+    <div class="stat-val yellow">9.14%</div>
+    <div class="stat-sub">Live APY</div>
+    <div class="stat-source">Source: Concrete Earn app, September 2, 2026.</div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="section-head">
+    <div class="section-kicker">01 / Market Snapshot</div>
+    <div class="section-line"></div>
+  </div>
+  <h2>Market snapshot</h2>
+  <p class="section-intro">This snapshot uses Concrete’s official Earn application as the primary source for current vault data. Live APY and target APY fields are kept separate to avoid implying that a target return is currently realized.</p>
+
+  <div class="grid-2">
+    <div class="panel">
+      <h3>Concrete platform overview</h3>
+      <table class="market-table">
+        <thead>
+          <tr><th>Metric</th><th>Value</th><th>Source</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Total deposits</strong></td><td class="num">$1.223B</td><td>Concrete Earn app · Sep. 2, 2026</td></tr>
+          <tr><td><strong>Total volume</strong></td><td class="num">$22.79B</td><td>Concrete Earn app · Sep. 2, 2026</td></tr>
+          <tr><td><strong>Depositors</strong></td><td class="num">53.74K</td><td>Concrete Earn app · Sep. 2, 2026</td></tr>
+          <tr><td><strong>Current featured vaults</strong></td><td>USDT, WBTC, Frontier / USDC, USD1, WLFIcx, WeETH</td><td>Concrete Earn app · Sep. 2, 2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h3>Featured vaults</h3>
+      <div class="featured-list">
+        <div class="featured-item">
+          <div class="name"><span>Concrete USDT</span><span class="badge live">Live</span></div>
+          <div class="sub">Live APY: 8.30% · TVL: $29.5M · Source: Concrete Earn app · Sep. 2, 2026</div>
+        </div>
+        <div class="featured-item">
+          <div class="name"><span>Concrete Frontier / USDC</span><span class="badge live">Live</span></div>
+          <div class="sub">Live APY: 9.14% · TVL: $1.19M · Source: Concrete Earn app · Sep. 2, 2026</div>
+        </div>
+        <div class="featured-item">
+          <div class="name"><span>WBTC target vault</span><span class="badge target">Target</span></div>
+          <div class="sub">Target APY: 7% · TVL: $2.27M · Source: Concrete Earn app · Sep. 2, 2026</div>
+        </div>
+        <div class="featured-item">
+          <div class="name"><span>RWA USD1</span><span class="badge target">Target</span></div>
+          <div class="sub">Target APY: 8% · TVL: $25M · Source: Concrete official USD1 / RWA materials · Sep. 2, 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div class="section-kicker">02 / The Yield Board</div>
+    <div class="section-line"></div>
+  </div>
+  <h2>Yield board</h2>
+  <div class="yield-board">
+    <div class="board-card">
+      <div class="label">Live APY</div>
+      <div class="vault">
+        <div>
+          <div class="vault-name">Concrete USDT</div>
+          <div class="vault-meta">TVL: $29.5M</div>
+        </div>
+        <div class="vault-rate live">8.30%</div>
+      </div>
+      <div class="vault">
+        <div>
+          <div class="vault-name">Concrete Frontier / USDC</div>
+          <div class="vault-meta">TVL: $1.19M</div>
+        </div>
+        <div class="vault-rate live">9.14%</div>
+      </div>
+      <div style="margin-top:12px; font-size:11px; color:var(--muted2); line-height:1.5;">Badge meaning: <span class="badge live">Live</span> = current live APY shown in the official app as of Sep. 2, 2026.</div>
+    </div>
+
+    <div class="board-card">
+      <div class="label">Target APY</div>
+      <div class="vault">
+        <div>
+          <div class="vault-name">WBTC</div>
+          <div class="vault-meta">TVL: $2.27M</div>
+        </div>
+        <div class="vault-rate target">7.00%</div>
+      </div>
+      <div class="vault">
+        <div>
+          <div class="vault-name">RWA USD1</div>
+          <div class="vault-meta">TVL: $25M</div>
+        </div>
+        <div class="vault-rate target">8.00%</div>
+      </div>
+      <div style="margin-top:12px; font-size:11px; color:var(--muted2); line-height:1.5;">Badge meaning: <span class="badge target">Target</span> = target return, not a guaranteed result or realized yield.</div>
+    </div>
+
+    <div class="board-card">
+      <div class="label">Private</div>
+      <div class="vault">
+        <div>
+          <div class="vault-name">WLFIcx</div>
+          <div class="vault-meta">TVL: $103M</div>
+        </div>
+        <div class="vault-rate private">Private</div>
+      </div>
+      <div class="vault">
+        <div>
+          <div class="vault-name">WeETH</div>
+          <div class="vault-meta">TVL: $742M</div>
+        </div>
+        <div class="vault-rate private">Private</div>
+      </div>
+      <div style="margin-top:12px; font-size:11px; color:var(--muted2); line-height:1.5;">Badge meaning: <span class="badge private">Private</span> = APY is not publicly disclosed; no public ranking should be inferred.</div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div class="section-kicker">03 / Yield Context</div>
+    <div class="section-line"></div>
+  </div>
+  <h2>Headline yield differentials, not risk-adjusted returns</h2>
+  <div class="grid-2">
+    <div class="context-panel">
+      <p class="section-intro" style="margin-bottom:18px;">Concrete USDT live APY was 8.30% on the official app. Comparisons below are headlined as yield differentials versus other sources, not as risk-adjusted return claims.</p>
+      <div class="inline-math">
+        <div class="math-box">
+          <div class="head">Headline premium vs USDT vault average</div>
+          <div class="value">+4.61 pp</div>
+          <div class="sub">8.30% − 3.69% = 4.61 percentage points. Source: Concrete Earn app (Sep. 2, 2026) vs Trading Strategy USDT vault average snapshot (Aug. 31, 2026).</div>
+        </div>
+        <div class="math-box">
+          <div class="head">Headline premium vs 3-month Treasury</div>
+          <div class="value">+4.39 pp</div>
+          <div class="sub">8.30% − 3.91% = 4.39 percentage points. Source: Concrete Earn app (Sep. 2, 2026) vs Federal Reserve 3-month Treasury constant maturity (Sep. 1, 2026).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="context-panel">
+      <h3>Why the comparison matters</h3>
+      <p>DeFi yield is not equivalent to Treasury yield. Treasury yields are tied to sovereign debt markets, while DeFi yields can reflect lending demand, stablecoin usage, protocol design, liquidity and operational complexity. Each carries different risk profiles.</p>
+      <p>DeFi carries smart-contract, liquidity, stablecoin, protocol and operational risk. Treasury yields do not carry the same protocol risk, though they have their own market and rate risk. APY is variable and may not equal realized return.</p>
+      <p style="margin-bottom:0;">These differentials are <strong>headline yield differentials</strong>, not risk-adjusted returns, and they should not be treated as equivalent to a risk-free spread.</p>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div class="section-kicker">04 / RWA USD1</div>
+    <div class="section-line"></div>
+  </div>
+  <h2>RWA USD1: a dedicated institutional lane</h2>
+  <div class="rwa-box">
+    <div class="grid-2">
+      <div>
+        <p class="section-intro" style="margin-bottom:8px;"><strong>USD1</strong> feeds a Concrete RWA vault structure aimed at institutional users evaluating tokenized real-world assets.</p>
+        <p class="section-intro" style="margin-bottom:14px;">This section relies on Concrete’s official USD1 / RWA materials as the primary source. The target return is shown as a target, not a guaranteed return.</p>
+        <div class="rwa-flow">
+          <div class="rwa-step"><strong>USD1</strong>RWA base</div>
+          <div class="rwa-arrow">↓</div>
+          <div class="rwa-step"><strong>Concrete RWA Vault</strong>Institutional access</div>
+          <div class="rwa-arrow">↓</div>
+          <div class="rwa-step"><strong>4 categories</strong>Finance / credit / infra</div>
+        </div>
+      </div>
+      <div class="panel" style="background:var(--card2);padding:16px;">
+        <h3>USD1 RWA vault details</h3>
+        <table class="market-table">
+          <tbody>
+            <tr><td><strong>Target APY</strong></td><td class="num">8.00%</td></tr>
+            <tr><td><strong>TVL</strong></td><td class="num">$25M</td></tr>
+            <tr><td><strong>Access</strong></td><td>Eligible / whitelisted participants</td></tr>
+            <tr><td><strong>Return status</strong></td><td>Target APY — not guaranteed.</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px; font-size:11px; color:var(--muted2); line-height:1.5;">Source: Concrete official USD1 / RWA materials, Sep. 2, 2026.</div>
+      </div>
+    </div>
+
+    <div class="rwa-categories">
+      <div class="rwa-cat"><h4>ZIG Markets</h4><p>Cross-border settlement finance. Source: Concrete official USD1 / RWA materials, Sep. 2, 2026.</p></div>
+      <div class="rwa-cat"><h4>Qiro</h4><p>Tokenized private credit. Source: Concrete official USD1 / RWA materials, Sep. 2, 2026.</p></div>
+      <div class="rwa-cat"><h4>Colb</h4><p>European short-duration asset-backed private credit. Source: Concrete official USD1 / RWA materials, Sep. 2, 2026.</p></div>
+      <div class="rwa-cat"><h4>Origin Assets</h4><p>Digital infrastructure / data-center financing. Source: Concrete official USD1 / RWA materials, Sep. 2, 2026.</p></div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div class="section-kicker">05 / Competitor / Risk Watch</div>
+    <div class="section-line"></div>
+  </div>
+  <h2>Aave stablecoin parameter changes</h2>
+  <div class="risk-box">
+    <p>Aave’s August 31 stablecoin interest-rate and utilization parameter changes matter because they can influence borrowing demand, liquidity conditions and the cost of capital across DeFi lending markets. When stablecoin borrowing costs rise or fall, lenders’ realized yield conditions can shift. This matters to the broader DeFi yield environment.</p>
+    <p>However, changing stablecoin borrowing costs do not directly determine Concrete’s APY. Concrete’s returns can come from multiple strategies and multiple underlying yield sources, including automated DeFi allocation, private markets and RWA exposures. The relationship is contextual, not mechanical.</p>
+    <p>Source: Aave governance / parameter updates, August 31, 2026.</p>
+  </div>
+
+  <div class="big-takeaway">
+    <h3>“Yield is becoming infrastructure.”</h3>
+    <p>Editorial analysis: Concrete is increasingly packaging multiple sources of capital productivity — DeFi lending, automated strategies, custody-native yield, RWA, private credit and digital infrastructure. This is not an official Concrete statement; it is a research interpretation of how the product stack is broadening beyond a simple yield vault model.</p>
+  </div>
+
+  <div class="section-head">
+    <div class="section-kicker">07 / Methodology</div>
+    <div class="section-line"></div>
+  </div>
+  <h2>Methodology</h2>
+  <div class="method-note">
+    <ul>
+      <li><strong>Live APY vs target APY:</strong> live APY reflects current app-displayed yield. target APY reflects a target return and is not guaranteed.</li>
+      <li><strong>Measurement dates:</strong> all Concrete figures are dated to September 2, 2026 unless otherwise indicated. The USDT vault average snapshot is from August 31, 2026. The Federal Reserve 3-month Treasury constant maturity is dated September 1, 2026.</li>
+      <li><strong>Source hierarchy:</strong> Concrete’s official Earn app is the primary source for current vault data. Official Concrete RWA materials are the primary source for USD1 and RWA framing. Federal Reserve data is used for Treasury benchmarking. Trading Strategy is used for the aggregate USDT vault comparison.</li>
+      <li><strong>Headline yield vs risk-adjusted yield:</strong> headline differentials do not equal risk-adjusted returns. They are a simple arithmetic comparison and should not be treated as equivalent to risk-adjusted performance.</li>
+      <li><strong>Private APYs cannot be ranked:</strong> WLFIcx and WeETH APYs are private; no public ranking is implied.</li>
+      <li><strong>RWA target returns:</strong> target APY should not be treated as realized return or guaranteed yield.</li>
+      <li><strong>Research snapshot:</strong> September 2, 2026.</li>
+    </ul>
+  </div>
+
+  <div class="section-head">
+    <div class="section-kicker">Sources</div>
+    <div class="section-line"></div>
+  </div>
+  <div class="sources">
+    <div class="source-card">
+      <h4>Concrete official app</h4>
+      <p>Concrete Earn application, current vault metrics including total deposits, total volume, depositors, live APY values, TVL and target APY values. <a href="https://app.concrete.xyz/earn" target="_blank">app.concrete.xyz/earn ↗</a></p>
+    </div>
+    <div class="source-card">
+      <h4>Concrete official RWA / USD1</h4>
+      <p>Concrete official materials for USD1 / RWA vault framing, target APY, TVL and category descriptions. <a href="https://concrete.xyz" target="_blank">concrete.xyz ↗</a></p>
+    </div>
+    <div class="source-card">
+      <h4>Federal Reserve</h4>
+      <p>3-month U.S. Treasury constant maturity, September 1, 2026 data. <a href="https://fred.stlouisfed.org/series/3MTD156N156NN" target="_blank">FRED 3MTD156N156NN ↗</a></p>
+    </div>
+    <div class="source-card">
+      <h4>Trading Strategy</h4>
+      <p>USDT vault average, approximate September 2026 snapshot basis used for comparative context. <a href="https://tradingstrategy.ai/" target="_blank">tradingstrategy.ai ↗</a></p>
+    </div>
+    <div class="source-card">
+      <h4>Aave</h4>
+      <p>August 31 stablecoin interest-rate and utilization parameter changes. <a href="https://docs.aave.com/" target="_blank">Aave docs ↗</a></p>
+    </div>
+    <div class="source-card">
+      <h4>Research note</h4>
+      <p>All numerical figures displayed in this edition are tied to a source and date, with the primary source hierarchy noted above.</p>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  Concrete Yield Tracker · Week 4 · The RWA Yield Shift · Research snapshot: September 2, 2026<br>
+  <a href="index">All editions</a> · <a href="https://app.concrete.xyz/earn" target="_blank">Earn ↗</a>
+</footer>
+</body>
+</html>
