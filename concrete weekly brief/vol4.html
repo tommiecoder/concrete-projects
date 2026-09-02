@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vol. 1 — Issue 4 | The Real-World Yield Layer Arrives</title>
+  <meta name="description" content="Concrete Weekly Brief, Vol. 1 — Issue 4. An independent institutional DeFi intelligence publication on Concrete's USD1 RWA Vault and real-world yield infrastructure.">
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --bg: #0d0d0d;
+      --card: #141414;
+      --card2: #191919;
+      --border: #1f1f1f;
+      --text: #f5f5f5;
+      --muted: #8f8f8f;
+      --muted2: #c7c7c7;
+      --yellow: #e9da7a;
+      --yellow-dim: rgba(233, 218, 122, 0.08);
+      --yellow-border: rgba(233, 218, 122, 0.22);
+      --green: #4ade80;
+      --blue: #8ec5ff;
+      --red: #ff7c7c;
+      --shadow: rgba(0, 0, 0, 0.25);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      letter-spacing: -0.01em;
+    }
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 18px 0 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-box {
+      width: 38px;
+      height: 38px;
+      background: var(--yellow);
+      border-radius: 8px;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 2px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .logo-c { font-size: 20px; font-weight: 900; color: #000; line-height: 1; }
+    .logo-line { width: 18px; height: 2px; background: #000; }
+    .brand-text {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: var(--muted2);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .pill.primary {
+      background: var(--yellow-dim);
+      color: var(--yellow);
+      border-color: var(--yellow-border);
+    }
+    .masthead {
+      padding: 38px 0 26px;
+      border-bottom: 1px solid var(--border);
+    }
+    .eyebrow {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--yellow);
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(40px, 7vw, 74px);
+      line-height: 0.93;
+      letter-spacing: -2.6px;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+    h1 .accent { color: var(--yellow); }
+    .subtitle {
+      max-width: 720px;
+      margin: 0 0 18px;
+      color: var(--muted2);
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .meta strong { color: var(--muted2); }
+    a { color: var(--yellow); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .editorial-box {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .mini-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 16px 14px;
+      box-shadow: 0 8px 18px var(--shadow);
+    }
+    .mini-box h3 {
+      margin: 0 0 8px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--yellow);
+      font-weight: 800;
+    }
+    .mini-box p {
+      margin: 0;
+      color: var(--muted2);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 46px 0 20px;
+    }
+    .section-head .kicker {
+      color: var(--yellow);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.8px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .line {
+      height: 1px;
+      background: var(--border);
+      flex: 1;
+    }
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.08;
+      letter-spacing: -1.2px;
+      font-weight: 900;
+    }
+    .lede {
+      margin: 0 0 18px;
+      color: var(--muted2);
+      font-size: 15px;
+      line-height: 1.8;
+      max-width: 760px;
+    }
+    .exec-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .exec-card {
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 16px 16px;
+      min-height: 170px;
+      box-shadow: 0 8px 18px var(--shadow);
+    }
+    .exec-card .num {
+      display: inline-block;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--yellow);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .exec-card h3 {
+      margin: 0 0 10px;
+      font-size: 17px;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+    .exec-card p {
+      margin: 0;
+      color: var(--muted2);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .big-story {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 18px 14px;
+      box-shadow: 0 8px 18px var(--shadow);
+    }
+    .panel h3 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      letter-spacing: -0.3px;
+    }
+    ul { margin: 0; padding-left: 18px; }
+    li { margin: 8px 0; color: var(--muted2); }
+    .fact-list { list-style: none; padding-left: 0; }
+    .fact-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted2);
+    }
+    .fact-list li:last-child { border-bottom: none; }
+    .label-chip {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--yellow-border);
+      background: var(--yellow-dim);
+      color: var(--yellow);
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .diagram {
+      margin-top: 18px;
+      padding: 18px 14px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: "SFMono-Regular", ui-monospace, monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--muted2);
+      overflow-x: auto;
+    }
+    .diagram .center { text-align: center; }
+    .diagram table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+    }
+    .diagram td {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      text-align: center;
+      padding: 10px 8px;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .opportunity {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .opportunity h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      letter-spacing: -0.4px;
+    }
+    .opportunity p {
+      margin: 0;
+      color: var(--muted2);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+    .qiro-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 18px;
+    }
+    .stats-box {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 16px;
+    }
+    .stat .k {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .stat .v {
+      font-size: clamp(26px, 3vw, 38px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+      color: var(--yellow);
+    }
+    .stat .s {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--muted2);
+    }
+    .note {
+      margin-top: 14px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--muted2);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .yield-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+    .yield-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .yield-box h3 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      letter-spacing: -0.3px;
+    }
+    .yield-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid var(--border);
+    }
+    .yield-row:first-child { border-top: none; }
+    .yield-name {
+      color: var(--muted2);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .yield-value {
+      font-weight: 900;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+      color: var(--yellow);
+    }
+    .watch-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .watch-item {
+      display: flex;
+      gap: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--yellow);
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+    .watch-item p {
+      margin: 0;
+      color: var(--muted2);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+    .thesis-box {
+      background: var(--yellow-dim);
+      border: 1px solid var(--yellow-border);
+      border-radius: 12px;
+      padding: 18px 18px 16px;
+      margin-top: 18px;
+    }
+    .thesis-box h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: -0.4px;
+      text-transform: uppercase;
+    }
+    .thesis-box p {
+      margin: 0;
+      color: var(--muted2);
+      line-height: 1.75;
+      font-size: 14px;
+    }
+    .watchpoints {
+      list-style: decimal;
+      padding-left: 18px;
+      margin: 18px 0 0;
+      color: var(--muted2);
+      line-height: 1.8;
+    }
+    .disclaimer {
+      margin-top: 28px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .disclaimer p {
+      margin: 0 0 12px;
+      color: var(--muted2);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    .disclaimer p:last-child { margin-bottom: 0; }
+    .sources-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .source-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .source-card h3 {
+      margin: 0 0 8px;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+    .source-card p {
+      margin: 0;
+      color: var(--muted2);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      padding: 28px 0 0;
+      line-height: 1.9;
+    }
+    @media (max-width: 860px) {
+      .editorial-box,
+      .big-story,
+      .yield-grid,
+      .stats-box,
+      .sources-grid,
+      .exec-grid { grid-template-columns: 1fr 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .page { padding-left: 18px; padding-right: 18px; }
+      .editorial-box,
+      .exec-grid,
+      .stats-box,
+      .yield-grid,
+      .sources-grid { grid-template-columns: 1fr; }
+      .topbar { align-items: flex-start; }
+      .nav { width: 100%; }
+      .subtitle { font-size: 16px; }
+      .section-head { margin-top: 36px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo-box"><span class="logo-c">C</span><div class="logo-line"></div></div>
+        <div class="brand-text">Concrete Weekly Brief</div>
+      </div>
+      <nav class="nav">
+        <a href="index" class="pill">All issues</a>
+        <span class="pill primary">Independent institutional DeFi intelligence</span>
+      </nav>
+    </header>
+
+    <section class="masthead">
+      <div class="eyebrow">Vol. 1 — Issue 4</div>
+      <h1>The Real-World <span class="accent">Yield Layer</span> Arrives</h1>
+      <p class="subtitle">Concrete’s USD1 RWA Vault marks a deeper move from DeFi yield infrastructure toward diversified institutional capital allocation.</p>
+      <div class="meta">
+        <span><strong>Date:</strong> August 25 – September 1, 2026</span>
+        <span>·</span>
+        <span>Research snapshot: September 2, 2026</span>
+        <span>·</span>
+        <span>Independent publication</span>
+      </div>
+
+      <div class="editorial-box">
+        <div class="mini-box">
+          <h3>Verified facts</h3>
+          <p>Concrete introduced a USD1 RWA Vault. Initial opportunities include ZIG Markets, Qiro, Colb and Origin Assets. Access is for eligible/whitelisted participants. Returns are not guaranteed.</p>
+        </div>
+        <div class="mini-box">
+          <h3>Analysis</h3>
+          <p>The vault structure suggests a broader institutional product stack, moving from simple fixed-yield access toward capital allocation across multiple real-world categories.</p>
+        </div>
+        <div class="mini-box">
+          <h3>Forward-looking interpretation</h3>
+          <p>Concrete’s product direction may be transitioning from yield optimization toward a multi-asset institutional infrastructure layer, but this is still an interpreting lens.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="kicker">Section 1</span>
+        <span class="line"></span>
+      </div>
+      <h2>Executive Summary</h2>
+      <p class="lede">This issue frames Concrete’s latest move as a product and positioning change, not simply a new yield vault. The central question is whether the USD1 RWA Vault is the start of a broader institutional capital-allocation layer.</p>
+      <div class="exec-grid">
+        <article class="exec-card">
+          <div class="num">01</div>
+          <h3>USD1 RWA Vault launches</h3>
+          <p>Concrete introduced a USD1 RWA Vault, designed to bring multiple real-world opportunity categories under one vault structure.</p>
+        </article>
+        <article class="exec-card">
+          <div class="num">02</div>
+          <h3>Four initial RWA opportunity categories</h3>
+          <p>ZIG Markets, Qiro, Colb and Origin Assets are the first named categories in the vault’s public configuration.</p>
+        </article>
+        <article class="exec-card">
+          <div class="num">03</div>
+          <h3>Concrete’s current platform scale</h3>
+          <p>Concrete’s platform reported $1.223B deposits, $22.79B volume and 53.74K depositors in the current Earn application snapshot.</p>
+        </article>
+        <article class="exec-card">
+          <div class="num">04</div>
+          <h3>Stablecoin lending markets are repricing</h3>
+          <p>Stablecoin borrowing costs and utilization changes can shift yield economics across the DeFi lending stack, even if the relationship to Concrete is indirect.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="kicker">Section 2</span>
+        <span class="line"></span>
+      </div>
+      <h2>The Big Story</h2>
+      <p class="lede">Concrete’s USD1 RWA Vault matters because it moves the product story beyond simple DeFi yield optimization. The vault is designed to present multiple real-world opportunity types through a single institutional access point.</p>
+
+      <div class="big-story">
+        <div class="panel">
+          <div class="label-chip">Verified facts</div>
+          <ul class="fact-list">
+            <li>Concrete introduced a USD1 RWA Vault.</li>
+            <li>The vault is designed to provide access to multiple real-world opportunities through one vault.</li>
+            <li>Initial opportunities include ZIG Markets, Qiro, Colb and Origin Assets.</li>
+            <li>Concrete provides the vault infrastructure.</li>
+            <li>USD1 is provided by World Liberty Financial.</li>
+            <li>Access is for eligible or whitelisted participants.</li>
+            <li>Returns are not guaranteed.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <div class="label-chip">Analysis</div>
+          <p style="color: var(--muted2); font-size: 13px; line-height: 1.8; margin: 0;">This is not a Concrete statement. It is our analysis: a vault that packages multiple real-world opportunities can be read as a move toward more diversified institutional capital allocation instead of a single yield strategy.</p>
+          <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); color: var(--muted2); font-size: 12px; line-height: 1.8;">Forward-looking interpretation: if the vault becomes a repeatable institutional wrapper, the product story becomes less about one-off yield and more about operational access to multiple real-world credit and infrastructure opportunities.</div>
+        </div>
+      </div>
+
+      <div class="diagram" aria-label="USD1 vault diagram">
+        <div class="center">USD1</div>
+        <div class="center">↓</div>
+        <div class="center">CONCRETE VAULT</div>
+        <div class="center">↓</div>
+        <table>
+          <tr>
+            <td>ZIG Markets</td>
+            <td>Qiro</td>
+          </tr>
+          <tr>
+            <td>Settlement</td>
+            <td>Private Credit</td>
+          </tr>
+          <tr>
+            <td>Colb</td>
+            <td>Origin Assets</td>
+          </tr>
+          <tr>
+            <td>EU Credit</td>
+            <td>Digital Infra</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="kicker">Section 3</span>
+        <span class="line"></span>
+      </div>
+      <h2>Where the Yield Comes From</h2>
+      <p class="lede">The yield story should be read as a set of opportunity categories, not as a guarantee. Concrete’s vault infrastructure sits above those opportunities, but the underlying revenue streams are still tied to the specific asset classes.</p>
+      <div class="two-col">
+        <article class="opportunity">
+          <h3>ZIG Markets</h3>
+          <p>ZIG Markets is framed in this context as a cross-border payment settlement liquidity opportunity. This description is a category explanation, not a performance or return claim.</p>
+        </article>
+        <article class="opportunity">
+          <h3>Qiro</h3>
+          <p>Qiro is framed as a short-duration private-credit opportunity for payment and fintech businesses. Qiro handles underwriting, structuring and monitoring.</p>
+        </article>
+        <article class="opportunity">
+          <h3>Colb</h3>
+          <p>Colb is described as a short-duration, asset-backed European private-credit opportunity. The point is the underlying credit exposure type, not a guaranteed yield result.</p>
+        </article>
+        <article class="opportunity">
+          <h3>Origin Assets</h3>
+          <p>Origin Assets is described as a digital infrastructure / data-center financing opportunity. This is a real-world financing category, not a promise of an official return profile.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="kicker">Section 4</span>
+        <span class="line"></span>
+      </div>
+      <h2>The Qiro Layer</h2>
+      <div class="qiro-box">
+        <p class="lede" style="margin-bottom: 0;">Using Qiro’s August 28 announcement, the salient fact is that Qiro joined the USD1 RWA Vault. Qiro provides short-duration private-credit opportunities focused on payment and fintech businesses. Qiro handles underwriting, structuring and monitoring.</p>
+        <p class="lede" style="margin-top: 14px; margin-bottom: 0;">Qiro says it has underwritten more than $125M. That figure is attributed exactly as stated and is not presented here as independently verified. It is a company statement, not an independent audit or a Concrete validation.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="kicker">Section 5</span>
+        <span class="line"></span>
+      </div>
+      <h2>Concrete at Scale</h2>
+      <p class="lede">The current Concrete Earn application remains the primary source for platform-level public figures. The numbers below should be read as a snapshot from the current app and not merged casually with other products or metrics.</p>
+      <div class="stats-box">
+        <div class="stat">
+          <div class="k">Deposits</div>
+          <div class="v">$1.223B</div>
+          <div class="s">Platform deposits</div>
+        </div>
+        <div class="stat">
+          <div class="k">Volume</div>
+          <div class="v">$22.79B</div>
+          <div class="s">Cumulative platform volume</div>
+        </div>
+        <div class="stat">
+          <div class="k">Depositors</div>
+          <div class="v">53.74K</div>
+          <div class="s">Unique depositors</div>
+        </div>
+      </div>
+      <div class="note">
+        Methodology note: Concrete’s public homepage displays a separate “assets on platform” metric. Those figures should not be merged with app-level deposit, volume and depositor numbers without understanding the definitions and measurement scopes. Different public surfaces may use different numbers for different purposes.
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="kicker">Section 6</span>
+        <span class="line"></span>
+      </div>
+      <h2>The Yield Environment</h2>
+      <div class="yield-grid">
+        <div class="yield-box">
+          <h3>Concrete yield snapshot</h3>
+          <div class="yield-row"><span class="yield-name">Concrete USDT live APY</span><span class="yield-value">8.30%</span></div>
+          <div class="yield-row"><span class="yield-name">Concrete USDT 7-day APY</span><span class="yield-value">8.45%</span></div>
+          <div class="yield-row"><span class="yield-name">Concrete Frontier USDC live APY</span><span class="yield-value">9.14%</span></div>
+          <div class="yield-row"><span class="yield-name">RWA USD1 target APY</span><span class="yield-value">8.00%</span></div>
+        </div>
+        <div class="yield-box">
+          <h3>Benchmark comparison</h3>
+          <div class="yield-row"><span class="yield-name">3-month U.S. Treasury</span><span class="yield-value">3.91%</span></div>
+          <div class="yield-row"><span class="yield-name">Broader USDT vault average</span><span class="yield-value">3.69%</span></div>
+          <div class="yield-row"><span class="yield-name">Interpretation</span><span class="yield-value">Context</span></div>
+          <div class="yield-row"><span class="yield-name">Risk profile</span><span class="yield-value">Different</span></div>
+        </div>
+      </div>
+      <div class="note" style="margin-top: 18px;">These figures are not automatically comparable as equivalent risks. A Treasury yield and a DeFi or RWA yield can differ in duration, liquidity, counterparty, legal, operational and protocol exposure. They should be read as benchmark context, not as a single risk-adjusted return.</div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="kicker">Section 7</span>
+        <span class="line"></span>
+      </div>
+      <h2>Competitor Watch</h2>
+      <div class="watch-list">
+        <div class="watch-item">
+          <span class="dot"></span>
+          <p><strong>Aave:</strong> August 31 stablecoin rate and utilization adjustments matter because higher borrowing costs and utilization changes can alter stablecoin lending economics. This can reshape the supply and demand balance in lending markets, which in turn affects yield conditions. It is relevant context, not a direct Concrete result.</p>
+        </div>
+        <div class="watch-item">
+          <span class="dot"></span>
+          <p><strong>Euler:</strong> an August 31 snapshot showed Euler Prime USDC at 7.98% 7-day APY, while some smaller or higher-risk vaults were materially higher. This is a useful competitive signal, but it should not be used to rank competitors solely by headline APY. Risk, liquidity, utilization and vault structure vary materially.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="kicker">Section 8</span>
+        <span class="line"></span>
+      </div>
+      <h2>From Yield Optimizer to Capital Allocation Layer?</h2>
+      <div class="thesis-box">
+        <h3>Editorial analysis · not a Concrete statement</h3>
+        <p>Concrete’s product direction appears to be expanding from DeFi yield into custody-native yield, synthetic asset exposure, real-world assets, private credit and infrastructure financing. This is not a claim that Concrete has officially declared itself an “RWA aggregator.” The interpretation is based on the product and ecosystem trajectory described publicly, not a formal company declaration.</p>
+      </div>
+      <p class="lede" style="margin-top: 18px;">The bigger question is whether the next generation of yield infrastructure is not simply optimizing on-chain capital, but allocating it across multiple asset types and operational structures. That is a product thesis and a market structure question, not just a yield question.</p>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="kicker">Section 9</span>
+        <span class="line"></span>
+      </div>
+      <h2>What We’re Watching Next</h2>
+      <ol class="watchpoints">
+        <li>USD1 Vault adoption among eligible/whitelisted participants.</li>
+        <li>RWA portfolio expansion beyond the initial four named categories.</li>
+        <li>concUSD development and how it interacts with broader capital allocation.</li>
+        <li>AssetCX institutional adoption and operational usage at scale.</li>
+        <li>Concrete’s evolution toward multi-asset institutional infrastructure.</li>
+      </ol>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="kicker">Final Disclaimer</span>
+        <span class="line"></span>
+      </div>
+      <div class="disclaimer">
+        <p>This publication is independent and is not affiliated with Concrete or Blueprint Finance.</p>
+        <p>Research snapshot: September 2, 2026.</p>
+        <p>Verified facts are separated from analysis and forward-looking interpretation. A public product name, strategy category or partnership discussion does not amount to a guarantee of return, asset performance or institutional adoption.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="kicker">Sources</span>
+        <span class="line"></span>
+      </div>
+      <div class="sources-grid">
+        <article class="source-card">
+          <h3>Concrete app</h3>
+          <p>Current Concrete Earn application metrics: deposits, volume, depositors, live APY, 7-day APY and product data. <a href="https://app.concrete.xyz/earn" target="_blank">app.concrete.xyz/earn ↗</a></p>
+        </article>
+        <article class="source-card">
+          <h3>Concrete site</h3>
+          <p>Official product framing for USD1, RWA platform concepts, vault infrastructure and public product surfaces. <a href="https://concrete.xyz" target="_blank">concrete.xyz ↗</a></p>
+        </article>
+        <article class="source-card">
+          <h3>Qiro announcement</h3>
+          <p>Qiro’s August 28 announcement regarding joining the USD1 RWA Vault and the company’s stated underwriting activity. <a href="https://qiro.com" target="_blank">qiro.com ↗</a></p>
+        </article>
+        <article class="source-card">
+          <h3>Aave and Euler</h3>
+          <p>August 31 lending-market parameter and APY snapshots for stablecoin market conditions and competitor context. <a href="https://aave.com" target="_blank">aave.com ↗</a> · <a href="https://app.euler.finance" target="_blank">Euler ↗</a></p>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      Concrete Weekly Brief · Vol. 1, Issue 4 · August 25 – September 1, 2026<br>
+      Independent research publication · Not affiliated with Concrete or Blueprint Finance<br>
+      <a href="index">All issues</a> · <a href="https://concrete.xyz" target="_blank">concrete.xyz ↗</a>
+    </footer>
+  </div>
+</body>
+</html>
