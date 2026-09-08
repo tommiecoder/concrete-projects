@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concrete Yield Tracker — Week 5 | The Infrastructure Premium</title>
+<meta name="description" content="Concrete Yield Tracker Week 5: The Infrastructure Premium. A source-led comparison of headline APY, curation, risk and institutional benchmarks.">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --yellow: #E9DA7A; --yellow-dim: rgba(233,218,122,0.07); --yellow-border: rgba(233,218,122,0.18);
+  --bg: #0D0D0D; --card: #141414; --card2: #191919; --border: #202020; --text: #FFFFFF; --muted: #555555; --muted2: #888888;
+  --green: #4ADE80; --red: #F87171; --blue: #7dd3fc; --orange: #FB923C;
+}
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+.header { padding: 18px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.header-left { display: flex; align-items: center; gap: 14px; }
+.logo-box { width: 38px; height: 38px; background: var(--yellow); border: 2px solid #000; border-radius: 7px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; flex-shrink: 0; }
+.logo-c { font-size: 19px; font-weight: 900; color: #000; line-height: 1; }
+.logo-line { width: 19px; height: 2px; background: #000; }
+.header-brand { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted2); }
+.header-title { font-size: 18px; font-weight: 900; letter-spacing: -0.3px; text-transform: uppercase; }
+.header-sub { font-size: 11px; color: var(--muted); }
+.header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.live-badge, .date-badge { display: inline-flex; align-items: center; gap: 7px; background: var(--yellow-dim); border: 1px solid var(--yellow-border); padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 700; color: var(--yellow); letter-spacing: 1px; text-transform: uppercase; }
+.live-dot { width: 7px; height: 7px; background: var(--yellow); border-radius: 50%; }
+.header-cta, .header-prev { font-size: 11px; font-weight: 800; padding: 9px 15px; border-radius: 7px; text-decoration: none; }
+.header-cta { background: var(--yellow); color: #000; }
+.header-prev { color: var(--muted2); border: 1px solid var(--border); }
+.header-prev:hover { color: var(--text); border-color: #333; }
+.hero { max-width: 1100px; margin: 0 auto; padding: 52px 24px 30px; }
+.kicker { font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: var(--yellow); }
+.hero h1 { font-size: clamp(38px, 5vw, 72px); font-weight: 900; letter-spacing: -2.5px; line-height: 0.96; margin-top: 12px; margin-bottom: 14px; text-transform: uppercase; }
+.hero h1 span { color: var(--yellow); }
+.subtitle { max-width: 760px; color: var(--muted2); font-size: 18px; line-height: 1.6; }
+.meta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); }
+.meta span { border: 1px solid var(--border); padding: 8px 10px; border-radius: 6px; }
+.meta .research { color: var(--yellow); border-color: var(--yellow-border); background: var(--yellow-dim); }
+.stats-bar { display: grid; grid-template-columns: repeat(3, minmax(160px, 1fr)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.stat { padding: 22px 24px; border-right: 1px solid var(--border); }
+.stat:last-child { border-right: none; }
+.stat-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+.stat-val { font-size: 32px; font-weight: 900; letter-spacing: -1.2px; color: var(--yellow); }
+.stat-sub { font-size: 10px; color: var(--muted); margin-top: 5px; }
+.stat-source { font-size: 10px; color: var(--muted2); margin-top: 4px; line-height: 1.4; }
+.main { max-width: 1100px; margin: 0 auto; padding: 28px 24px 60px; }
+.section-head { display: flex; align-items: center; gap: 14px; padding-top: 24px; margin-bottom: 20px; }
+.section-kicker { font-size: 10px; font-weight: 800; letter-spacing: 2px; color: var(--yellow); text-transform: uppercase; white-space: nowrap; }
+.section-line { height: 1px; flex: 1; background: var(--border); }
+h2 { font-size: 32px; letter-spacing: -0.8px; font-weight: 800; margin-bottom: 10px; }
+.section-intro { font-size: 13px; color: var(--muted2); line-height: 1.65; max-width: 760px; }
+.panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+.panel h3 { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 12px; }
+.dashboard { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 16px; margin-top: 18px; }
+.market-table { width: 100%; border-collapse: collapse; }
+.market-table th { text-align: left; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 10px; border-bottom: 1px solid var(--border); }
+.market-table td { padding: 12px 10px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--muted2); vertical-align: top; }
+.market-table tr:last-child td { border-bottom: none; }
+.market-table td strong { color: var(--text); }
+.num { color: var(--yellow); font-weight: 800; }
+.source-inline { font-size: 10px; color: var(--muted2); line-height: 1.45; }
+.type { display: inline-block; font-size: 9px; letter-spacing: 1.2px; font-weight: 800; text-transform: uppercase; border-radius: 999px; padding: 4px 8px; }
+.type.live { background: var(--yellow-dim); color: var(--yellow); border: 1px solid var(--yellow-border); }
+.type.seven { background: rgba(125,211,252,0.08); color: var(--blue); border: 1px solid rgba(125,211,252,0.25); }
+.type.target { background: rgba(74,222,128,0.08); color: var(--green); border: 1px solid rgba(74,222,128,0.25); }
+.type.private { background: rgba(255,255,255,0.04); color: var(--muted2); border: 1px solid var(--border); }
+.vault-board { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.vault-row { padding: 13px; border: 1px solid var(--border); border-radius: 9px; background: var(--card2); }
+.vault-name { font-weight: 800; font-size: 13px; }
+.vault-data { display: flex; justify-content: space-between; gap: 10px; align-items: end; margin-top: 8px; }
+.vault-tvl { color: var(--muted2); font-size: 11px; }
+.vault-yield { font-weight: 900; font-size: 18px; color: var(--yellow); }
+.flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; align-items: center; margin-top: 22px; }
+.flow-step { background: var(--card2); border: 1px solid var(--border); border-radius: 9px; padding: 18px 8px; text-align: center; font-size: 12px; font-weight: 800; line-height: 1.4; }
+.flow-step strong { display: block; color: var(--yellow); font-size: 18px; margin-bottom: 7px; }
+.flow-arrow { text-align: center; color: var(--yellow); font-size: 22px; }
+.compare-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 18px 0 12px; }
+.filter-button { background: var(--card2); border: 1px solid var(--border); color: var(--muted2); border-radius: 7px; padding: 8px 12px; font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+.filter-button.active, .filter-button:hover { background: var(--yellow-dim); border-color: var(--yellow-border); color: var(--yellow); }
+.compare-table { width: 100%; border-collapse: collapse; }
+.compare-table th { text-align: left; font-size: 9px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; padding: 10px; border-bottom: 1px solid var(--border); }
+.compare-table td { padding: 13px 10px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--muted2); }
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table .rate { color: var(--yellow); font-size: 18px; font-weight: 900; }
+.compare-table .note { font-size: 11px; color: var(--muted2); }
+.compare-table tr.outlier { background: rgba(251,146,60,0.05); }
+.compare-footnote { margin-top: 12px; color: var(--muted2); font-size: 11px; line-height: 1.6; }
+.benchmark { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+.benchmark-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+.benchmark-value { font-size: 42px; font-weight: 900; letter-spacing: -1.5px; color: var(--yellow); }
+.benchmark-label { color: var(--muted); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-top: 6px; }
+.spread-visual { margin-top: 18px; }
+.spread-line { height: 12px; border-radius: 999px; background: linear-gradient(90deg, var(--blue) 0 45%, var(--yellow) 45% 100%); position: relative; }
+.spread-marker { position: absolute; left: 45%; top: -11px; width: 2px; height: 34px; background: var(--text); }
+.spread-labels { display: flex; justify-content: space-between; gap: 12px; margin-top: 12px; color: var(--muted2); font-size: 11px; }
+.callout { margin-top: 18px; padding: 18px 20px; background: var(--yellow-dim); border: 1px solid var(--yellow-border); border-left: 3px solid var(--yellow); border-radius: 0 12px 12px 0; }
+.callout h3 { margin-bottom: 7px; font-size: 18px; font-weight: 900; }
+.callout p { color: var(--muted2); font-size: 14px; line-height: 1.7; }
+.curation { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+.curation-bars { display: grid; gap: 12px; }
+.bar-label { display: flex; justify-content: space-between; color: var(--muted2); font-size: 12px; margin-bottom: 5px; }
+.bar-track { height: 14px; border-radius: 999px; background: var(--card2); overflow: hidden; border: 1px solid var(--border); }
+.bar-fill { height: 100%; background: var(--yellow); border-radius: inherit; }
+.bar-fill.market { width: 100%; }
+.bar-fill.growth { width: 78%; background: var(--green); }
+.bar-fill.share { width: 62%; background: var(--blue); }
+.quote { border-left: 2px solid var(--yellow); padding-left: 18px; color: var(--text); font-size: 22px; font-weight: 800; line-height: 1.3; }
+.quote cite { display: block; margin-top: 12px; color: var(--muted2); font-size: 11px; line-height: 1.6; font-style: normal; font-weight: 500; }
+.interactive { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+.feature-list { display: grid; gap: 8px; }
+.feature-button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px; text-align: left; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; color: var(--muted2); cursor: pointer; font-size: 12px; }
+.feature-button:hover, .feature-button.selected { color: var(--text); border-color: var(--yellow-border); background: var(--yellow-dim); }
+.feature-button .check { width: 17px; height: 17px; border: 1px solid var(--muted); border-radius: 4px; flex-shrink: 0; }
+.feature-button.selected .check { background: var(--yellow); border-color: var(--yellow); box-shadow: inset 0 0 0 4px #141414; }
+.feature-detail { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.feature-detail h3 { font-size: 20px; margin-bottom: 10px; }
+.feature-detail p { color: var(--muted2); font-size: 13px; line-height: 1.7; }
+.method-note { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+.method-note ul { margin: 0; padding-left: 18px; color: var(--muted2); font-size: 13px; line-height: 1.8; }
+.sources { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+.source-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.source-card h4 { font-size: 11px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.source-card p { font-size: 12px; line-height: 1.6; color: var(--muted2); }
+.source-card a { color: var(--yellow); text-decoration: none; }
+.footer { padding: 28px 40px 42px; border-top: 1px solid var(--border); text-align: center; font-size: 11px; color: var(--muted); line-height: 2; }
+.footer a { color: var(--yellow); text-decoration: none; }
+@media (max-width: 900px) {
+  .stats-bar { grid-template-columns: 1fr; }
+  .stat { border-right: none; border-bottom: 1px solid var(--border); }
+  .stat:last-child { border-bottom: none; }
+  .dashboard, .benchmark, .curation, .interactive { grid-template-columns: 1fr; }
+  .sources { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .header { padding: 14px 20px; }
+  .hero, .main { padding-left: 20px; padding-right: 20px; }
+  .header-right { width: 100%; justify-content: flex-start; }
+  .section-head { margin-top: 10px; }
+  .vault-board { grid-template-columns: 1fr; }
+  .flow { grid-template-columns: 1fr; }
+  .flow-arrow { transform: rotate(90deg); }
+  .market-table, .compare-table { display: block; overflow-x: auto; white-space: nowrap; }
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-left">
+    <div class="logo-box"><span class="logo-c">C</span><div class="logo-line"></div></div>
+    <div>
+      <div class="header-brand">Concrete.xyz Community</div>
+      <div class="header-title">Weekly Yield Tracker</div>
+      <div class="header-sub">September 2–8, 2026</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="week4" class="header-prev">← Week 4</a>
+    <div class="date-badge">Data as of September 8, 2026</div>
+    <a href="https://app.concrete.xyz/earn" class="header-cta" target="_blank">Earn with Concrete →</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="kicker">Week 5 · September 2–8, 2026</div>
+  <h1>The <span>Infrastructure Premium</span></h1>
+  <p class="subtitle">What are investors actually being paid for professionally curated on-chain yield?</p>
+  <div class="meta">
+    <span>Edition 05</span>
+    <span>September 2026</span>
+    <span class="research">Research snapshot</span>
+    <span>Source-led</span>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-label">Total deposits</div><div class="stat-val">$1.246B</div><div class="stat-sub">Concrete platform total</div><div class="stat-source">Source: Concrete Earn app · Sep. 8, 2026</div></div>
+  <div class="stat"><div class="stat-label">Total volume</div><div class="stat-val">$23.41B</div><div class="stat-sub">Cumulative volume</div><div class="stat-source">Source: Concrete Earn app · Sep. 8, 2026</div></div>
+  <div class="stat"><div class="stat-label">Depositors</div><div class="stat-val">53.76K</div><div class="stat-sub">Unique depositors</div><div class="stat-source">Source: Concrete Earn app · Sep. 8, 2026</div></div>
+</div>
+
+<main class="main">
+  <div class="section-head"><div class="section-kicker">01 / The Market Snapshot</div><div class="section-line"></div></div>
+  <h2>Institutional dashboard</h2>
+  <p class="section-intro">A point-in-time view of Concrete’s public platform scale. The dashboard is dated so the reader can distinguish this historical snapshot from live application data.</p>
+  <div class="dashboard">
+    <div class="panel">
+      <h3>Platform scale</h3>
+      <table class="market-table">
+        <thead><tr><th>Metric</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Total deposits</strong></td><td class="num">$1.246B</td><td class="source-inline">Concrete Earn app · Sep. 8, 2026</td></tr>
+          <tr><td><strong>Total volume</strong></td><td class="num">$23.41B</td><td class="source-inline">Concrete Earn app · Sep. 8, 2026</td></tr>
+          <tr><td><strong>Depositors</strong></td><td class="num">53.76K</td><td class="source-inline">Concrete Earn app · Sep. 8, 2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <h3>Reading the dashboard</h3>
+      <p class="section-intro">Scale can show that a platform is being used. It does not, by itself, prove that one vault has better risk-adjusted performance than another.</p>
+      <div class="callout"><h3>Data as of September 8, 2026</h3><p>This edition reports a dated research snapshot, not a real-time investment recommendation.</p></div>
+    </div>
+  </div>
+
+  <div class="section-head"><div class="section-kicker">02 / Concrete Vault Board</div><div class="section-line"></div></div>
+  <h2>Yield types stay separate</h2>
+  <p class="section-intro">Live APY, 7-day APY, target APY and private APY answer different questions. They are displayed together for visibility, not combined into a single ranking.</p>
+  <div class="panel" style="margin-top:18px;">
+    <table class="market-table">
+      <thead><tr><th>Vault</th><th>TVL</th><th>Yield</th><th>Yield type</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Concrete USDT</strong></td><td class="num">$29.8M</td><td class="num">8.30%</td><td><span class="type live">LIVE APY</span></td><td class="source-inline">Concrete Earn app · Sep. 8, 2026</td></tr>
+        <tr><td><strong>Concrete USDT</strong></td><td class="num">$29.8M</td><td class="num">8.29%</td><td><span class="type seven">7-DAY APY</span></td><td class="source-inline">Concrete Earn app · Sep. 8, 2026</td></tr>
+        <tr><td><strong>WBTC</strong></td><td class="num">$2.30M</td><td class="num">7.00%</td><td><span class="type target">TARGET APY</span></td><td class="source-inline">Concrete Earn app · Sep. 8, 2026</td></tr>
+        <tr><td><strong>Concrete Frontier</strong></td><td class="num">$1.19M</td><td class="num">9.40%</td><td><span class="type live">LIVE APY</span></td><td class="source-inline">Concrete Earn app · Sep. 8, 2026</td></tr>
+        <tr><td><strong>RWA USD1</strong></td><td class="num">$25M</td><td class="num">8.00%</td><td><span class="type target">TARGET APY</span></td><td class="source-inline">Concrete official RWA materials · Sep. 8, 2026</td></tr>
+        <tr><td><strong>WeETH</strong></td><td class="num">$762M</td><td>Private</td><td><span class="type private">PRIVATE APY</span></td><td class="source-inline">Concrete Earn app · Sep. 8, 2026</td></tr>
+        <tr><td><strong>WLFIcx</strong></td><td class="num">$101M</td><td>Private</td><td><span class="type private">PRIVATE APY</span></td><td class="source-inline">Concrete Earn app · Sep. 8, 2026</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-head"><div class="section-kicker">03 / The Infrastructure Premium</div><div class="section-line"></div></div>
+  <h2>Raw APY is only the opening number</h2>
+  <p class="section-intro">Headline yield is not the whole product. A professionally curated strategy may also include selection, execution, monitoring, reporting and risk controls. Those services do not automatically make a yield superior, but they change what the investor is evaluating.</p>
+  <div class="flow">
+    <div class="flow-step"><strong>RAW APY</strong>What rate is visible?</div><div class="flow-arrow">↓</div>
+    <div class="flow-step"><strong>RISK</strong>What can go wrong?</div><div class="flow-arrow">↓</div>
+    <div class="flow-step"><strong>CURATION</strong>Who selects?</div>
+  </div>
+  <div class="flow" style="grid-template-columns: 1fr 28px 1fr; max-width: 620px; margin: 10px auto 0;">
+    <div class="flow-step"><strong>INFRASTRUCTURE</strong>Who executes, accounts and reports?</div><div class="flow-arrow">↓</div><div class="flow-step"><strong>INSTITUTIONAL YIELD</strong>What is the complete package?</div>
+  </div>
+
+  <div class="panel" style="margin-top:18px;">
+    <h3>Selected USDT strategies</h3>
+    <div class="compare-tools" aria-label="Yield comparison filters">
+      <button class="filter-button active" data-filter="all">All strategies</button>
+      <button class="filter-button" data-filter="curated">Curated / named</button>
+      <button class="filter-button" data-filter="outlier">Higher-yield outliers</button>
+    </div>
+    <table class="compare-table">
+      <thead><tr><th>Strategy</th><th>7-day APY</th><th>Category</th><th>Reading</th></tr></thead>
+      <tbody>
+        <tr data-category="curated"><td><strong>Concrete USDT</strong></td><td class="rate">7.48%</td><td>Curated strategy</td><td class="note">Vaults.fyi snapshot · Sep. 7, 2026</td></tr>
+        <tr data-category="curated"><td><strong>Fluid USDT</strong></td><td class="rate">4.78%</td><td>Selected strategy</td><td class="note">Vaults.fyi snapshot · Sep. 7, 2026</td></tr>
+        <tr data-category="curated"><td><strong>Syrup USDT</strong></td><td class="rate">4.65%</td><td>Selected strategy</td><td class="note">Vaults.fyi snapshot · Sep. 7, 2026</td></tr>
+        <tr data-category="curated"><td><strong>Aave v3 USDT</strong></td><td class="rate">3.56%</td><td>Lending market</td><td class="note">Vaults.fyi snapshot · Sep. 7, 2026</td></tr>
+        <tr data-category="curated"><td><strong>Morpho Steakhouse Prime Instant</strong></td><td class="rate">3.43%</td><td>Curated market</td><td class="note">Vaults.fyi snapshot · Sep. 7, 2026</td></tr>
+        <tr data-category="curated"><td><strong>Spark USDT</strong></td><td class="rate">3.14%</td><td>Lending market</td><td class="note">Vaults.fyi snapshot · Sep. 7, 2026</td></tr>
+        <tr class="outlier" data-category="outlier"><td><strong>Wildcat</strong></td><td class="rate">Higher outlier</td><td>Higher-risk / smaller market</td><td class="note">Use as context, not as a quality ranking. Snapshot source: Vaults.fyi · Sep. 7, 2026</td></tr>
+      </tbody>
+    </table>
+    <p class="compare-footnote">The Concrete figure in this comparison is the September 7, 2026 7-day APY snapshot. It differs from the September 8 app snapshot in the vault board. APY is not normalized into a quality score, and higher APY can reflect higher risk, lower liquidity or different strategy exposure.</p>
+  </div>
+
+  <div class="section-head"><div class="section-kicker">04 / TradFi Benchmark</div><div class="section-line"></div></div>
+  <h2>Headline spread, not risk-adjusted premium</h2>
+  <div class="benchmark">
+    <div class="benchmark-card">
+      <div class="benchmark-value">7.48%</div>
+      <div class="benchmark-label">Concrete USDT · 7-day APY</div>
+      <div class="source-inline" style="margin-top:12px;">Source: Vaults.fyi snapshot · Sep. 7, 2026</div>
+    </div>
+    <div class="benchmark-card">
+      <div class="benchmark-value">4.79%</div>
+      <div class="benchmark-label">U.S. 10-year Treasury yield midpoint</div>
+      <div class="source-inline" style="margin-top:12px;">Observed range: 4.78–4.80% · Source: U.S. Treasury market data · Sep. 8, 2026</div>
+    </div>
+  </div>
+  <div class="panel" style="margin-top:16px;">
+    <h3>Headline yield differential</h3>
+    <p class="section-intro">7.48% − 4.79% = <strong style="color:var(--yellow);">+2.69 percentage points</strong>. This is a simple arithmetic spread between two dated observations, not a risk-adjusted premium.</p>
+    <div class="spread-visual"><div class="spread-line"><span class="spread-marker"></span></div><div class="spread-labels"><span>10-year Treasury · 4.79%</span><span>Concrete USDT · 7.48%</span></div></div>
+    <div class="callout"><h3>Different risk profiles</h3><p>DeFi yield may reflect smart-contract, protocol, stablecoin, liquidity, utilization, strategy and operational risks. A Treasury yield reflects a different instrument, market and sovereign-credit framework. Comparing the numbers can provide context; it does not make the risks equivalent.</p></div>
+  </div>
+
+  <div class="section-head"><div class="section-kicker">05 / Curation Market</div><div class="section-line"></div></div>
+  <h2>The market for professional selection</h2>
+  <p class="section-intro">Vaults.fyi’s State of DeFi Curation 2026 describes a growing market around curated on-chain strategies. The figures below describe the dataset; the quote is a separately attributed company insight.</p>
+  <div class="curation">
+    <div class="panel">
+      <h3>Vaults.fyi dataset</h3>
+      <div class="curation-bars">
+        <div><div class="bar-label"><span>Curated on-chain markets</span><strong>$11.29B</strong></div><div class="bar-track"><div class="bar-fill market"></div></div></div>
+        <div><div class="bar-label"><span>Vaults</span><strong>856</strong></div><div class="bar-track"><div class="bar-fill growth"></div></div></div>
+        <div><div class="bar-label"><span>Curators</span><strong>131</strong></div><div class="bar-track"><div class="bar-fill share"></div></div></div>
+        <div><div class="bar-label"><span>Protocols</span><strong>18</strong></div><div class="bar-track"><div class="bar-fill growth" style="width:28%;"></div></div></div>
+      </div>
+      <div class="source-inline" style="margin-top:15px;">Source: Vaults.fyi, State of DeFi Curation 2026.</div>
+    </div>
+    <div class="panel">
+      <h3>Market movement</h3>
+      <table class="market-table"><tbody>
+        <tr><td><strong>Curated TVL growth</strong></td><td class="num">39%</td><td class="source-inline">Vaults.fyi · State of DeFi Curation 2026</td></tr>
+        <tr><td><strong>Curated market share</strong></td><td class="num">5.24% → 12.51%</td><td class="source-inline">Vaults.fyi · State of DeFi Curation 2026</td></tr>
+      </tbody></table>
+      <div class="quote">“Concrete is now the 4th-largest DeFi curator and largest outside Morpho.”<cite>Attributed to Concrete CEO Nic Roberts-Huntley. This statement is distinct from, and not independently established by, the underlying Vaults.fyi dataset.</cite></div>
+    </div>
+  </div>
+
+  <div class="section-head"><div class="section-kicker">06 / What Are You Paying For?</div><div class="section-line"></div></div>
+  <h2>The service behind the rate</h2>
+  <p class="section-intro">Use the controls to inspect the operating layers that may sit behind a professionally curated vault. APY alone cannot capture these attributes.</p>
+  <div class="interactive">
+    <div class="feature-list">
+      <button class="feature-button selected" data-feature="strategy"><span class="check"></span>Strategy selection</button>
+      <button class="feature-button" data-feature="execution"><span class="check"></span>Execution</button>
+      <button class="feature-button" data-feature="accounting"><span class="check"></span>Accounting</button>
+      <button class="feature-button" data-feature="risk"><span class="check"></span>Risk controls</button>
+      <button class="feature-button" data-feature="liquidity"><span class="check"></span>Liquidity management</button>
+      <button class="feature-button" data-feature="automation"><span class="check"></span>Automation</button>
+      <button class="feature-button" data-feature="custody"><span class="check"></span>Custody integrations</button>
+      <button class="feature-button" data-feature="reporting"><span class="check"></span>Reporting</button>
+    </div>
+    <div class="feature-detail"><h3 id="feature-title">Strategy selection</h3><p id="feature-copy">Selecting a strategy is not the same as selecting the highest visible APY. It can involve liquidity, protocol design, counterparty exposure, capacity and mandate fit.</p></div>
+  </div>
+
+  <div class="section-head"><div class="section-kicker">07 / Methodology</div><div class="section-line"></div></div>
+  <h2>How to read this edition</h2>
+  <div class="method-note">
+    <ul>
+      <li>APYs move continuously. Every historical observation in this edition is paired with a source and date.</li>
+      <li>Live APY and 7-day APY are different measurements. A live figure is not a substitute for a trailing-period result.</li>
+      <li>Target APY is not realized APY and should not be treated as a promise.</li>
+      <li>Private APY cannot be ranked. WeETH and WLFIcx are shown as private rather than assigned an implied score.</li>
+      <li>Third-party yield data has its own methodology, coverage and update schedule. Vaults.fyi figures are presented as a dated comparison snapshot.</li>
+      <li>Treasury yield is not directly comparable to DeFi APY. The headline differential is arithmetic context, not a risk-adjusted premium.</li>
+      <li>Historical APYs do not guarantee future returns. Higher APY can accompany higher risk, lower liquidity or different exposures.</li>
+      <li><strong>Research snapshot: September 8, 2026.</strong></li>
+    </ul>
+  </div>
+
+  <div class="section-head"><div class="section-kicker">Sources</div><div class="section-line"></div></div>
+  <div class="sources">
+    <div class="source-card"><h4>Concrete Earn app</h4><p>Platform deposits, volume, depositors, TVL and current vault yield fields. <a href="https://app.concrete.xyz/earn" target="_blank">app.concrete.xyz/earn ↗</a></p></div>
+    <div class="source-card"><h4>Concrete RWA materials</h4><p>RWA USD1 TVL and target APY context. <a href="https://concrete.xyz" target="_blank">concrete.xyz ↗</a></p></div>
+    <div class="source-card"><h4>Vaults.fyi comparison</h4><p>September 7, 2026 USDT strategy APY snapshot and State of DeFi Curation 2026 dataset. <a href="https://vaults.fyi" target="_blank">vaults.fyi ↗</a></p></div>
+    <div class="source-card"><h4>U.S. Treasury</h4><p>10-year Treasury yield around 4.78–4.80% on September 8, 2026. <a href="https://home.treasury.gov/resource-center/data-chart-center/interest-rates" target="_blank">Treasury rates ↗</a></p></div>
+    <div class="source-card"><h4>Concrete CEO attribution</h4><p>“4th-largest DeFi curator and largest outside Morpho” attributed to Nic Roberts-Huntley. This is kept separate from the Vaults.fyi dataset.</p></div>
+    <div class="source-card"><h4>Editorial note</h4><p>No single APY, TVL or platform scale metric is treated as proof of superior risk-adjusted performance.</p></div>
+  </div>
+</main>
+
+<footer class="footer">
+  Concrete Yield Tracker · Week 5 · The Infrastructure Premium · Research snapshot: September 8, 2026<br>
+  <a href="index">All editions</a> · <a href="https://app.concrete.xyz/earn" target="_blank">Earn ↗</a>
+</footer>
+
+<script>
+const featureCopy = {
+  strategy: ['Strategy selection', 'Selecting a strategy is not the same as selecting the highest visible APY. It can involve liquidity, protocol design, counterparty exposure, capacity and mandate fit.'],
+  execution: ['Execution', 'Execution covers how deposits, withdrawals, rebalancing and strategy actions are coordinated. The operating process matters when markets move.'],
+  accounting: ['Accounting', 'Accounting helps translate positions and strategy activity into records that allocators, operators and reviewers can understand.'],
+  risk: ['Risk controls', 'Risk controls can include permissions, exposure limits, monitoring and escalation paths. They reduce ambiguity; they do not erase underlying risk.'],
+  liquidity: ['Liquidity management', 'Liquidity management asks whether the strategy can meet withdrawals and how capacity, utilization and exit conditions are handled.'],
+  automation: ['Automation', 'Automation can reduce repetitive operational work, but automated execution still depends on its rules, integrations and failure handling.'],
+  custody: ['Custody integrations', 'Custody integrations connect strategy access with institutional custody workflows. They do not make the underlying assets risk-free.'],
+  reporting: ['Reporting', 'Reporting makes performance, positions, NAV and activity easier to review. Better reporting is not the same as better returns.']
+};
+document.querySelectorAll('.feature-button').forEach((button) => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('.feature-button').forEach((item) => item.classList.remove('selected'));
+    button.classList.add('selected');
+    const [title, copy] = featureCopy[button.dataset.feature];
+    document.getElementById('feature-title').textContent = title;
+    document.getElementById('feature-copy').textContent = copy;
+  });
+});
+document.querySelectorAll('.filter-button').forEach((button) => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('.filter-button').forEach((item) => item.classList.remove('active'));
+    button.classList.add('active');
+    const filter = button.dataset.filter;
+    document.querySelectorAll('.compare-table tbody tr').forEach((row) => {
+      row.hidden = filter !== 'all' && row.dataset.category !== filter;
+    });
+  });
+});
+</script>
+</body>
+</html>
