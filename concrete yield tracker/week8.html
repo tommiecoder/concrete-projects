@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concrete Yield Tracker — Week 8 | When Yield Stops Moving</title>
+<meta name="description" content="Concrete Yield Tracker Week 8: When Yield Stops Moving. A data-driven examination of APY stability, measurement windows, and what stable yield actually tells us.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}:root{--yellow:#E9DA7A;--yellow-dim:rgba(233,218,122,.07);--yellow-border:rgba(233,218,122,.18);--bg:#0D0D0D;--card:#141414;--card2:#191919;--border:#202020;--text:#FFF;--muted:#555;--muted2:#888;--text2:#c3c2b7;--green:#4ADE80;--red:#F87171;--s1:#3987e5;--s2:#d95926;--s3:#9085e9;--s4:#199e70}body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
+.header{padding:18px 40px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.header-left{display:flex;align-items:center;gap:14px}.logo-box{width:38px;height:38px;background:var(--yellow);border:2px solid #000;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;flex-shrink:0}.logo-c{font-size:19px;font-weight:900;color:#000;line-height:1}.logo-line{width:19px;height:2px;background:#000}.header-brand{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted2)}.header-title{font-size:18px;font-weight:900;letter-spacing:-.3px;text-transform:uppercase}.header-sub{font-size:11px;color:var(--muted)}.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.date-badge,.header-prev,.header-cta{font-size:11px;font-weight:800;padding:9px 14px;border-radius:7px;text-decoration:none}.date-badge{color:var(--yellow);border:1px solid var(--yellow-border);background:var(--yellow-dim);letter-spacing:1px;text-transform:uppercase}.header-prev{color:var(--muted2);border:1px solid var(--border)}.header-prev:hover{color:var(--text);border-color:#333}.header-cta{background:var(--yellow);color:#000}
+.hero{max-width:1100px;margin:0 auto;padding:52px 24px 30px}.kicker,.section-kicker{font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--yellow)}.hero h1{font-size:clamp(38px,5.4vw,76px);font-weight:900;letter-spacing:-2.5px;line-height:.96;margin-top:12px;margin-bottom:16px;text-transform:uppercase}.hero h1 span{color:var(--yellow)}.subtitle{max-width:820px;color:var(--muted2);font-size:18px;line-height:1.6}.meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted)}.meta span{border:1px solid var(--border);padding:8px 10px;border-radius:6px}.meta .research{color:var(--yellow);border-color:var(--yellow-border);background:var(--yellow-dim)}.live-line{margin-top:18px;font-size:12px;color:var(--muted2);line-height:1.6;display:flex;gap:8px;align-items:flex-start}.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);margin-top:5px;flex-shrink:0}.dot.ok{background:var(--green)}.dot.err{background:var(--red)}
+.stats-bar{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.stat{padding:20px 22px;border-right:1px solid var(--border)}.stat:last-child{border-right:none}.stat-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}.stat-val{font-size:30px;font-weight:900;letter-spacing:-1px;color:var(--yellow);font-variant-numeric:tabular-nums}.stat-sub{font-size:10px;color:var(--muted);margin-top:5px}.stat-source{font-size:10px;color:var(--muted2);margin-top:4px;line-height:1.45}
+.main{max-width:1100px;margin:0 auto;padding:28px 24px 60px}.section-head{display:flex;align-items:center;gap:14px;padding-top:30px;margin-bottom:20px}.section-line{height:1px;flex:1;background:var(--border)}h2{font-size:32px;letter-spacing:-.8px;font-weight:800;margin-bottom:10px}.intro{font-size:13px;color:var(--muted2);line-height:1.65;max-width:800px}.panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px}.panel h3{font-size:18px;font-weight:800;letter-spacing:-.3px;margin-bottom:12px}.grid-2{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:18px}
+.data-table{width:100%;border-collapse:collapse}.data-table th{text-align:left;font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;padding:10px;border-bottom:1px solid var(--border);white-space:nowrap}.data-table td{padding:11px 10px;border-bottom:1px solid var(--border);font-size:12px;color:var(--muted2);vertical-align:top;font-variant-numeric:tabular-nums}.data-table tr:last-child td{border-bottom:none}.data-table strong{color:var(--text)}.data-table tr.hl td{background:var(--yellow-dim)}.num{color:var(--text);font-weight:700}.num.y{color:var(--yellow)}.source{font-size:10px!important;line-height:1.45;color:var(--muted2)}.na{color:var(--muted)!important;font-style:italic}.table-scroll{overflow-x:auto;margin-top:18px}.table-scroll .data-table{min-width:980px}.swatch{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.callout{margin-top:18px;padding:18px 20px;background:var(--yellow-dim);border:1px solid var(--yellow-border);border-left:3px solid var(--yellow);border-radius:0 12px 12px 0}.callout h3{margin-bottom:7px;font-size:18px;font-weight:900}.callout p{color:var(--muted2);font-size:14px;line-height:1.7}
+.win-wrap{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin-top:18px}.bars{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:end;height:300px;padding:10px 10px 0;border-bottom:1px solid var(--muted);position:relative}.bar-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}.bar-val{font-size:22px;font-weight:900;letter-spacing:-.6px;margin-bottom:8px;font-variant-numeric:tabular-nums}.bar{width:min(96px,70%);background:var(--yellow);border-radius:4px 4px 0 0;height:0;transition:height .6s ease}.bar-labels{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:10px 10px 0;text-align:center;font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted2);font-weight:800}.bar-labels small{display:block;font-weight:500;letter-spacing:0;text-transform:none;color:var(--muted);margin-top:3px;font-size:10px}.diffs{display:grid;gap:10px}.diff{background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:14px 16px}.diff dt{font-size:9px;color:var(--muted);letter-spacing:1.4px;text-transform:uppercase;font-weight:800}.diff dd{font-size:24px;font-weight:900;margin-top:6px;letter-spacing:-.5px;font-variant-numeric:tabular-nums}.diff p{font-size:11px;color:var(--muted2);margin-top:4px;line-height:1.5}
+.window-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.window{padding:18px;background:var(--card);border:1px solid var(--border);border-radius:10px}.window strong{display:block;color:var(--yellow);font-size:24px;margin-bottom:4px}.window h4{font-size:13px;margin-bottom:8px}.window span{font-size:12px;color:var(--muted2);line-height:1.6}
+.disp-scale{position:relative;height:14px;border-radius:7px;margin:26px 0 8px;background:linear-gradient(to right,#2a2a28 0,#2a2a28 25%,#3a3a36 25%,#3a3a36 75%,#4a4a44 75%)}.disp-marker{position:absolute;top:-8px;width:3px;height:30px;background:var(--yellow);border-radius:2px;left:0;transition:left .6s ease}.disp-ticks{display:grid;grid-template-columns:1fr 2fr 1fr;font-size:10px;color:var(--muted2);letter-spacing:1px;text-transform:uppercase;font-weight:700}.disp-ticks span:nth-child(2){text-align:center}.disp-ticks span:nth-child(3){text-align:right}.disp-read{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.disp-read b{font-size:38px;font-weight:900;color:var(--yellow);letter-spacing:-1px}.pill{display:inline-block;font-size:10px;letter-spacing:1.2px;font-weight:800;text-transform:uppercase;border-radius:999px;padding:5px 10px;border:1px solid var(--border);color:var(--text2)}.dbar{height:8px;border-radius:0 4px 4px 0;background:var(--muted2);min-width:2px}.dbar.hl{background:var(--yellow)}
+.risk-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}.risk{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}.risk h4{font-size:13px;margin-bottom:6px}.risk p{font-size:11px;color:var(--muted2);line-height:1.6}.warning-band{margin-top:18px;border:1px solid rgba(248,113,113,.3);background:rgba(248,113,113,.05);border-radius:12px;padding:18px 20px}.warning-band h3{font-size:16px;font-weight:900;margin-bottom:6px}.warning-band p{font-size:13px;color:var(--muted2);line-height:1.7}
+.chart-box{position:relative;margin-top:18px}.chart-box svg{display:block;width:100%;height:auto;overflow:visible}.chart-box text{font-family:inherit}.tip{position:absolute;pointer-events:none;background:#0b0b0b;border:1px solid #333;border-radius:8px;padding:9px 11px;font-size:11px;line-height:1.55;color:var(--text2);opacity:0;transition:opacity .12s;max-width:260px;z-index:5}.tip b{color:var(--text)}.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;color:var(--muted2);font-size:11px}.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px}.legend .ring{background:transparent;border:2px solid var(--yellow)}.legend .dash{width:16px;height:0;border-radius:0;border-top:2px dashed var(--text2)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 0}.filter{background:var(--card2);border:1px solid var(--border);color:var(--muted2);border-radius:7px;padding:8px 12px;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:inherit}.filter.active,.filter:hover{background:var(--yellow-dim);border-color:var(--yellow-border);color:var(--yellow)}details{margin-top:14px}summary{cursor:pointer;font-size:11px;color:var(--muted2);letter-spacing:1px;text-transform:uppercase;font-weight:800}details .data-table{margin-top:10px}
+.finding{margin-top:6px;padding:40px 36px;border:1px solid var(--yellow-border);border-radius:14px;background:radial-gradient(120% 140% at 0% 0%,rgba(233,218,122,.10),rgba(233,218,122,.02) 55%,transparent);position:relative;overflow:hidden}.finding h3{font-size:clamp(26px,3.6vw,44px);font-weight:900;letter-spacing:-1.2px;line-height:1.02;text-transform:uppercase;max-width:900px}.finding h3 span{color:var(--yellow)}.finding p{font-size:15px;color:var(--muted2);line-height:1.75;max-width:780px;margin-top:16px}.finding .quote{display:inline-block;margin-top:20px;font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);border-top:1px solid var(--yellow-border);padding-top:12px}
+.sources{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}.source-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}.source-card h4{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}.source-card p{font-size:12px;line-height:1.6;color:var(--muted2)}.source-card a{color:var(--yellow);text-decoration:none}
+.archive{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}.arch{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;text-decoration:none;color:var(--text);transition:border-color .12s,background .12s}.arch:hover{border-color:#333;background:var(--card2)}.arch small{display:block;font-size:9px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--yellow);margin-bottom:6px}.arch span{font-size:13px;font-weight:800;line-height:1.35}.arch.current{border-color:var(--yellow-border);background:var(--yellow-dim)}
+.footer{padding:28px 40px 42px;border-top:1px solid var(--border);text-align:center;font-size:11px;color:var(--muted);line-height:2}.footer a{color:var(--yellow);text-decoration:none}.disclaimer{max-width:800px;margin:0 auto 12px;color:var(--muted2)}
+.reveal{opacity:0;transform:translateY(8px);transition:opacity .5s ease,transform .5s ease}.reveal.in{opacity:1;transform:none}@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.bar,.disp-marker{transition:none}}
+@media(max-width:900px){.stats-bar{grid-template-columns:repeat(2,minmax(130px,1fr))}.stat:nth-child(2n){border-right:none}.stat:nth-child(-n+2){border-bottom:1px solid var(--border)}.grid-2,.win-wrap{grid-template-columns:1fr}.risk-grid,.sources,.archive{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.header{padding:14px 16px}.hero,.main{padding-left:16px;padding-right:16px}.header-right{width:100%;justify-content:flex-start}.stats-bar{grid-template-columns:1fr}.stat{border-right:none!important;border-bottom:1px solid var(--border)}.stat:last-child{border-bottom:none}.window-grid,.risk-grid,.sources,.archive{grid-template-columns:1fr}h2{font-size:27px}.hero h1{font-size:39px}.bars{height:220px;gap:10px}.bar-labels{gap:10px}.bar-val{font-size:17px}.finding{padding:28px 20px}.panel:has(.data-table){overflow-x:auto}}
+</style>
+</head>
+<body>
+<header class="header"><div class="header-left"><div class="logo-box"><span class="logo-c">C</span><div class="logo-line"></div></div><div><div class="header-brand">Concrete.xyz Community</div><div class="header-title">Weekly Yield Tracker</div><div class="header-sub">September 24–30, 2026</div></div></div><div class="header-right"><a href="week7" class="header-prev">← Week 7</a><div class="date-badge" id="hdr-asof">Data as of — loading</div><a href="https://app.concrete.xyz/earn" target="_blank" rel="noopener" class="header-cta">Earn with Concrete →</a></div></header>
+
+<section class="hero"><div class="kicker">Week 08 • September 2026</div><h1>When Yield <span>Stops Moving</span></h1><p class="subtitle">Concrete’s USDT vault is currently showing remarkably similar 1-day, 7-day and 30-day APYs. This edition investigates what that consistency means — and what it does not mean.</p><div class="meta"><span>Edition 08</span><span>Reporting period · September 24–30, 2026</span><span class="research">Research snapshot</span><span>Reporting week in progress</span></div><p class="live-line"><i class="dot" id="live-dot"></i><span id="live-status">Loading live data from DeFiLlama Yields… No values are shown until they are retrieved.</span></p><noscript><p class="live-line">JavaScript is required to retrieve live data. No values are displayed without it.</p></noscript></section>
+
+<div class="stats-bar">
+<div class="stat"><div class="stat-label">1D APY</div><div class="stat-val" data-k="d1">—</div><div class="stat-sub">Latest daily observation</div><div class="stat-source" data-src>Source: DeFiLlama Yields · awaiting data</div></div>
+<div class="stat"><div class="stat-label">7D APY</div><div class="stat-val" data-k="d7">—</div><div class="stat-sub">Mean of daily APY, trailing 7 days</div><div class="stat-source" data-src>Source: DeFiLlama Yields · awaiting data</div></div>
+<div class="stat"><div class="stat-label">30D APY</div><div class="stat-val" data-k="d30">—</div><div class="stat-sub">Mean of daily APY, trailing 30 days</div><div class="stat-source" data-src>Source: DeFiLlama Yields · awaiting data</div></div>
+<div class="stat"><div class="stat-label">TVL</div><div class="stat-val" data-k="tvl">—</div><div class="stat-sub">Latest daily observation</div><div class="stat-source" data-src>Source: DeFiLlama Yields · awaiting data</div></div>
+</div>
+
+<main class="main">
+
+<!-- 01 -->
+<section class="reveal"><div class="section-head"><div class="section-kicker">01 / APY Window Comparison</div><div class="section-line"></div></div><h2>Three windows, side by side</h2><p class="intro">Concrete USDT’s 1D, 7D and 30D APY on one axis starting at zero. Differences are shown in <strong>percentage points (pp)</strong>. A move from 8.00% to 8.20% is +0.20 pp; calling it a “2.5% increase” would overstate it.</p>
+<div class="win-wrap"><div class="panel"><div class="bars" id="bars" role="img" aria-label="Bar chart of Concrete USDT 1D, 7D and 30D APY"><div class="bar-col"><div class="bar-val" data-k="d1">—</div><div class="bar" data-bar="d1"></div></div><div class="bar-col"><div class="bar-val" data-k="d7">—</div><div class="bar" data-bar="d7"></div></div><div class="bar-col"><div class="bar-val" data-k="d30">—</div><div class="bar" data-bar="d30"></div></div></div><div class="bar-labels"><div>1D APY<small>latest daily obs.</small></div><div>7D APY<small>7-day mean</small></div><div>30D APY<small>30-day mean</small></div></div><p class="source" style="margin-top:14px" data-src>Source: DeFiLlama Yields · awaiting data</p></div>
+<dl class="diffs"><div class="diff"><dt>APY Spread (max − min)</dt><dd data-k="spread">—</dd><p>Highest minus lowest of the three windows.</p></div><div class="diff"><dt>30D vs 7D</dt><dd data-k="d30v7">—</dd><p>30D APY minus 7D APY.</p></div><div class="diff"><dt>7D vs 1D</dt><dd data-k="d7v1">—</dd><p>7D APY minus 1D APY.</p></div></dl></div></section>
+
+<!-- 02 -->
+<section class="reveal"><div class="section-head"><div class="section-kicker">02 / Why Three APYs?</div><div class="section-line"></div></div><h2>Each window answers a different question</h2><p class="intro">An APY window annualizes yield that has <strong>already been observed</strong> over a period. It describes the past. It does not guarantee a forward return.</p>
+<div class="window-grid"><div class="window"><strong>1D</strong><h4>Highly sensitive</h4><span>Reflects the most recent day. It reacts quickly to utilization shifts, funding-rate moves, rebalancing and one-off events, so it is the noisiest of the three.</span></div><div class="window"><strong>7D</strong><h4>Smoother short term</h4><span>Averages about a week of observations. Single-day spikes carry less weight, but it still responds to changes within the same month.</span></div><div class="window"><strong>30D</strong><h4>Broader recent performance</h4><span>Covers about a month of observations. It is slow to react, so it can lag a real change in underlying conditions.</span></div></div>
+<div class="callout"><h3>Measurement, not a promise</h3><p>1D, 7D and 30D APY are backward-looking, annualized measurements of historical yield behavior. None of them is a quote, a target or a guaranteed forward return. Future yield depends on market conditions that have not happened yet.</p></div></section>
+
+<!-- 03 -->
+<section class="reveal"><div class="section-head"><div class="section-kicker">03 / Market Comparison</div><div class="section-line"></div></div><h2>USDT strategies across DeFi</h2><p class="intro">Comparable USDT pools indexed by DeFiLlama Yields, with all three windows computed the same way from each pool’s daily history. Rows are in alphabetical order after Concrete. This is <strong>not a ranking</strong>. Pools without enough history show “Insufficient history”; no values are estimated.</p>
+<div class="panel table-scroll"><table class="data-table"><thead><tr><th>Protocol</th><th>Vault</th><th>Asset</th><th>1D APY</th><th>7D APY</th><th>30D APY</th><th>TVL</th><th>Data quality / reputation</th></tr></thead><tbody id="mkt-body"><tr><td colspan="8" class="na">Loading live data…</td></tr></tbody></table></div><p class="source" style="margin-top:10px" id="mkt-note">Source: DeFiLlama Yields · selection rule and windows described in Methodology.</p></section>
+
+<!-- 04 -->
+<section class="reveal"><div class="section-head"><div class="section-kicker">04 / APY Dispersion · Measurement Consistency</div><div class="section-line"></div></div><h2>How far apart are the windows?</h2><p class="intro"><strong>APY Dispersion = max(1D, 7D, 30D) − min(1D, 7D, 30D)</strong>, in percentage points. It measures how consistent the recent measurements are with each other. It is <strong>not a risk score</strong>, and low dispersion is not a safety signal.</p>
+<div class="grid-2"><div class="panel"><h3>Concrete USDT · Measurement Consistency</h3><div class="disp-read"><b data-k="spread">—</b><span class="pill" id="disp-band">—</span></div><div class="disp-scale"><div class="disp-marker" id="disp-marker"></div></div><div class="disp-ticks"><span>Low &lt; 0.50 pp</span><span>Moderate 0.50–1.50 pp</span><span>High &gt; 1.50 pp</span></div><p class="source" style="margin-top:14px" data-src>Source: DeFiLlama Yields · awaiting data</p><div class="callout"><h3>What the label means</h3><p><strong>Low dispersion:</strong> recent windows agree closely. <strong>Moderate:</strong> some drift between short and long windows. <strong>High:</strong> recent yield differs meaningfully from the monthly picture. None of these labels says anything about the safety of principal.</p></div></div>
+<div class="panel"><h3>Dispersion across compared pools</h3><table class="data-table"><thead><tr><th>Pool</th><th>Dispersion</th><th style="width:40%"></th></tr></thead><tbody id="disp-body"><tr><td colspan="3" class="na">Loading…</td></tr></tbody></table><p class="source" style="margin-top:10px">Alphabetical order. Only pools with all three windows available are shown.</p></div></div></section>
+
+<!-- 05 -->
+<section class="reveal"><div class="section-head"><div class="section-kicker">05 / Stable Yield ≠ Safe Yield</div><div class="section-line"></div></div><h2>A flat line can hide real risk</h2><p class="intro">A stable APY describes how the <em>return</em> has behaved. It does not describe what could happen to the <em>principal</em>. Every risk below can coexist with a perfectly steady APY series.</p>
+<div class="risk-grid"><div class="risk"><h4>Smart-contract risk</h4><p>Bugs or exploits in the vault, the strategies or the underlying protocols do not appear in a yield chart until they happen.</p></div><div class="risk"><h4>Liquidity risk</h4><p>Exiting at size can depend on market depth and on the liquidity of the underlying venues.</p></div><div class="risk"><h4>Strategy risk</h4><p>Allocation decisions, hedging and rebalancing can fail or behave differently under stress.</p></div><div class="risk"><h4>Counterparty risk</h4><p>Exposure to venues, custodians, curators or other operators the strategy relies on.</p></div><div class="risk"><h4>Asset / peg risk</h4><p>USDT is a stablecoin. Its peg and its issuer are separate risks from the vault’s yield.</p></div><div class="risk"><h4>Withdrawal constraints</h4><p>Queues, lockups or delays can apply. Week 7 recorded a 21-day withdrawal queue on the Concrete WBTC vault, and terms vary by vault.</p></div><div class="risk"><h4>Changing market conditions</h4><p>Borrow demand, funding rates and incentives change, and past consistency does not carry forward automatically.</p></div><div class="risk"><h4>Measurement risk</h4><p>Averaging windows smooth data by design. A smoothed series can look calmer than the underlying positions.</p></div></div>
+<div class="warning-band"><h3>This dashboard does not rate safety.</h3><p>Nothing on this page, including “Measurement Consistency,” the dispersion bands or the market table, is a safety rating, a risk score or a recommendation. Read APY stability as a description of past yield measurements only.</p></div></section>
+
+<!-- 06 -->
+<section class="reveal"><div class="section-head"><div class="section-kicker">06 / TVL + APY</div><div class="section-line"></div></div><h2>Scale and observed yield</h2><p class="intro">Each bubble is one pool from the comparison table. The x-axis is TVL on a log scale, the y-axis is 30D APY and bubble area is proportional to TVL. Color shows the pool category. Concrete USDT has a yellow ring. The chart shows the relationship between scale and observed yield; it does not rank protocols.</p>
+<div class="panel"><div class="chart-box" id="scatter-box"><svg id="scatter" viewBox="0 0 760 400" role="img" aria-label="Scatter plot of TVL versus 30D APY"></svg><div class="tip" id="scatter-tip"></div></div><div class="legend" id="scatter-legend"></div><p class="source" style="margin-top:10px">Source: DeFiLlama Yields · 30D APY = mean of daily APY over trailing 30 days · per-pool timestamps in tooltip.</p></div></section>
+
+<!-- 07 -->
+<section class="reveal"><div class="section-head"><div class="section-kicker">07 / Yield Consistency Timeline</div><div class="section-line"></div></div><h2>Concrete USDT, trailing 30 days</h2><p class="intro">Daily observations for the Concrete USDT pool, ending at the latest available observation and capped at the end of this edition’s reporting week (September 30, 2026, 23:59 UTC). Toggle between APY and TVL; each has its own view and there is no dual axis.</p>
+<div class="panel"><div class="tools" role="group" aria-label="Timeline metric"><button class="filter active" data-metric="apy">APY</button><button class="filter" data-metric="tvl">TVL</button></div><div class="chart-box" id="line-box"><svg id="line" viewBox="0 0 760 320" role="img" aria-label="Concrete USDT daily timeline"></svg><div class="tip" id="line-tip"></div></div><div class="legend" id="line-legend"></div><details><summary>View data table</summary><div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Date (UTC)</th><th>APY</th><th>7D rolling avg</th><th>TVL</th></tr></thead><tbody id="line-table"></tbody></table></div></details><p class="source" style="margin-top:10px" data-src>Source: DeFiLlama Yields · awaiting data</p></div></section>
+
+<!-- 08 -->
+<section class="reveal"><div class="section-head"><div class="section-kicker">08 / Key Finding</div><div class="section-line"></div></div><div class="finding"><h3>The interesting number isn’t the APY. <span>It’s the gap between the APYs.</span></h3><p>When the 1D, 7D and 30D measurements converge, recent observed yield has been relatively consistent across those windows. Day-to-day noise, the past week and the past month all describe roughly the same rate.</p><p id="finding-live">Live reading: awaiting data.</p><p>That is a statement about the past. It says nothing about smart-contract, liquidity, strategy, counterparty or peg risk, and it does not tell you what next month’s yield will be.</p><span class="quote">Consistency is descriptive, not predictive.</span></div></section>
+
+<!-- 09 -->
+<section class="reveal"><div class="section-head"><div class="section-kicker">09 / Methodology</div><div class="section-line"></div></div><h2>How every number on this page is produced</h2>
+<div class="panel"><table class="data-table"><thead><tr><th>Metric</th><th>Definition</th><th>Measurement window</th><th>Source</th><th>Timestamp</th></tr></thead><tbody id="method-body">
+<tr><td><strong>1D APY</strong></td><td>APY of the latest daily observation (base + reward, as indexed)</td><td>1 day</td><td>DeFiLlama Yields <code>/chart/{pool}</code></td><td data-k="asof-cell">—</td></tr>
+<tr><td><strong>7D APY</strong></td><td>Arithmetic mean of daily APY observations in the trailing 7 days (≥ 5 observations required)</td><td>7 days, trailing</td><td>DeFiLlama Yields <code>/chart/{pool}</code></td><td data-k="asof-cell">—</td></tr>
+<tr><td><strong>30D APY</strong></td><td>Arithmetic mean of daily APY observations in the trailing 30 days (≥ 20 observations required)</td><td>30 days, trailing</td><td>DeFiLlama Yields <code>/chart/{pool}</code></td><td data-k="asof-cell">—</td></tr>
+<tr><td><strong>TVL</strong></td><td>USD TVL of the latest daily observation</td><td>Point-in-time</td><td>DeFiLlama Yields <code>/chart/{pool}</code></td><td data-k="asof-cell">—</td></tr>
+<tr><td><strong>APY Spread / Dispersion</strong></td><td>max(1D, 7D, 30D) − min(1D, 7D, 30D), in percentage points</td><td>Derived from the three windows</td><td>Calculated on this page</td><td data-k="asof-cell">—</td></tr>
+<tr><td><strong>7D rolling average</strong></td><td>For each day, mean of daily APY in the preceding 7 days (≥ 5 observations)</td><td>7 days, rolling</td><td>Calculated on this page</td><td data-k="asof-cell">—</td></tr>
+</tbody></table></div>
+<div class="panel" style="margin-top:14px"><ul style="padding-left:18px;color:var(--muted2);font-size:13px;line-height:1.85">
+<li><strong>Live, not hardcoded.</strong> Values are retrieved in your browser from DeFiLlama’s public Yields API every time the page loads. “Data as of” is the timestamp of the latest daily observation, and “Retrieved” is when your browser fetched it (both UTC).</li>
+<li><strong>Reporting week in progress.</strong> The edition covers September 24–30, 2026. Observations after September 30, 2026, 23:59 UTC are excluded, and no data is shown for days that have not yet been observed.</li>
+<li><strong>No mixed labels.</strong> Every figure is labeled 1D, 7D or 30D. This edition does not show spot or “current” APY. The 7D and 30D values here are DeFiLlama-derived means and <em>can differ from the 7D or 30D APY shown in the Concrete app</em>, which uses Concrete’s own methodology.</li>
+<li><strong>Pool selection.</strong> USDT-denominated pools (symbol exactly “USDT”) from the listed protocols with at least $1M TVL. For each protocol, the largest pools by TVL at retrieval time are included, up to 15 rows. Selection by TVL is an inclusion rule, not a ranking.</li>
+<li><strong>Failure handling.</strong> If the source is unreachable or a pool lacks history, the page shows “Not available” or “Insufficient history” instead of estimating.</li>
+<li><strong>Cross-reference.</strong> Week 7 recorded Concrete USDT at 8.32% current APY, 8.20% 7D APY and $29.8M TVL on Concrete Earn, as of September 22, 2026. That is a different source and a different measurement type, kept here as historical context only.</li>
+<li>Research context only. It is not investment advice or a recommendation. APY is variable and not guaranteed.</li></ul></div></section>
+
+<section class="reveal"><div class="section-head"><div class="section-kicker">Sources</div><div class="section-line"></div></div><div class="sources"><div class="source-card"><h4>DeFiLlama Yields</h4><p>Independent aggregator of on-chain pool APY and TVL. It supplies every live figure on this page. <a href="https://defillama.com/yields?token=USDT" target="_blank" rel="noopener">defillama.com/yields ↗</a></p></div><div class="source-card"><h4>Concrete</h4><p>Primary vault pages and documentation for vault terms, strategy description and Concrete’s own APY displays. <a href="https://app.concrete.xyz/earn" target="_blank" rel="noopener">app.concrete.xyz/earn ↗</a> · <a href="https://docs.concrete.xyz" target="_blank" rel="noopener">docs ↗</a></p></div><div class="source-card"><h4>vaults.fyi &amp; underlying protocols</h4><p>Cross-reference for vault-level data, plus Aave, Morpho, Yearn, Spark, Fluid and other protocol pages for market context. <a href="https://vaults.fyi" target="_blank" rel="noopener">vaults.fyi ↗</a></p></div></div></section>
+
+<!-- 10 -->
+<section class="reveal"><div class="section-head"><div class="section-kicker">Archive</div><div class="section-line"></div></div><div class="archive"><a class="arch" href="week1"><small>Week 1</small><span>Weekly Yield Tracker</span></a><a class="arch" href="week2"><small>Week 2</small><span>Weekly Yield Tracker</span></a><a class="arch" href="week3"><small>Edition 03</small><span>The Institutional Yield Spread</span></a><a class="arch" href="week4"><small>Edition 04</small><span>The RWA Yield Shift</span></a><a class="arch" href="week5"><small>Edition 05</small><span>The Infrastructure Premium</span></a><a class="arch" href="week6"><small>Edition 06</small><span>The $1.25B Yield Layer</span></a><a class="arch" href="week7"><small>Edition 07</small><span>Bitcoin Enters the Yield Desk</span></a><a class="arch current" href="week8" aria-current="page"><small>Week 8 · Edition 08</small><span>When Yield Stops Moving</span></a></div></section>
+
+</main>
+<footer class="footer"><p class="disclaimer">Data is informational only. DeFi yields are variable and carry smart-contract, liquidity, market, counterparty, asset/peg and strategy risks. Stable APY is not a safety rating.</p>Concrete Yield Tracker · When Yield Stops Moving · September 24–30, 2026 · <span id="foot-asof">Data as of —</span><br><a href="index">All editions</a> · <a href="https://app.concrete.xyz/earn" target="_blank" rel="noopener">Earn ↗</a></footer>
+
+<script>
+(function(){
+'use strict';
+var API='https://yields.llama.fi';
+var EDITION_CLOSE=Date.UTC(2026,8,30,23,59,59);
+var CUTOFF=Math.min(Date.now(),EDITION_CLOSE);
+var DAY=864e5;
+var CATS={curated:{label:'Curated vault',color:'var(--s1)'},lending:{label:'Lending market',color:'var(--s2)'},aggregator:{label:'Yield aggregator',color:'var(--s3)'},credit:{label:'Credit / other',color:'var(--s4)'}};
+// Protocol targets. `rep` is a neutral descriptor, not a rating.
+var TARGETS=[
+ {test:/concrete/i,name:'Concrete',cat:'curated',max:1,rep:'Curated vault layer',concrete:true},
+ {test:/^aave-v3$/,name:'Aave V3',cat:'lending',max:2,rep:'Established lending market'},
+ {test:/^morpho/,name:'Morpho',cat:'curated',max:3,rep:'Curated vaults on isolated markets'},
+ {test:/^yearn/,name:'Yearn',cat:'aggregator',max:1,rep:'Yield aggregator'},
+ {test:/^spark/,name:'Spark',cat:'lending',max:1,rep:'Lending / savings market'},
+ {test:/^fluid/,name:'Fluid',cat:'lending',max:1,rep:'Lending market'},
+ {test:/^compound-v3$/,name:'Compound V3',cat:'lending',max:1,rep:'Established lending market'},
+ {test:/^euler/,name:'Euler',cat:'curated',max:1,rep:'Modular lending vaults'},
+ {test:/^maple/,name:'Maple',cat:'credit',max:1,rep:'Institutional credit'},
+ {test:/^gearbox/,name:'Gearbox',cat:'lending',max:1,rep:'Leverage lending pools'},
+ {test:/^venus/,name:'Venus',cat:'lending',max:1,rep:'Lending market (BNB Chain)'},
+ {test:/^kamino/,name:'Kamino',cat:'lending',max:1,rep:'Lending market (Solana)'}
+];
+var MAX_ROWS=15,MIN_TVL=1e6;
+
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function pct(v){return v==null||!isFinite(v)?null:v.toFixed(2)+'%'}
+function pp(v){if(v==null||!isFinite(v))return null;v=Math.round(v*100)/100;var s=v>0?'+':v<0?'−':'±';return s+Math.abs(v).toFixed(2)+' pp'}
+function usd(v){if(v==null||!isFinite(v))return null;if(v>=1e9)return '$'+(v/1e9).toFixed(2)+'B';if(v>=1e6)return '$'+(v/1e6).toFixed(1)+'M';if(v>=1e3)return '$'+(v/1e3).toFixed(0)+'K';return '$'+v.toFixed(0)}
+function utc(d,withTime){if(!d)return '—';var o={year:'numeric',month:'short',day:'numeric',timeZone:'UTC'};if(withTime){o.hour='2-digit';o.minute='2-digit';o.hour12=false}return d.toLocaleString('en-US',o)+(withTime?' UTC':'')}
+function mean(a){return a.length?a.reduce(function(s,x){return s+x},0)/a.length:null}
+function cell(v,cls){return v==null?'<td class="na">Insufficient history</td>':'<td class="num'+(cls?' '+cls:'')+'">'+v+'</td>'}
+
+function fetchJSON(url){return fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})}
+
+// Normalize a pool's history: one observation per UTC day (latest wins), within the edition cutoff.
+function cleanSeries(rows){
+ var byDay={};
+ (rows||[]).forEach(function(r){var t=Date.parse(r.timestamp);if(!isFinite(t)||t>CUTOFF)return;if(r.apy==null||!isFinite(r.apy))return;var k=new Date(t).toISOString().slice(0,10);if(!byDay[k]||Date.parse(byDay[k].timestamp)<t)byDay[k]=r});
+ return Object.keys(byDay).sort().map(function(k){var r=byDay[k];return {t:Date.parse(r.timestamp),day:k,apy:+r.apy,tvl:r.tvlUsd==null?null:+r.tvlUsd}});
+}
+function windowMean(s,endT,days,minObs){var from=endT-days*DAY;var v=s.filter(function(p){return p.t>from&&p.t<=endT}).map(function(p){return p.apy});return v.length>=minObs?mean(v):null}
+function windows(s){
+ if(!s.length)return null;var last=s[s.length-1];
+ var w={d1:last.apy,d7:windowMean(s,last.t,7,5),d30:windowMean(s,last.t,30,20),tvl:last.tvl,asOf:new Date(last.t),n:s.length};
+ var all=[w.d1,w.d7,w.d30];w.complete=all.every(function(x){return x!=null});
+ w.spread=w.complete?Math.max.apply(null,all)-Math.min.apply(null,all):null;
+ w.d30v7=(w.d30!=null&&w.d7!=null)?w.d30-w.d7:null;w.d7v1=(w.d7!=null)?w.d7-w.d1:null;
+ return w;
+}
+function band(v){if(v==null)return null;return v<0.5?'Low dispersion':v<=1.5?'Moderate dispersion':'High dispersion'}
+
+function selectPools(pools){
+ var picked=[];
+ TARGETS.forEach(function(tg){
+  var c=pools.filter(function(p){return tg.test.test(p.project||'')&&String(p.symbol||'').toUpperCase()==='USDT'&&(tg.concrete||(p.tvlUsd||0)>=MIN_TVL)})
+   .sort(function(a,b){return (b.tvlUsd||0)-(a.tvlUsd||0)}).slice(0,tg.max);
+  c.forEach(function(p){picked.push({pool:p,tg:tg})});
+ });
+ var conc=picked.filter(function(x){return x.tg.concrete});
+ var rest=picked.filter(function(x){return !x.tg.concrete}).sort(function(a,b){return (b.pool.tvlUsd||0)-(a.pool.tvlUsd||0)}).slice(0,MAX_ROWS-conc.length);
+ return conc.concat(rest);
+}
+
+function setStatus(ok,msg){$('#live-dot').className='dot '+(ok?'ok':'err');$('#live-status').innerHTML=msg}
+
+function renderConcrete(c,retrieved){
+ var w=c.w,srcTxt='Source: DeFiLlama Yields · pool '+esc(c.pool.pool.slice(0,8))+'… · Data as of '+utc(w.asOf,true)+' · Retrieved '+utc(retrieved,true);
+ var map={d1:pct(w.d1),d7:pct(w.d7),d30:pct(w.d30),tvl:usd(w.tvl),spread:w.spread==null?null:w.spread.toFixed(2)+' pp',d30v7:pp(w.d30v7),d7v1:pp(w.d7v1)};
+ $$('[data-k]').forEach(function(el){var k=el.getAttribute('data-k');if(k in map)el.textContent=map[k]==null?'n/a':map[k];if(k==='asof-cell')el.textContent=utc(w.asOf,true)});
+ $$('[data-src]').forEach(function(el){el.textContent=srcTxt});
+ $('#hdr-asof').textContent='Data as of '+utc(w.asOf,false);
+ $('#foot-asof').textContent='Data as of '+utc(w.asOf,true);
+ var vals=[w.d1,w.d7,w.d30].filter(function(x){return x!=null}),mx=Math.max.apply(null,vals.concat([0.01]))*1.12;
+ ['d1','d7','d30'].forEach(function(k){var b=$('[data-bar="'+k+'"]');b.style.height=w[k]==null?'0':(w[k]/mx*100)+'%'});
+ var b=band(w.spread);$('#disp-band').textContent=b?b:'Insufficient history';
+ if(w.spread!=null)$('#disp-marker').style.left='calc('+Math.min(w.spread/2,1)*100+'% - 1px)';
+ var stale=(retrieved-w.asOf)>3*DAY&&CUTOFF===Date.now();
+ var fl=$('#finding-live');
+ if(w.spread==null)fl.textContent='Live reading: not enough daily history to compute all three windows for Concrete USDT as of '+utc(w.asOf,true)+'.';
+ else fl.innerHTML='Live reading, data as of '+utc(w.asOf,true)+': Concrete USDT’s windows span <strong>'+w.spread.toFixed(2)+' pp</strong> ('+b.toLowerCase()+'). '+(w.spread<0.5?'The measurements are converging.':'The measurements are <em>not</em> tightly converged in this reading, so the headline premise should be read against these numbers.');
+ setStatus(true,'Live data retrieved '+utc(retrieved,true)+'. Concrete USDT data as of <strong>'+utc(w.asOf,true)+'</strong> ('+w.n+' daily observations'+(stale?'; latest observation is more than 3 days old':'')+').'+(CUTOFF===EDITION_CLOSE?' Edition closed September 30, 2026; later data excluded.':' Reporting week in progress.'));
+}
+
+function renderTable(rows){
+ var sorted=rows.slice().sort(function(a,b){if(a.tg.concrete!==b.tg.concrete)return a.tg.concrete?-1:1;return (a.tg.name+(a.pool.poolMeta||'')).localeCompare(b.tg.name+(b.pool.poolMeta||''))});
+ $('#mkt-body').innerHTML=sorted.map(function(r){var w=r.w,p=r.pool;
+  var vault=esc(p.poolMeta||(r.tg.name+' USDT'))+' <span class="source">· '+esc(p.chain)+'</span>';
+  var q=w?(esc(r.tg.rep)+'<br><span class="source">DeFiLlama-indexed · '+w.n+' daily obs. · as of '+utc(w.asOf,false)+'</span>'):esc(r.tg.rep)+'<br><span class="source na">History unavailable</span>';
+  return '<tr'+(r.tg.concrete?' class="hl"':'')+'><td><span class="swatch" style="background:'+CATS[r.tg.cat].color+'"></span><strong>'+esc(r.tg.name)+'</strong></td><td>'+vault+'</td><td>USDT</td>'+
+   (w?cell(pct(w.d1),r.tg.concrete&&'y')+cell(pct(w.d7),r.tg.concrete&&'y')+cell(pct(w.d30),r.tg.concrete&&'y')+cell(usd(w.tvl)):'<td class="na" colspan="4">Not available</td>')+'<td class="source">'+q+'</td></tr>'}).join('');
+ var d=sorted.filter(function(r){return r.w&&r.w.spread!=null}),mx=Math.max.apply(null,d.map(function(r){return r.w.spread}).concat([0.5]));
+ $('#disp-body').innerHTML=d.length?d.map(function(r){return '<tr'+(r.tg.concrete?' class="hl"':'')+'><td><strong>'+esc(r.tg.name)+'</strong> <span class="source">'+esc(r.pool.poolMeta||'')+'</span></td><td class="num">'+r.w.spread.toFixed(2)+' pp<br><span class="source">'+band(r.w.spread)+'</span></td><td><div class="dbar'+(r.tg.concrete?' hl':'')+'" style="width:'+(r.w.spread/mx*100)+'%"></div></td></tr>'}).join(''):'<tr><td colspan="3" class="na">No pool has all three windows available.</td></tr>';
+}
+
+// ---------- SVG helpers ----------
+var NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+function niceTicks(lo,hi,n){var span=hi-lo;if(!(span>Math.max(Math.abs(hi),1)*1e-6)){lo-=Math.max(Math.abs(hi)*0.05,0.1);hi+=Math.max(Math.abs(hi)*0.05,0.1);span=hi-lo}var step=Math.pow(10,Math.floor(Math.log10(span/n))),err=span/n/step;if(err>=7.5)step*=10;else if(err>=3)step*=5;else if(err>=1.5)step*=2;var t=[];for(var v=Math.ceil(lo/step)*step;v<=hi+step*1e-6&&t.length<50;v+=step)t.push(+v.toFixed(10));return t}
+function placeTip(tip,box,x,y,html){tip.innerHTML=html;tip.style.opacity=1;var bw=box.clientWidth,tw=tip.offsetWidth;var left=x+14;if(left+tw>bw)left=x-tw-14;tip.style.left=Math.max(0,left)+'px';tip.style.top=Math.max(0,y-10)+'px'}
+function hideTip(tip){tip.style.opacity=0}
+
+function renderScatter(rows){
+ var svg=$('#scatter'),box=$('#scatter-box'),tip=$('#scatter-tip');svg.innerHTML='';
+ var d=rows.filter(function(r){return r.w&&r.w.d30!=null&&r.w.tvl>0});
+ if(!d.length){el('text',{x:380,y:200,'text-anchor':'middle',fill:'#888','font-size':13},svg).textContent='No pools with 30D APY and TVL available.';return}
+ var W=760,H=400,m={l:56,r:24,t:18,b:48},iw=W-m.l-m.r,ih=H-m.t-m.b;
+ var lx=d.map(function(r){return Math.log10(r.w.tvl)}),x0=Math.floor(Math.min.apply(null,lx)),x1=Math.ceil(Math.max.apply(null,lx));if(x1===x0)x1++;
+ var ys=d.map(function(r){return r.w.d30}),y0=Math.min(0,Math.min.apply(null,ys)),yt=niceTicks(y0,Math.max.apply(null,ys)*1.15,5),y1=yt[yt.length-1];
+ var X=function(v){return m.l+(Math.log10(v)-x0)/(x1-x0)*iw},Y=function(v){return m.t+ih-(v-y0)/(y1-y0)*ih};
+ var maxT=Math.max.apply(null,d.map(function(r){return r.w.tvl}));
+ yt.forEach(function(t){var y=Y(t);el('line',{x1:m.l,x2:W-m.r,y1:y,y2:y,stroke:'#262626','stroke-width':1},svg);el('text',{x:m.l-8,y:y+4,'text-anchor':'end',fill:'#888','font-size':11},svg).textContent=t+'%'});
+ for(var e=x0;e<=x1;e++){var xx=X(Math.pow(10,e));el('line',{x1:xx,x2:xx,y1:m.t,y2:m.t+ih,stroke:'#1f1f1f'},svg);el('text',{x:xx,y:H-m.b+18,'text-anchor':'middle',fill:'#888','font-size':11},svg).textContent=usd(Math.pow(10,e))}
+ el('text',{x:m.l+iw/2,y:H-6,'text-anchor':'middle',fill:'#888','font-size':10,'letter-spacing':1},svg).textContent='TVL (LOG SCALE) →';
+ el('text',{x:14,y:m.t+ih/2,'text-anchor':'middle',fill:'#888','font-size':10,'letter-spacing':1,transform:'rotate(-90 14 '+(m.t+ih/2)+')'},svg).textContent='30D APY →';
+ d.slice().sort(function(a,b){return b.w.tvl-a.w.tvl}).forEach(function(r){
+  var cx=X(r.w.tvl),cy=Y(r.w.d30),rad=5+17*Math.sqrt(r.w.tvl/maxT);
+  var g=el('g',{tabindex:0,style:'cursor:pointer;outline:none'},svg);
+  el('circle',{cx:cx,cy:cy,r:rad+10,fill:'transparent'},g);
+  var c=el('circle',{cx:cx,cy:cy,r:rad,fill:CATS[r.tg.cat].color,'fill-opacity':.8,stroke:r.tg.concrete?'#E9DA7A':'#141414','stroke-width':r.tg.concrete?3:2},g);
+  if(r.tg.concrete)el('text',{x:cx+rad+7,y:cy+4,fill:'#fff','font-size':12,'font-weight':800},g).textContent='Concrete USDT';
+  var html='<b>'+esc(r.tg.name)+' · '+esc(r.pool.poolMeta||'USDT')+'</b><br>'+esc(r.pool.chain)+' · '+CATS[r.tg.cat].label+'<br>30D APY: '+pct(r.w.d30)+'<br>TVL: '+usd(r.w.tvl)+'<br><span style="color:#888">Data as of '+utc(r.w.asOf,true)+'</span>';
+  var show=function(){var bb=svg.getBoundingClientRect(),k=bb.width/W;placeTip(tip,box,cx*k,cy*k,html);c.setAttribute('fill-opacity',1)};
+  var hide=function(){hideTip(tip);c.setAttribute('fill-opacity',.8)};
+  g.addEventListener('mouseenter',show);g.addEventListener('mouseleave',hide);g.addEventListener('focus',show);g.addEventListener('blur',hide);g.addEventListener('click',show);
+ });
+ var used={};d.forEach(function(r){used[r.tg.cat]=1});
+ $('#scatter-legend').innerHTML=Object.keys(CATS).filter(function(k){return used[k]}).map(function(k){return '<span><i style="background:'+CATS[k].color+'"></i>'+CATS[k].label+'</span>'}).join('')+'<span><i class="ring"></i>Concrete USDT</span><span>Bubble area ∝ TVL</span>';
+}
+
+var LINE=null,METRIC='apy';
+function rolling(s){return s.map(function(p){var v=s.filter(function(q){return q.t>p.t-7*DAY&&q.t<=p.t}).map(function(q){return q.apy});return v.length>=5?mean(v):null})}
+function renderLine(){
+ var svg=$('#line'),box=$('#line-box'),tip=$('#line-tip');svg.innerHTML='';
+ if(!LINE||!LINE.s.length){el('text',{x:380,y:160,'text-anchor':'middle',fill:'#888','font-size':13},svg).textContent='Historical data not available.';return}
+ var s=LINE.s,ra=LINE.ra,W=760,H=320,m={l:64,r:20,t:16,b:40},iw=W-m.l-m.r,ih=H-m.t-m.b;
+ var isA=METRIC==='apy',val=function(p){return isA?p.apy:p.tvl};
+ var pts=s.filter(function(p){return val(p)!=null});
+ var vs=pts.map(val).concat(isA?ra.filter(function(x){return x!=null}):[]);
+ var lo=Math.min.apply(null,vs),hi=Math.max.apply(null,vs),pad=(hi-lo)*0.15||Math.abs(hi)*0.05||1;
+ var yt=niceTicks(isA?Math.max(0,lo-pad):Math.max(0,lo-pad),hi+pad,5),y0=yt[0],y1=yt[yt.length-1];
+ var t0=s[0].t,t1=s[s.length-1].t===t0?t0+DAY:s[s.length-1].t;
+ var X=function(t){return m.l+(t-t0)/(t1-t0)*iw},Y=function(v){return m.t+ih-(v-y0)/(y1-y0)*ih};
+ yt.forEach(function(t){var y=Y(t);el('line',{x1:m.l,x2:W-m.r,y1:y,y2:y,stroke:'#262626'},svg);el('text',{x:m.l-8,y:y+4,'text-anchor':'end',fill:'#888','font-size':11},svg).textContent=isA?t.toFixed(2)+'%':usd(t)});
+ var step=Math.max(1,Math.ceil(s.length/6));s.forEach(function(p,i){if(i%step&&i!==s.length-1)return;el('text',{x:X(p.t),y:H-m.b+18,'text-anchor':'middle',fill:'#888','font-size':11},svg).textContent=new Date(p.t).toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'})});
+ var path=function(arr,getV){var dd='',pen=false;arr.forEach(function(p,i){var v=getV(p,i);if(v==null){pen=false;return}dd+=(pen?'L':'M')+X(p.t).toFixed(1)+','+Y(v).toFixed(1);pen=true});return dd};
+ el('path',{d:path(s,function(p){return val(p)}),fill:'none',stroke:'#E9DA7A','stroke-width':2,'stroke-linejoin':'round'},svg);
+ if(isA&&ra.some(function(x){return x!=null}))el('path',{d:path(s,function(p,i){return ra[i]}),fill:'none',stroke:'#c3c2b7','stroke-width':2,'stroke-dasharray':'5 4'},svg);
+ var last=pts[pts.length-1];el('circle',{cx:X(last.t),cy:Y(val(last)),r:4,fill:'#E9DA7A',stroke:'#141414','stroke-width':2},svg);
+ var cross=el('line',{y1:m.t,y2:m.t+ih,stroke:'#555','stroke-width':1,opacity:0},svg),dot=el('circle',{r:5,fill:'#E9DA7A',stroke:'#141414','stroke-width':2,opacity:0},svg);
+ var ov=el('rect',{x:m.l,y:m.t,width:iw,height:ih,fill:'transparent'},svg);
+ var move=function(ev){var bb=svg.getBoundingClientRect(),k=bb.width/W,cx=((ev.touches?ev.touches[0].clientX:ev.clientX)-bb.left)/k;var t=t0+(cx-m.l)/iw*(t1-t0),bi=0,bd=Infinity;s.forEach(function(p,i){var dd=Math.abs(p.t-t);if(dd<bd){bd=dd;bi=i}});var p=s[bi],v=val(p);if(v==null)return;var px=X(p.t),py=Y(v);cross.setAttribute('x1',px);cross.setAttribute('x2',px);cross.setAttribute('opacity',1);dot.setAttribute('cx',px);dot.setAttribute('cy',py);dot.setAttribute('opacity',1);
+  placeTip(tip,box,px*k,py*k,'<b>'+utc(new Date(p.t),false)+'</b><br>APY: '+pct(p.apy)+'<br>7D rolling avg: '+(ra[bi]==null?'n/a':pct(ra[bi]))+'<br>TVL: '+(usd(p.tvl)||'n/a'))};
+ var out=function(){hideTip(tip);cross.setAttribute('opacity',0);dot.setAttribute('opacity',0)};
+ ov.addEventListener('mousemove',move);ov.addEventListener('touchmove',move,{passive:true});ov.addEventListener('mouseleave',out);ov.addEventListener('touchend',out);
+ $('#line-legend').innerHTML=isA?'<span><i style="background:#E9DA7A"></i>Daily APY</span>'+(ra.some(function(x){return x!=null})?'<span><i class="dash"></i>7D rolling average</span>':'<span class="na">7D rolling average: insufficient history</span>'):'<span><i style="background:#E9DA7A"></i>Daily TVL (USD)</span>';
+}
+function setupLine(c){
+ var s=c.s.filter(function(p){return p.t>c.w.asOf.getTime()-30*DAY});
+ LINE={s:s,ra:rolling(c.s).slice(c.s.length-s.length)};
+ $('#line-table').innerHTML=s.slice().reverse().map(function(p,i){var ri=s.length-1-i;return '<tr><td>'+p.day+'</td><td class="num">'+pct(p.apy)+'</td><td>'+(LINE.ra[ri]==null?'<span class="na">n/a</span>':pct(LINE.ra[ri]))+'</td><td>'+(usd(p.tvl)||'<span class="na">n/a</span>')+'</td></tr>'}).join('');
+ renderLine();
+}
+$$('[data-metric]').forEach(function(b){b.addEventListener('click',function(){$$('[data-metric]').forEach(function(x){x.classList.remove('active')});b.classList.add('active');METRIC=b.getAttribute('data-metric');renderLine()})});
+
+function fail(msg){
+ setStatus(false,'Live data unavailable ('+esc(msg)+'). No values are displayed rather than substituting estimates. Reload to retry.');
+ $('#hdr-asof').textContent='Data unavailable';$('#foot-asof').textContent='Data unavailable';
+ $('#mkt-body').innerHTML='<tr><td colspan="8" class="na">Live source unavailable. No values shown.</td></tr>';
+ $('#disp-body').innerHTML='<tr><td colspan="3" class="na">Live source unavailable.</td></tr>';
+ $$('[data-src]').forEach(function(e){e.textContent='Source: DeFiLlama Yields · unavailable at load time'});
+ renderScatter([]);renderLine();
+}
+
+var retrieved;
+fetchJSON(API+'/pools').then(function(j){
+ retrieved=new Date();
+ var rows=selectPools(j.data||[]);
+ if(!rows.length)throw new Error('no matching pools');
+ return Promise.all(rows.map(function(r){return fetchJSON(API+'/chart/'+encodeURIComponent(r.pool.pool)).then(function(h){r.s=cleanSeries(h.data);r.w=windows(r.s)}).catch(function(){r.s=[];r.w=null})})).then(function(){return rows});
+}).then(function(rows){
+ var c=rows.filter(function(r){return r.tg.concrete&&r.w})[0];
+ renderTable(rows);renderScatter(rows);
+ if(c){renderConcrete(c,retrieved);setupLine(c)}
+ else{setStatus(false,'Comparison pools retrieved '+utc(retrieved,true)+', but no Concrete USDT pool with history was found in DeFiLlama Yields. Concrete metrics are left blank rather than estimated.');$('#hdr-asof').textContent='Concrete data unavailable';$$('[data-k]').forEach(function(e){if(e.textContent==='—')e.textContent='n/a'});renderLine()}
+}).catch(function(e){fail(e&&e.message||'network error')});
+
+// restrained reveal
+if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.08});$$('.reveal').forEach(function(s){io.observe(s)})}else $$('.reveal').forEach(function(s){s.classList.add('in')});
+})();
+</script>
+</body>
+</html>
